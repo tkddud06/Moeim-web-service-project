@@ -1,0 +1,291 @@
+
+:root {
+    --primary-color: #134D38;
+    --primary-hover: #0e3b2b;
+    --text-gray: #666;
+}
+
+body {
+    background: #f5f7f6;
+}
+
+/* 전체 래퍼 */
+.grouplist-wrapper {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 40px 16px 60px;
+    box-sizing: border-box;
+    width: 100%;
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+}
+
+/* 제목 */
+.grouplist-header {
+    margin-bottom: 24px;
+}
+
+.grouplist-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0b3c2a;
+    margin: 0;
+}
+
+.grouplist-subtitle {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: #555;
+}
+
+/* 검색 + 필터 폼 */
+.grouplist-search-form {
+    margin-bottom: 24px;
+}
+
+/* 검색창 */
+.grouplist-searchbox {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    padding: 10px 14px;
+    border-radius: 16px;
+    border: 1px solid #e2e2e2;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.grouplist-searchbox input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+}
+
+/* 돋보기 버튼 - 헤더와 충돌 피하려고 전용 클래스 사용 */
+.grouplist-search-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.grouplist-search-btn img {
+    width: 18px;
+}
+
+/* 필터 영역 */
+.grouplist-filter {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-label {
+    font-size: 13px;
+    margin-bottom: 4px;
+    color: #0b3c2a;
+}
+
+.filter-select {
+    padding: 7px 12px;
+    border-radius: 8px;
+    border: 1px solid #cfe1d9;
+    background: #fff;
+    font-size: 14px;
+}
+
+/* 카테고리 select를 짧게 */
+.category-small {
+    width: 180px;
+}
+
+/* 카드 리스트 */
+.grouplist-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 20px;
+    margin-top: 10px;
+}
+
+/* 비어있을 때 메시지 */
+.grouplist-empty {
+    grid-column: 1 / -1;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px 24px;
+    text-align: center;
+    color: #777;
+    font-size: 14px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* 단일 카드 (a 태그로 감싸서 전체 클릭 가능) */
+.group-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.group-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* 썸네일 */
+.card-thumb {
+    width: 100%;
+    height: 160px;
+    background: #dcdcdc;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* 썸네일 이미지가 있을 때 */
+.card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 카드 정보 */
+.card-info {
+    padding: 14px 16px 16px;
+}
+
+.card-title {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0b3c2a;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+
+.card-desc {
+    margin: 0 0 10px;
+    color: #555;
+    font-size: 13px;
+    line-height: 1.5;
+    max-height: 3.0em;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    word-break: break-word;
+}
+
+/* 메타 정보 */
+.card-meta {
+    font-size: 12px;
+    color: #777;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 카테고리 태그 느낌 */
+.card-tag {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #e6f3ec;
+    color: #0f6b4a;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.card-sep {
+    color: #bbb;
+}
+
+
+/* 반응형 */
+@media (max-width: 700px) {
+    .grouplist-wrapper {
+        padding: 28px 12px 40px;
+    }
+}
+
+.bottom-controls {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.pagination {
+    display: flex;
+    gap: 8px;
+}
+
+.page-item {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid #eee;
+    color: var(--text-gray);
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.page-item:hover {
+    background-color: #f5fbf8;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.page-item.active {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 700;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 10px rgba(15, 107, 74, 0.2);
+}
+
+.grouplist-filter {
+    margin-top: 20px;
+}
+
+.filter-box {
+    margin-right: 20px;
+}
+
+/* 체크박스 높이 + 수평 정렬을 select 박스와 동일하게 */
+.filter-box input[type="checkbox"] {
+    margin-top: 6px;
+    width: 16px;
+    height: 16px;
+}
+
+.filter-box label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.filter-checkbox {
+    flex-direction: row !important;
+    align-items: center;
+    margin-top: 22px;   /* ← 체크박스를 좀 아래로 내리는 핵심 */
+}

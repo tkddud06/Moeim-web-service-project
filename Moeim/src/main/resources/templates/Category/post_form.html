@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <!-- 제목을 상황에 따라 변경 (글쓰기/수정) -->
+    <title th:text="${formActionUrl.contains('modify') ? '게시글 수정' : '게시글 작성'}">글쓰기</title>
+
+    <link rel="stylesheet" th:href="@{/css/Category/post_form.css}">
+</head>
+
+<div layout:fragment="content" class="write-container">
+
+    <!-- 입력 폼 박스 -->
+    <div class="form-box">
+
+        <!-- 헤더 -->
+        <div class="form-header">
+            <h2 class="form-title"
+                th:text="${formActionUrl.contains('modify') ? '게시글 수정' : '새 글 작성'}">
+                새 글 작성
+            </h2>
+            <div class="form-subtitle">
+                <span style="font-weight:bold; color:#134D38;">[[${categoryTitle}]]</span>
+                카테고리에 글을 남깁니다.
+            </div>
+        </div>
+
+        <form th:action="@{${formActionUrl}}" th:object="${postForm}" method="post">
+
+            <!-- 제목 입력 -->
+            <div class="form-group">
+                <label for="title" class="form-label">제목</label>
+                <input type="text" id="title" th:field="*{title}"
+                       class="form-input" placeholder="제목을 입력해 주세요.">
+
+            </div>
+
+            <!-- 내용 입력 -->
+            <div class="form-group">
+                <label for="content" class="form-label">내용</label>
+                <textarea id="content" th:field="*{text}"
+                          class="form-textarea" placeholder="내용을 자유롭게 작성해 주세요."></textarea>
+
+            </div>
+
+            <!-- 버튼 영역 -->
+            <div class="btn-area">
+                <!-- 취소 시 해당 카테고리 목록으로 이동 -->
+                <a th:href="@{|/category/${targetCategoryId}|}" class="btn btn-cancel">취소</a>
+
+                <button type="submit" class="btn btn-submit">
+                    <span th:text="${formActionUrl.contains('modify') ? '수정하기' : '등록하기'}">등록하기</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+</html>

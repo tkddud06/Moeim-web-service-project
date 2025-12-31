@@ -1,0 +1,133 @@
+/* 전체 레이아웃 */
+.signup-wrapper {
+    width: 900px;
+    margin: 60px auto;
+
+}
+.back-ground{
+    width: 100%;
+    display: flex;
+
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+}
+
+
+/* 제목 */
+.signup-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.signup-subtitle {
+    color: #777;
+    margin-bottom: 30px;
+}
+
+/* 카드 박스 */
+.signup-card-box {
+    background: #fff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 40px;
+}
+
+/* 카드 */
+.signup-card {
+    display: flex;
+    align-items: center;
+}
+
+/* 이미지 */
+.signup-card-thumb {
+    width: 160px;
+    height: 160px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ddd;
+}
+
+.signup-card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 카드 정보 */
+.signup-card-info {
+    margin-left: 25px;
+}
+
+.signup-card-info h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+/* 인풋 영역 */
+.signup-input-area {
+    margin-bottom: 20px;
+}
+
+.input-label {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.signup-textarea {
+    width: 100%;
+    height: 160px;
+    padding: 12px;
+    border: 1px solid #dcdcdc;
+    border-radius: 12px;
+    font-size: 14px;
+    resize: none;
+}
+
+/* 체크박스 */
+.signup-checkbox-area {
+    margin-top: 10px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 버튼 */
+.submit-btn {
+    padding: 12px 30px;
+    font-size: 15px;
+    font-weight: 600;
+    background: #30673b;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* 비활성화 버튼 */
+.submit-btn:disabled {
+    background: #b5b5b5;
+    cursor: not-allowed;
+}
+
+/* 돌아가기 */
+.back-btn {
+    display: inline-block;
+    margin-top: 25px;
+    color: #666;
+    font-size: 14px;
+}
+
+/* 버튼 영역 */
+.signup-btn-area {
+    text-align: right;
+    margin-top: 10px;
+}

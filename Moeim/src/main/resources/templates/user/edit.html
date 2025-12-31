@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>프로필 수정 | Moeim</title>
+    <link rel="stylesheet" th:href="@{/css/user/edit.css}">
+</head>
+
+<body>
+<th:block layout:fragment="content">
+
+    <main class="edit-wrapper">
+        <section class="edit-container">
+            <h1 class="edit-title">내 정보 수정</h1>
+            <p class="edit-subtitle">프로필 정보를 수정하고 저장할 수 있습니다.</p>
+
+            <!-- 에러 메시지 -->
+            <div th:if="${error}" class="edit-alert error">
+                <span th:text="${error}">에러 메시지</span>
+            </div>
+
+            <!-- 성공 메시지 -->
+            <div th:if="${message}" class="edit-alert success">
+                <span th:text="${message}">성공 메시지</span>
+            </div>
+
+            <form th:action="@{/user/edit}" method="post" class="edit-form" enctype="multipart/form-data">
+
+                <!-- 이메일 (수정 불가) -->
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           th:value="${user.email}"
+                           readonly>
+                    <p class="field-help">이메일은 변경할 수 없습니다.</p>
+                </div>
+
+                <!-- 닉네임 -->
+                <div class="form-group">
+                    <label for="nickname">닉네임</label>
+                    <input type="text"
+                           id="nickname"
+                           name="nickname"
+                           th:value="${user.nickname}"
+                           maxlength="50"
+                           required>
+                </div>
+
+                <!-- 한 줄 소개 -->
+                <div class="form-group">
+                    <label for="bio">한 줄 소개</label>
+                    <textarea id="bio"
+                              name="bio"
+                              rows="3"
+                              th:text="${user.bio}"> </textarea>
+                </div>
+
+                <!-- 관심사 선택 (하드코딩) -->
+                <div class="form-group">
+                    <label>관심사 (중복 선택 가능)</label>
+                    <div class="category-group">
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="2"
+                                   th:checked="${user.interestCategoryIds != null and user.interestCategoryIds.contains(2)}">
+                            <span>운동</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="3"
+                                   th:checked="${user.interestCategoryIds != null and user.interestCategoryIds.contains(3)}">
+                            <span>공부</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="4"
+                                   th:checked="${user.interestCategoryIds != null and user.interestCategoryIds.contains(4)}">
+                            <span>취미</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="5"
+                                   th:checked="${user.interestCategoryIds != null and user.interestCategoryIds.contains(5)}">
+                            <span>식사</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="6"
+                                   th:checked="${user.interestCategoryIds != null and user.interestCategoryIds.contains(6)}">
+                            <span>독서</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="7"
+                                   th:checked="${user.interestCategoryIds != null and user.interestCategoryIds.contains(7)}">
+                            <span>여행</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="8"
+                                   th:checked="${user.interestCategoryIds != null and user.interestCategoryIds.contains(8)}">
+                            <span>게임</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="9"
+                                   th:checked="${user.interestCategoryIds != null and user.interestCategoryIds.contains(9)}">
+                            <span>기타</span>
+                        </label>
+
+                    </div>
+                    <p class="field-help">관심사를 선택하면 메인에서 관련 모임을 추천해 드립니다.</p>
+                </div>
+
+                <!-- 프로필 이미지  -->
+                <div class="form-group">
+                    <label for="profileImage">프로필 이미지</label>
+                    <input type="file"
+                           id="profileImage"
+                           name="profileImage"
+                           accept="image/jpeg,image/png,image/gif,image/webp">
+                    <p class="field-help">비워두면 기본 이미지가 사용됩니다.</p>
+
+                    <div class="profile-preview">
+                        <span>현재 프로필 미리보기</span>
+                        <img th:if="${user != null and user.profileImage != null}"
+                             id="profileImagePreview"
+                             th:src="@{/user/profile-image/{id}(id=${user.id})}"
+                             alt="프로필 이미지" />
+
+                        <img th:unless="${user != null and user.profileImage != null}"
+                             id="profileImagePreview"
+                             th:src="@{/images/defaultProfilePicture.png}"
+                             alt="기본 프로필 이미지" />
+                    </div>
+                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // 1. 파일 입력 요소와 미리보기 이미지 요소 가져오기
+                        const fileInput = document.getElementById('profileImage');
+                        const previewImage = document.getElementById('profileImagePreview');
+                        const defaultImageSrc = '[[@{/images/defaultProfilePicture.png}]]'; // 기본 이미지 경로 (Thymeleaf 사용)
+
+                        // 2. 파일 선택 변경 이벤트 리스너 추가
+                        fileInput.addEventListener('change', function(event) {
+                            const file = event.target.files[0]; // 선택된 첫 번째 파일
+
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = function(e) {
+                                    previewImage.src = e.target.result;
+                                };
+                                reader.readAsDataURL(file);
+
+                            } else {
+                                previewImage.src = defaultImageSrc;
+                            }
+                        });
+                    });
+                </script>
+
+                <div class="form-group form-switch-row">
+                    <span class="switch-text">
+                        내 프로필 공개
+                        <small>다른 사용자가 내 프로필을 볼 수 있음</small>
+                    </span>
+
+                    <label class="switch">
+                        <!-- name="profilePublic" 체크된 경우만 true 값이 서버로 감 -->
+                        <input type="checkbox"
+                               name="profilePublic"
+                               th:checked="${user.profilePublic}">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">저장하기</button>
+                    <a th:href="@{/user/mypage}" class="btn-secondary">취소</a>
+                </div>
+
+                <div class="password-link">
+                    <a th:href="@{/user/change-password}">비밀번호 변경하기</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+</th:block>
+</body>
+</html>

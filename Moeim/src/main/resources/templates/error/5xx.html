@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>오류가 발생했습니다 | Moeim</title>
+    <style>
+        .error-wrapper {
+            min-height: 300px;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .error-code {
+            font-size: 64px;
+            font-weight: 800;
+            color: #134D38;
+            margin-bottom: 10px;
+        }
+
+        .error-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .error-message {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 24px;
+            max-width: 480px;
+        }
+
+        .btn-home {
+            display: inline-block;
+            padding: 10px 24px;
+            border-radius: 999px;
+            background-color: #134D38;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-home:hover {
+            background-color: #0e3b2b;
+        }
+    </style>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <main class="error-wrapper">
+        <!-- 상태 코드 (예: 404, 500). 없으면 기본값 500 -->
+        <div class="error-code" th:text="${status} ?: 500">500</div>
+
+        <!-- 상단 제목 -->
+        <div class="error-title">
+            잘못된 요청입니다.
+        </div>
+
+        <!-- 세부 메시지: 스프링이 넘겨주는 message가 있으면 같이 표시 -->
+        <p class="error-message">
+            <span th:if="${status == 404}">
+                잘못된 주소입니다. 주소를 다시 확인하세요.
+            </span>
+            <span th:if="${status != 404}">
+                요청을 처리하는 중 오류가 발생했습니다.<br/>
+                잠시 후 다시 시도해 주세요.
+            </span>
+            <br/><br/>
+            <span th:if="${message != null}"
+                  th:text="'자세한 내용: ' + ${message}"></span>
+        </p>
+
+        <a th:href="@{/}" class="btn-home">홈으로</a>
+    </main>
+</th:block>
+</body>
+</html>

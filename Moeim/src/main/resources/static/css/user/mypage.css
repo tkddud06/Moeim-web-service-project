@@ -1,0 +1,532 @@
+body {
+    margin: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f5f7f6;
+}
+
+/* 전체 래퍼 */
+.mypage-wrapper {
+    min-height: calc(100vh - 60px);
+    padding: 40px 16px 60px;
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+    box-sizing: border-box;
+}
+
+/* 가운데 정렬 + 최대 폭 */
+.mypage-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+}
+
+/* 공통 카드 스타일 */
+.info-card,
+.profile-card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2ece7;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
+}
+
+/* 프로필 카드 */
+.profile-card {
+    padding: 24px 20px 20px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+/* 아바타 */
+.avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(15, 107, 74, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef7f3;
+    flex-shrink: 0;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-basic {
+    min-width: 0;
+}
+
+.profile-basic .nickname {
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #0b3c2a;
+
+    word-break: break-all;
+    white-space: normal;
+    line-height: 1.3;
+}
+
+.profile-basic .email {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 간단 통계 */
+.profile-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding-top: 10px;
+    border-top: 1px dashed #dde6e2;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+}
+
+.meta-label {
+    color: #666;
+}
+
+.meta-value {
+    font-weight: 600;
+    color: #0f6b4a;
+}
+
+/* 프로필 수정 버튼 */
+.btn-edit-profile {
+    width: 100%;
+    border-radius: 999px;
+    border: none;
+    padding: 9px 0;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #0f6b4a;
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(15, 107, 74, 0.26);
+    transition: background 0.18s ease, transform 0.1s ease, box-shadow 0.18s ease;
+}
+
+.btn-edit-profile:hover {
+    background: #0c553a;
+    box-shadow: 0 10px 22px rgba(15, 107, 74, 0.3);
+}
+
+.btn-edit-profile:active {
+    transform: translateY(1px);
+    box-shadow: 0 6px 12px rgba(15, 107, 74, 0.22);
+}
+
+/* 오른쪽 큰 영역 */
+.mypage-content {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* 카드 헤더 */
+.info-card-header {
+    padding: 16px 18px 10px;
+    border-bottom: 1px solid #edf2ef;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.info-card-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0b3c2a;
+}
+
+/* 내용 */
+.info-body {
+    padding: 12px 18px 16px;
+}
+
+/* 내 정보 행 */
+.info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 14px;
+}
+
+.info-label {
+    color: #777;
+}
+
+.info-value {
+    font-weight: 500;
+    color: #333;
+}
+
+/* 2열 그리드 (참여 모임 / 최근 활동 등) */
+.grid-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    /* 그리드 아이템이 넘치는 것을 방지 */
+    min-width: 0;
+}
+
+/* 참여 모임 리스트 */
+.group-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.group-item {
+    padding: 8px 4px;
+    border-bottom: 1px dashed #edf0ee;
+    font-size: 13px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.group-item:last-child {
+    border-bottom: none;
+}
+
+.group-title {
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #1d2b24;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+
+.group-meta {
+    color: #888;
+}
+
+/* 참여 모임: 왼쪽 내용 영역 */
+.group-main {
+    flex: 1;
+    min-width: 0;
+}
+
+/* 참여 모임: 오른쪽 버튼 영역 */
+.group-actions {
+    flex-shrink: 0;
+    text-align: right;
+}
+
+
+/* 활동 리스트 */
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 🔹 제목(왼쪽) + 버튼(오른쪽) + 메타(아래)를 그리드로 배치 */
+.activity-item {
+    padding: 10px 4px;
+    border-bottom: 1px dashed #edf0ee;
+    font-size: 13px;
+
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+        "main action"
+        "meta action";
+    column-gap: 12px;
+    row-gap: 4px;
+    align-items: center;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+/* 제목 영역 (왼쪽 상단) */
+.activity-main {
+    grid-area: main;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    height: 100%;
+}
+
+.activity-type {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(15, 107, 74, 0.08);
+    color: #0f6b4a;
+    font-size: 11px;
+    font-weight: 700;
+
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.activity-title {
+    text-decoration: none;
+    color: #222;
+    font-weight: 500;
+
+    display: block;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.activity-title:hover {
+    text-decoration: underline;
+}
+
+/* 메타 영역 (왼쪽 하단) */
+.activity-meta {
+    grid-area: meta;
+    color: #888;
+    font-size: 12px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 버튼 영역 (오른쪽 전체 세로) */
+.activity-actions {
+    grid-area: action;
+    align-self: center;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* 비어 있을 때 */
+.group-item.empty,
+.activity-item.empty {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    border-bottom: none;
+}
+
+/* 작은 링크 (헤더 우측 등) */
+.link-small {
+    text-decoration: none;
+    font-size: 12px;
+    color: #0f6b4a;
+}
+
+.link-small:hover {
+    text-decoration: underline;
+}
+
+/* 🔹 글 옆 버튼 컨테이너 (안 써도 되지만 남겨둠) */
+.activity-actions-inline {
+    flex-shrink: 0;
+}
+
+/* 🔹 글 옆에 붙는 작은 버튼 스타일 */
+.btn-outline,
+.btn-outline-sm {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid #2f6f4f;
+    font-size: 12px;
+    font-weight: 500;
+    color: #2f6f4f;
+    text-decoration: none;
+    transition: 0.15s ease;
+    white-space: nowrap;
+}
+
+.btn-outline:hover,
+.btn-outline-sm:hover {
+    background: #2f6f4f;
+    color: #fff;
+}
+
+/* --- 좌측 프로필 카드 내 관심사 영역 --- */
+.profile-interests {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px dashed #dde6e2;
+}
+
+.interests-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0b3c2a;
+    margin-bottom: 10px;
+    display: block;
+}
+
+
+.interest-chips {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 무조건 5개씩 배치 */
+    gap: 4px;
+}
+
+/* 칩 스타일 */
+.interest-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 4px 0; /* 좌우 패딩을 제거하여 좁은 공간에서도 글자가 잘리지 않게 함 */
+    width: 100%;
+
+    background-color: #f0f7f3;
+    color: #0f6b4a;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid #d1e1da;
+    box-sizing: border-box;
+}
+
+/* 리뷰 통계 스타일 */
+.review-summary-container {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 10px 0;
+    width: 100%;
+}
+
+/* 왼쪽: 종합 점수 영역 (고정 크기) */
+.review-total-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    flex-shrink: 0;
+}
+
+.total-score-num {
+    font-size: 42px;
+    font-weight: 800;
+    color: #0f6b4a;
+    line-height: 1.2;
+}
+
+.total-score-label {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+}
+
+/* 오른쪽: 바 그래프 영역 */
+.review-chart-area {
+    flex: 1;
+    min-width: 0;
+}
+
+/* 별점 공통 스타일 */
+.star-rating-display {
+    position: relative;
+    display: inline-block;
+    font-size: 24px;
+    line-height: 1;
+    font-family: sans-serif;
+}
+
+.star-base {
+    color: #E0E0E0;
+}
+
+.star-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #FFD700;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* 개별 바 그래프 아이템 */
+.chart-item {
+    margin-bottom: 14px;
+}
+
+.chart-item:last-child {
+    margin-bottom: 0;
+}
+
+.bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #555;
+    font-weight: 600;
+}
+
+.bar-bg {
+    width: 100%;
+    background: #f0f0f0;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    background-color: #0f6b4a;
+    height: 100%;
+    border-radius: 4px;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 600px) {
+    .mypage-container {
+        grid-template-columns: 1fr;
+    }
+
+    .grid-two {
+        grid-template-columns: 1fr;
+    }
+
+    .review-summary-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+    }
+
+    .review-total-area {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

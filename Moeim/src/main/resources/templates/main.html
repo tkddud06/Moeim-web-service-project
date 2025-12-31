@@ -1,0 +1,128 @@
+<!-- main.html-->
+
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>Moeim | 메인</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+
+    <main class="main-wrapper">
+        <section class="main-container">
+
+            <!-- 왼쪽 영역: 소개/버튼 등 -->
+            <section class="main-left">
+                <h1 class="main-title">
+                    취향이 비슷한 사람들과<br>
+                    모임을 만들어 보세요.
+                </h1>
+                <p class="main-subtitle">
+                    Moeim은 관심사 기반 커뮤니티 플랫폼입니다.<br>
+                    스터디, 운동, 취미 모임까지 한 곳에서 관리하세요.
+                </p>
+
+                <div class="main-actions">
+                    <a th:href="@{group/list}" class="btn-primary">모임 둘러보기</a>
+                    <a th:href="@{/group/form}" class="btn-secondary">모임 만들기</a>
+                </div>
+
+                <div class="main-stats">
+                    <div class="stat-item">
+                        <span class="stat-value"
+                              th:text="${#numbers.formatInteger(groupCount, 1, 'COMMA')}">0</span>
+                        <span class="stat-label">모집 중인 모임</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value"
+                              th:text="${#numbers.formatInteger(userCount, 1, 'COMMA')}">0</span>
+                        <span class="stat-label">참여 중인 유저</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 오른쪽 영역: 달력 카드 -->
+            <aside class="main-right">
+                <div class="main-calendar-box">
+                    <th:block th:replace="~{schedule/calendar :: calendar}"></th:block>
+                </div>
+            </aside>
+
+        </section>
+
+        <!-- ===== 모집중인 모임 가로 카드 ===== -->
+        <section class="recruit-section"
+                 th:if="${recruitingGroups != null}">
+            <div class="recruit-header">
+                <h2 th:if="${isRecommended}">
+                    <span style="color:#0f6b4a;">[[${session.user.nickname}]]</span>님을 위한 추천 모임
+                </h2>
+                <h2 th:unless="${isRecommended}">
+                    지금 모집 중인 모임
+                </h2>
+                <p>지금 팀원을 모집 중인 모임이에요.</p>
+            </div>
+
+            <!-- 모집중인 모임이 있을 때 -->
+            <div class="recruit-scroll"
+                 th:if="${!#lists.isEmpty(recruitingGroups)}">
+                <div class="recruit-card"
+                     th:each="g : ${recruitingGroups}">
+                    <a class="recruit-card-link"
+                       th:href="@{/group/view(id=${g.id})}">
+
+                        <div class="recruit-banner">
+                            <!-- 배너 이미지 있으면 -->
+                            <img th:if="${g.bannerImage != null}"
+                                 th:src="@{/group/banner/{id}(id=${g.id})}"
+                                 alt="모임 배너">
+
+                            <!-- 없으면 기본 이미지 -->
+                            <img th:if="${g.bannerImage == null}"
+                                 th:src="@{/images/default_banner.jpg}"
+                                 alt="기본 배너">
+                        </div>
+
+                        <div class="recruit-body">
+                            <div class="recruit-category"
+                                 th:text="${g.category != null ? g.category.title : '카테고리'}">
+                                카테고리
+                            </div>
+
+                            <div class="recruit-title"
+                                 th:text="${g.title}">
+                                모임 제목
+                            </div>
+
+                            <div class="recruit-desc"
+                                 th:text="${#strings.abbreviate(g.description, 60)}">
+                                모임 설명이 들어갑니다...
+                            </div>
+
+                            <div class="recruit-count">
+                                <span th:text="${g.nowCount}">1</span>
+                                <span>/</span>
+                                <span th:text="${g.maxCount}">4</span>
+                                <span> 명</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 모집중인 모임이 없을 때 -->
+            <div class="recruit-empty"
+                 th:if="${#lists.isEmpty(recruitingGroups)}">
+                현재 모집 중인 모임이 없습니다.
+            </div>
+        </section>
+    </main>
+
+</th:block>
+</body>
+</html>

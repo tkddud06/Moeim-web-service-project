@@ -1,0 +1,291 @@
+body {
+    margin: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f5f7f6;
+}
+
+/* 메인 전체 래퍼 (헤더 아래) */
+.main-wrapper {
+    min-height: calc(100vh - 60px);
+    padding: 40px 16px 60px;
+    box-sizing: border-box;
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+}
+
+/* 가운데 컨테이너 */
+.main-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(320px, 1.2fr);
+    gap: 28px;
+    align-items: center;
+}
+
+/* 왼쪽 영역 */
+.main-left {
+    padding-right: 12px;
+}
+
+.main-title {
+    margin: 0 0 12px;
+    font-size: 28px;
+    line-height: 1.4;
+    font-weight: 800;
+    color: #0b3c2a;
+}
+
+.main-subtitle {
+    margin: 0 0 20px;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.7;
+}
+
+/* 버튼 영역 */
+.main-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.btn-primary,
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease,
+    transform 0.08s ease;
+}
+
+/* 진한 녹색 포인트 버튼 */
+.btn-primary {
+    background: #0f6b4a;
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(15, 107, 74, 0.3);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #0c553a;
+    box-shadow: 0 12px 26px rgba(15, 107, 74, 0.34);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+    box-shadow: 0 7px 15px rgba(15, 107, 74, 0.26);
+}
+
+/* 서브 버튼 */
+.btn-secondary {
+    background: #ffffff;
+    color: #0f6b4a;
+    border: 1px solid #cfe1d9;
+}
+
+.btn-secondary:hover {
+    background: #f5fbf8;
+    border-color: #0f6b4a;
+    box-shadow: 0 8px 18px rgba(15, 107, 74, 0.22);
+}
+
+.btn-secondary:active {
+    transform: translateY(1px);
+    box-shadow: 0 6px 12px rgba(15, 107, 74, 0.18);
+}
+
+/* 간단한 통계 영역 */
+.main-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    font-size: 12px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f6b4a;
+}
+
+.stat-label {
+    color: #777;
+}
+
+/* 오른쪽 영역 */
+.main-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* 달력 박스를 담는 네모 영역 */
+.main-calendar-box {
+    width: 100%;
+    max-width: 360px;
+}
+
+/* 반응형 */
+@media (max-width: 900px) {
+    .main-container {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .main-right {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 640px) {
+    .main-wrapper {
+        padding: 28px 12px 40px;
+    }
+    .main-title {
+        font-size: 24px;
+    }
+}
+
+/* ===== 모집중인 모임 가로 카드 ===== */
+.recruit-section {
+    max-width: 1200px;
+    margin: 40px auto 0;
+    padding: 0 16px 24px;
+}
+
+.recruit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 12px;
+}
+
+.recruit-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.recruit-header p {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+}
+
+.recruit-scroll {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.recruit-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.recruit-scroll::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 3px;
+}
+
+.recruit-card {
+    flex: 0 0 260px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.recruit-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.recruit-card-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+
+.recruit-banner {
+    width: 100%;
+    height: 140px;
+    background-color: #eeeeee;
+    overflow: hidden;
+}
+
+.recruit-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.recruit-body {
+    padding: 10px 12px 12px;
+}
+
+.recruit-category {
+    font-size: 11px;
+    color: #777;
+    margin-bottom: 4px;
+}
+
+.recruit-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #222;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recruit-desc {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 8px;
+    min-height: 32px;
+}
+
+.recruit-count {
+    font-size: 12px;
+    color: #134D38;
+    font-weight: 600;
+}
+
+.recruit-empty {
+    font-size: 13px;
+    color: #777;
+}
+
+
+/* 메인페이지 달력 박스 안 링크는 밑줄/파란색 없애기 */
+.main-calendar-box a,
+.main-calendar-box a:link,
+.main-calendar-box a:visited,
+.main-calendar-box a:hover,
+.main-calendar-box a:active {
+    text-decoration: none !important;  /* 밑줄 제거 */
+    color: inherit !important;         /* 파란색 링크색 제거 */
+}
+
+/* 메인페이지 달력 전체 박스는 기준점이 되도록 relative */
+.main-calendar-box {
+    position: relative;
+}
+/* 달력 자체 카드 */
+.calendar-card {
+    position: relative;   /* 이 안에서 절대 위치로 띄움 */
+}

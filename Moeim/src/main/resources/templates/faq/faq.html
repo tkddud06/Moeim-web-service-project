@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>FAQ | Moeim</title>
+    <link rel="stylesheet" th:href="@{/css/faq/faq.css}">
+</head>
+
+<body>
+<th:block layout:fragment="content">
+
+    <main class="faq-wrapper">
+        <section class="faq-container">
+
+            <header class="faq-header">
+                <h1 class="faq-title">자주 묻는 질문</h1>
+                <p class="faq-subtitle">
+                    Moeim 이용 중 궁금한 점이 있으신가요?<br>
+                    자주 찾는 질문들을 카테고리별로 확인해 보세요.
+                </p>
+            </header>
+
+            <div class="faq-tabs">
+                <button class="faq-tab active" type="button" data-category="all">전체</button>
+                <button class="faq-tab" type="button" data-category="account">회원/계정</button>
+                <button class="faq-tab" type="button" data-category="meeting">모임/이용</button>
+                <button class="faq-tab" type="button" data-category="etc">기타</button>
+            </div>
+
+            <section class="faq-list">
+
+                <details class="faq-item" data-category="account" open>
+                    <summary class="faq-question">
+                        회원가입은 어떻게 하나요?
+                    </summary>
+                    <div class="faq-answer">
+                        <p>
+                            상단 메뉴의 <strong>회원가입</strong> 버튼을 눌러 이메일, 비밀번호, 닉네임을 입력하시면
+                            간편하게 가입이 완료됩니다. 이후 프로필 편집에서 추가 정보를 등록할 수 있습니다.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="faq-item" data-category="account">
+                    <summary class="faq-question">
+                        비밀번호를 잊어버렸어요.
+                    </summary>
+                    <div class="faq-answer">
+                        <p>
+                            로그인 화면 하단의 <strong>아이디/비밀번호 찾기</strong>를 클릭해 주세요.
+                            가입하신 이메일 주소와 닉네임을 입력하시면, 비밀번호를 재설정할 수 있습니다.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="faq-item" data-category="account">
+                    <summary class="faq-question">
+                        회원 탈퇴는 어떻게 하나요?
+                    </summary>
+                    <div class="faq-answer">
+                        <p>
+                            이메일(support@moeim.com)로 문의해 주시면 처리해 드리겠습니다.
+                            탈퇴 시 작성한 게시글과 모임 참여 기록은 복구가 어려울 수 있으니, 신중하게 결정해 주세요.
+                        </p>
+                    </div>
+                </details>
+
+
+                <details class="faq-item" data-category="meeting">
+                    <summary class="faq-question">
+                        모임을 직접 개설하고 싶어요.
+                    </summary>
+                    <div class="faq-answer">
+                        <p>
+                            메인 화면의 <strong>모임 만들기</strong> 버튼을 클릭하세요.
+                            모임의 주제(카테고리), 날짜, 최대 인원 등을 설정하고 모임 소개글을 작성하면
+                            누구나 쉽게 모임장이 될 수 있습니다.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="faq-item" data-category="meeting">
+                    <summary class="faq-question">
+                        모임에 참여하고 싶어요.
+                    </summary>
+                    <div class="faq-answer">
+                        <p>
+                            모임 리스트 페이지에서 참여하고 싶은 모임을 선택한 후 <strong>신청하기</strong> 버튼을 누르시고 신청하시면 됩니다.
+                            모임의 참가 여부는 모임장의 승인 여부에 따라 결정됩니다.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="faq-item" data-category="etc">
+                    <summary class="faq-question">
+                        1:1 문의는 어디서 하나요?
+                    </summary>
+                    <div class="faq-answer">
+                        <p>
+                            FAQ로 해결되지 않는 문제는
+                            이메일(support@moeim.com)로 문의해 주시면 답변드리겠습니다.
+                        </p>
+                    </div>
+                </details>
+
+            </section>
+
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.faq-tab');
+            const items = document.querySelectorAll('.faq-item');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // 1. 모든 탭에서 active 클래스 제거하고, 클릭한 탭에만 추가
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    // 2. 클릭한 탭의 카테고리 값 가져오기
+                    const category = tab.getAttribute('data-category');
+
+                    // 3. 모든 FAQ 아이템을 순회하며 필터링
+                    items.forEach(item => {
+                        const itemCategory = item.getAttribute('data-category');
+
+                        // 'all'이거나 카테고리가 일치하면 보여줌
+                        if (category === 'all' || category === itemCategory) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                            item.removeAttribute('open'); // 숨길 때 열려있던 상태도 닫음 (선택사항)
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+</th:block>
+</body>
+</html>

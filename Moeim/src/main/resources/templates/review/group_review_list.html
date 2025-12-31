@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>[[${group.title}]] 리뷰 목록</title>
+    <link rel="stylesheet" th:href="@{/css/group/group_review_list.css}">
+</head>
+
+<div layout:fragment="content">
+
+    <div class="review-wrapper">
+
+        <div class="review-list-container">
+
+            <div class="list-header">
+                <h2 class="page-title">
+                    <span class="group-name">[[${group.title}]]</span> 리뷰
+                </h2>
+                <a th:href="@{|/group/home/${group.id}|}" class="group-link">&lt; 돌아가기</a>
+            </div>
+
+            <div class="empty-state" th:if="${reviewPaging != null and reviewPaging.isEmpty()}">
+                <span class="empty-icon">📝</span>
+                <p>아직 작성된 리뷰가 없습니다.</p>
+            </div>
+
+            <div class="empty-state" th:if="${reviewPaging == null}">
+                <span class="empty-icon">⚠️</span>
+                <p>리뷰를 불러오는 데 실패했습니다.</p>
+            </div>
+
+            <div class="review-list" th:if="${reviewPaging != null and !reviewPaging.isEmpty()}">
+                <div th:each="review : ${reviewPaging}" class="review-card">
+
+                    <div class="card-header-row">
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">익명</span>
+                            <span class="review-date" th:text="${#temporals.format(review.createdAt, 'yyyy.MM.dd HH:mm')}">2025.11.20</span>
+                        </div>
+
+                        <div class="star-display">
+                            <div class="star-rating-mini" th:title="|${review.averageScore}점|">
+                                <span>★★★★★</span> <div class="fill" th:style="|width: ${(review.averageScore / 5.0) * 100}%|">★★★★★</div>
+                            </div>
+                            <span class="star-score-text" th:text="${#numbers.formatDecimal(review.averageScore, 1, 1)}">4.5</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-scores">
+                        <div class="score-badge">
+                            참여/신뢰도 <span class="score-value" th:text="${review.scoreReliability}">5</span>
+                        </div>
+                        <div class="score-badge">
+                            준비/운영 <span class="score-value" th:text="${review.scorePreparation}">4</span>
+                        </div>
+                        <div class="score-badge">
+                            만족도/재미 <span class="score-value" th:text="${review.scoreSatisfaction}">5</span>
+                        </div>
+                    </div>
+
+                    <div class="review-content"
+                         th:if="${review.description != null and review.description != ''}"
+                         th:text="${review.description}">
+                        리뷰 내용이 들어갑니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination" th:if="${reviewPaging != null and !reviewPaging.isEmpty()}">
+                <a class="page-item"
+                   th:href="@{|/review/group/${group.id}/list?page=${reviewPaging.number - 1}|}"
+                   th:if="${reviewPaging.hasPrevious()}">&lt;</a>
+
+                <th:block th:each="page : ${#numbers.sequence(0, reviewPaging.totalPages - 1)}">
+                    <a class="page-item"
+                       th:href="@{|/review/group/${group.id}/list?page=${page}|}"
+                       th:text="${page + 1}"
+                       th:classappend="${page == reviewPaging.number} ? 'active'">
+                    </a>
+                </th:block>
+
+                <a class="page-item"
+                   th:href="@{|/review/group/${group.id}/list?page=${reviewPaging.number + 1}|}"
+                   th:if="${reviewPaging.hasNext()}">&gt;</a>
+            </div>
+
+        </div> </div> </div>
+</html>

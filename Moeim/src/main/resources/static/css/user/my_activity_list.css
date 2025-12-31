@@ -1,0 +1,188 @@
+:root {
+    --primary-color: #0f6b4a;
+    --primary-hover: #0c553a;
+    --bg-base: #f5f7f6;
+    --text-title: #0b3c2a;
+    --text-body: #333333;
+    --border-color: #e0e0e0;
+}
+
+body {
+    margin: 0; padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-body);
+}
+
+/* 전체 래퍼 */
+.list-wrapper {
+    min-height: 100vh;
+    padding: 40px 16px 60px;
+    box-sizing: border-box;
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* 리스트 컨테이너 */
+.list-container {
+    background: white;
+    width: 100%;
+    max-width: 800px;
+    padding: 40px 50px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    border: 1px solid var(--border-color);
+    margin-top: 20px;
+}
+
+/* 헤더 */
+.list-header {
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-title);
+}
+
+.highlight { color: var(--primary-color); }
+
+.back-link {
+    color: var(--primary-color);
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: 1px solid #cfe1d9;
+    transition: all 0.2s ease;
+}
+
+.back-link:hover {
+    background-color: #f5fbf8;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(15, 107, 74, 0.1);
+}
+
+/* 아이템 카드 스타일 */
+.item-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: block; /* 링크일 경우를 대비 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+    color: inherit;
+}
+
+.item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    border-color: #d1e1da;
+}
+
+/* 카드 내부 헤더 (제목 등) */
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.item-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2b4238;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.item-meta {
+    font-size: 13px;
+    color: #888;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.meta-badge {
+    background-color: #f0f7f4;
+    color: var(--primary-color);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* 본문 (댓글 내용 등) */
+.item-body {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #444;
+    margin-top: 10px;
+    background-color: #FAFAFA;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+/* 페이징 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 50px;
+}
+
+.page-item {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    color: #666;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.2s;
+    background-color: white;
+    border: 1px solid #eee;
+}
+
+.page-item:hover {
+    background-color: #f5fbf8;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.page-item.active {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 700;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 10px rgba(15, 107, 74, 0.2);
+}
+
+/* 빈 화면 */
+.empty-state {
+    text-align: center;
+    padding: 80px 0;
+    color: #999;
+}
+.empty-icon { font-size: 48px; margin-bottom: 16px; display: block; }
+
+/* 모바일 */
+@media (max-width: 640px) {
+    .list-wrapper { padding: 20px 16px; }
+    .list-container { padding: 30px 20px; }
+    .item-title { font-size: 16px; }
+}

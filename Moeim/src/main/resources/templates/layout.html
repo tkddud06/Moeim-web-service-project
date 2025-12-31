@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Moeim</title>
+
+    <!-- 공통 스타일 -->
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/schedule/calendar.css}">
+    <link rel="stylesheet" th:href="@{/css/chat/chat_widget.css}">
+
+    <!-- 채팅 입력 비활성화 스타일 -->
+    <style>
+    </style>
+</head>
+
+<body th:with="loginUser=${session.user}"
+      th:attr="data-login-user-id=${loginUser != null ? loginUser.id : 0}">
+
+<!-- ======================= HEADER ======================= -->
+<header class="header">
+    <div class="header-inner">
+
+        <!-- 로고 -->
+        <a href="/" class="logo-area">
+            <img th:src="@{/images/logo.png}" alt="logo">
+            <span class="logo-text">MOEIM</span>
+        </a>
+
+        <!-- 메뉴 -->
+        <nav class="menu">
+            <a th:if="${session.user == null}" th:href="@{/user/login_form}">로그인</a>
+            <a th:if="${session.user != null}" th:href="@{/user/logout}">로그아웃</a>
+            <span>|</span>
+            <a th:href="@{/faq/faq}">FAQ</a>
+            <span>|</span>
+            <a th:href="@{/category/0}">커뮤니티</a>
+            <span>|</span>
+            <a th:href="@{/group/list}">소모임</a>
+            <span th:if="${session.user != null}">|</span>
+            <a th:if="${session.user != null}" th:href="@{/user/mypage}">마이페이지</a>
+        </nav>
+
+    </div>
+</header>
+
+<!-- ======================= 채팅 플로팅 버튼 & 패널 ======================= -->
+
+<!-- 왼쪽 아래 둥근 버튼 -->
+<div id="chat-floating-btn" class="chat-floating-btn" th:if="${session.user != null}">
+    💬
+    <span id="chat-global-unread" class="chat-unread-badge hidden">0</span>
+</div>
+
+<!-- 채팅 패널 -->
+<div id="chat-panel" class="chat-panel">
+    <div class="chat-panel-header">
+        <span id="chat-room-title">대화 상대를 선택하세요</span>
+        <button type="button" id="chat-close-btn" class="chat-close-btn">✕</button>
+    </div>
+
+    <!-- 탭 -->
+    <div class="chat-panel-tabs">
+        <button class="chat-tab-btn active" data-tab="group">그룹 채팅</button>
+        <button class="chat-tab-btn" data-tab="direct">1:1 채팅</button>
+        <button class="chat-tab-btn" data-tab="random">랜덤 채팅</button>
+    </div>
+
+    <!-- 본문: 왼쪽 방 리스트 + 오른쪽 대화창 -->
+    <div class="chat-panel-body">
+        <!-- 왼쪽: 방 리스트/랜덤 매칭 -->
+        <div class="chat-sidebar">
+            <!-- 그룹 채팅 리스트 -->
+            <div class="chat-tab-content" id="chat-tab-group">
+                <div class="chat-list" id="chat-group-list">
+                    로딩 중...
+                </div>
+            </div>
+
+            <!-- 1:1 채팅 리스트 -->
+            <div class="chat-tab-content hidden" id="chat-tab-direct">
+                <div class="chat-list" id="chat-direct-list">
+                    아직 1:1 채팅 내역이 없습니다.
+                </div>
+            </div>
+
+            <!-- 랜덤 채팅 -->
+            <div class="chat-tab-content hidden" id="chat-tab-random">
+                <div id="random-chat-status">
+                    <p class="random-status-text">랜덤 매칭 상대를 찾고 있습니다...</p>
+                    <button type="button" id="random-chat-start-btn" class="chat-random-btn">
+                        매칭 시작
+                    </button>
+                    <button type="button" id="random-chat-cancel-btn"
+                            class="chat-random-btn secondary hidden">
+                        매칭 취소
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 오른쪽: 실제 대화창 -->
+        <div class="chat-main">
+            <div class="chat-main-header">
+                <!-- 위쪽 헤더 타이틀 -->
+                <span id="chat-main-title">채팅</span>
+            </div>
+
+            <div class="chat-message-container">
+                <ul id="chat-message-list" class="chat-message-list">
+                    <li class="chat-message-system">
+                        왼쪽에서 채팅방을 선택하거나, 마이페이지에서 [메시지 보내기]를 눌러 시작하세요.
+                    </li>
+                </ul>
+            </div>
+
+            <form id="chat-send-form" class="chat-send-form">
+                <textarea id="chat-input"
+                          class="chat-input"
+                          rows="1"
+                          placeholder="메시지를 입력하세요"
+                          autocomplete="off"></textarea>
+                <button type="submit" id="chat-send-btn" class="chat-send-btn">전송</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ======================= 페이지 컨텐츠 ======================= -->
+
+<th:block layout:fragment="content"></th:block>
+
+<script>
+    function openSidebar() {
+        console.log("사이드바 열기");
+    }
+</script>
+
+<th:block layout:fragment="script"></th:block>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="site-footer">
+    <div class="footer-inner">
+
+        <a href="https://github.com/happylife10201020/OpenSW_group3"
+           class="footer-link"
+           target="_blank"
+           rel="noopener noreferrer">
+            GitHub
+        </a>
+
+        <span class="footer-text">
+            © 2025 Moeim. All rights reserved.
+        </span>
+
+
+        <span class="footer-members">
+                서민석 · 이인수 · 최상영 · Ali Zarq
+            </span>
+    </div>
+</footer>
+<!-- ======================= FOOTER END ======================= -->
+
+
+<!-- ======================= 채팅 위젯 스크립트 ======================= -->
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        // 현재 선택된 방 / 타입
+        let currentRoomId = null;
+        let currentRoomType = null;   // 'GROUP' | 'DIRECT' | 'RANDOM'
+        let messagePollTimer = null;
+
+        const chatBtn = document.getElementById('chat-floating-btn');
+        const chatPanel = document.getElementById('chat-panel');
+        const chatCloseBtn = document.getElementById('chat-close-btn');
+        const tabButtons = document.querySelectorAll('.chat-tab-btn');
+        const tabGroup = document.getElementById('chat-tab-group');
+        const tabDirect = document.getElementById('chat-tab-direct');
+        const tabRandom = document.getElementById('chat-tab-random');
+
+        const groupListEl = document.getElementById('chat-group-list');
+        const directListEl = document.getElementById('chat-direct-list');
+        const randomStartBtn = document.getElementById('random-chat-start-btn');
+        const randomCancelBtn = document.getElementById('random-chat-cancel-btn');
+
+        const chatRoomTitleEl = document.getElementById('chat-room-title');
+        const chatMainTitleEl = document.getElementById('chat-main-title');
+        const messageListEl = document.getElementById('chat-message-list');
+        // 실제 스크롤이 걸리는 컨테이너 기준
+        const messageScrollEl = document.querySelector('.chat-message-container') || messageListEl;
+
+        const sendForm = document.getElementById('chat-send-form');
+        const inputEl = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('chat-send-btn');
+
+        const globalUnreadEl = document.getElementById('chat-global-unread');
+
+        // ===== 입력/전송 버튼 활성/비활성 제어 =====
+        function setSendFormEnabled(enabled) {
+            if (!inputEl || !sendBtn) return;
+
+            if (enabled) {
+                inputEl.disabled = false;
+                inputEl.classList.remove('disabled');
+
+                sendBtn.disabled = false;
+                sendBtn.classList.remove('disabled');
+            } else {
+                inputEl.value = '';
+                inputEl.disabled = true;
+                inputEl.classList.add('disabled');
+
+                sendBtn.disabled = true;
+                sendBtn.classList.add('disabled');
+            }
+        }
+
+        // 처음에는 방이 선택되지 않았으므로 비활성화
+        setSendFormEnabled(false);
+
+        // ===== 상단 빨간 배지 =====
+        function updateGlobalUnreadBadge(count) {
+            if (!globalUnreadEl) return;
+            if (!count || count <= 0) {
+                globalUnreadEl.classList.add('hidden');
+            } else {
+                globalUnreadEl.textContent = count > 99 ? '99+' : count;
+                globalUnreadEl.classList.remove('hidden');
+            }
+        }
+
+        function refreshUnreadCount() {
+            fetch('/api/chat/unread-count')
+                .then(res => res.ok ? res.json() : {totalUnread: 0})
+                .then(data => {
+                    updateGlobalUnreadBadge(data.totalUnread || 0);
+                })
+                .catch(() => {
+                });
+        }
+
+        const bodyTag = document.querySelector('body');
+        const loginUserId = bodyTag ? parseInt(bodyTag.getAttribute('data-login-user-id') || '0') : 0;
+        if (loginUserId > 0) {
+            refreshUnreadCount();
+            setInterval(refreshUnreadCount, 3000); // 3초마다 갱신
+        }
+
+        // ===== 패널 열고 닫기 =====
+        function openChatPanelInternal() {
+            if (chatPanel) {
+                chatPanel.classList.add('open');
+            }
+            if (currentRoomId) {
+                setSendFormEnabled(true);
+            } else {
+                setSendFormEnabled(false);
+            }
+        }
+
+        function stopMessagePolling() {
+            if (messagePollTimer != null) {
+                clearInterval(messagePollTimer);
+                messagePollTimer = null;
+            }
+        }
+
+        function closeChatPanelInternal() {
+            if (chatPanel) {
+                chatPanel.classList.remove('open');
+            }
+            stopMessagePolling();
+        }
+
+        window.openChatPanel = openChatPanelInternal;
+
+        if (chatBtn) {
+            chatBtn.addEventListener('click', function () {
+                if (chatPanel.classList.contains('open')) {
+                    closeChatPanelInternal();
+                } else {
+                    openChatPanelInternal();
+                    setActiveTab('group');
+                }
+            });
+        }
+        if (chatCloseBtn) {
+            chatCloseBtn.addEventListener('click', closeChatPanelInternal);
+        }
+
+        // ===== 탭 전환 =====
+        function setActiveTab(tabName) {
+            tabButtons.forEach(b => {
+                b.classList.toggle('active', b.dataset.tab === tabName);
+            });
+
+            if (tabGroup) tabGroup.classList.toggle('hidden', tabName !== 'group');
+            if (tabDirect) tabDirect.classList.toggle('hidden', tabName !== 'direct');
+            if (tabRandom) tabRandom.classList.toggle('hidden', tabName !== 'random');
+
+            if (tabName === 'group') {
+                loadGroupChatRooms();
+            } else if (tabName === 'direct') {
+                loadDirectChatRooms();
+            }
+        }
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setActiveTab(btn.dataset.tab);
+            });
+        });
+
+        // ===== 메시지 주기적 갱신 =====
+        function startMessagePolling() {
+            stopMessagePolling();
+            if (!currentRoomId) return;
+            messagePollTimer = setInterval(() => {
+                loadMessagesForRoom(currentRoomId, true); // silent
+            }, 2500);
+        }
+
+        // ===== 특정 방 읽음 처리 =====
+        function markRoomAsRead(roomId, lastMessageId) {
+            if (!lastMessageId) return;
+            if (!chatPanel || !chatPanel.classList.contains('open')) return;
+
+            fetch('/api/chat/rooms/' + roomId + '/read', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({lastMessageId: lastMessageId})
+            }).then(() => {
+                refreshUnreadCount();
+
+                if (currentRoomType === 'DIRECT') {
+                    loadDirectChatRooms();
+                } else if (currentRoomType === 'GROUP') {
+                    loadGroupChatRooms();
+                }
+            }).catch(() => {
+            });
+        }
+
+        // ===== 마지막 내 메시지가 읽혔으면, 내 메시지 전체에 읽음표시 =====
+        function updateLastMineReadMark(list) {
+            if (!Array.isArray(list) || list.length === 0) return;
+
+            // 1. 최근 '내 메시지' 하나 찾기
+            let lastMine = null;
+            for (let i = list.length - 1; i >= 0; i--) {
+                const m = list[i];
+                if (m.mine) {
+                    lastMine = m;
+                    break;
+                }
+            }
+
+            // 내 메시지가 하나도 없거나, "가장 최근 내 메시지"가 아직 안 읽힌 상태면 아무것도 안 함
+            if (!lastMine || !lastMine.readByAll) {
+                return;
+            }
+
+            // 2. DOM에서 내 메시지(li.chat-message.mine) 전부에 읽음표시 추가
+            const mineNodes = messageListEl.querySelectorAll('li.chat-message.mine');
+            if (!mineNodes || mineNodes.length === 0) return;
+
+            mineNodes.forEach(li => {
+                const metaEl = li.querySelector('.chat-message-meta');
+                if (!metaEl) return;
+
+                // 이미 붙어 있으면 또 안 붙임
+                if (metaEl.querySelector('.chat-message-read')) return;
+
+                const span = document.createElement('span');
+                span.className = 'chat-message-read';
+                span.textContent = '읽음';
+                // 시간 앞쪽에 끼워 넣기
+                metaEl.insertBefore(span, metaEl.firstChild);
+            });
+        }
+
+        // ===== 특정 방 메시지 로딩 (깜빡임 최소화 + 자동 스크롤 + 읽음표시 업데이트) =====
+        function loadMessagesForRoom(roomId, silent) {
+            if (!messageListEl || !messageScrollEl || !roomId) return;
+
+            if (!chatPanel || !chatPanel.classList.contains('open')) {
+                return;
+            }
+
+            const nearBottom =
+                messageScrollEl.scrollHeight - messageScrollEl.scrollTop - messageScrollEl.clientHeight < 50;
+
+            // 메타 영역 HTML 생성 공통 함수
+            function buildMetaHtml(m) {
+                const isReadByAll = (currentRoomType === 'DIRECT' && m.readByAll);
+
+                const readMark =
+                    (m.mine && isReadByAll)
+                        ? '<span class="chat-message-read">읽음</span>'
+                        : '';
+
+                let groupUnreadMark = '';
+                if (currentRoomType === 'GROUP' &&
+                    typeof m.unreadMemberCount === 'number' &&
+                    m.unreadMemberCount > 0) {
+                    groupUnreadMark =
+                        `<span class="chat-message-unread-count">${m.unreadMemberCount}</span>`;
+                }
+
+                return `
+            ${readMark}
+            ${groupUnreadMark}
+            <span class="chat-message-time">
+                ${m.createdAt ? m.createdAt.slice(11, 16) : ''}
+            </span>
+        `;
+            }
+
+            fetch('/api/chat/rooms/' + roomId + '/messages')
+                .then(res => {
+                    if (!res.ok) throw new Error('메시지 불러오기 실패');
+                    return res.json();
+                })
+                .then(list => {
+                    if (!Array.isArray(list) || list.length === 0) {
+                        if (!messageListEl.dataset.lastMessageId) {
+                            messageListEl.innerHTML =
+                                '<li class="chat-message-system">아직 주고받은 메시지가 없습니다.</li>';
+                        }
+                        messageListEl.dataset.lastMessageId = '';
+                        return;
+                    }
+
+                    // 메시지 하나 렌더링
+                    function renderMessage(m) {
+                        const li = document.createElement('li');
+                        li.className = 'chat-message ' + (m.mine ? 'mine' : 'theirs');
+
+                        // 그룹 채팅이고 내가 보낸 메시지가 아닌 경우 → 프로필 이미지 + 닉네임
+                        if (currentRoomType === 'GROUP' && !m.mine) {
+                            li.classList.add('group-other');
+
+                            const profileUrl = m.senderProfileImageUrl
+                                || '/images/defaultProfilePicture.png';
+
+                            li.innerHTML = `
+                        <div class="chat-message-avatar">
+                            <img src="${profileUrl}"
+                                 onerror="this.src='/images/defaultProfilePicture.png'"
+                                 alt="프로필 이미지">
+                        </div>
+                        <div class="chat-message-body">
+                            <div class="chat-message-sender">
+                                ${m.senderNickname || '사용자'}
+                            </div>
+                            <div class="chat-message-content-wrapper">
+                                <div class="chat-message-bubble">
+                                    <div class="chat-message-content"></div>
+                                </div>
+                                <div class="chat-message-meta">
+                                    ${buildMetaHtml(m)}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                        } else {
+                            // 1:1 이거나, 내가 보낸 메시지 → 기존 버블 레이아웃
+                            li.innerHTML = `
+                        <div class="chat-message-bubble">
+                            <div class="chat-message-content"></div>
+                        </div>
+                        <div class="chat-message-meta">
+                            ${buildMetaHtml(m)}
+                        </div>
+                    `;
+                        }
+
+                        const contentEl = li.querySelector('.chat-message-content');
+                        if (contentEl) {
+                            contentEl.textContent = m.content;
+                        }
+                        messageListEl.appendChild(li);
+                    }
+
+                    if (!silent) {
+                        // 방을 처음 열거나 내가 전송 직후 등 → 전체 다시 그림
+                        messageListEl.innerHTML = '';
+                        list.forEach(renderMessage);
+                    } else {
+                        const lastRenderedId = messageListEl.dataset.lastMessageId;
+                        let startIndex = 0;
+
+                        if (lastRenderedId) {
+                            const idx = list.findIndex(m => String(m.id) === lastRenderedId);
+                            if (idx >= 0) {
+                                startIndex = idx + 1;
+                            }
+                        }
+
+                        const hasNewMessages = startIndex < list.length;
+
+                        if (hasNewMessages) {
+                            for (let i = startIndex; i < list.length; i++) {
+                                renderMessage(list[i]);
+                            }
+                        }
+
+                        // 새 메시지가 없더라도, 기존 메시지의 읽음 상태 및 그룹 unread 숫자 업데이트
+                        if (!hasNewMessages) {
+                            const existingMessages = messageListEl.querySelectorAll('.chat-message');
+                            const messagesToUpdate = list.slice(-existingMessages.length);
+
+                            messagesToUpdate.forEach((m, index) => {
+                                const li = existingMessages[index];
+                                if (!li) return;
+
+                                const metaEl = li.querySelector('.chat-message-meta');
+                                if (metaEl) {
+                                    metaEl.innerHTML = buildMetaHtml(m);
+                                }
+                            });
+                        }
+                    }
+
+                    const last = list[list.length - 1];
+                    if (last) {
+                        messageListEl.dataset.lastMessageId = String(last.id);
+                        markRoomAsRead(roomId, last.id);
+                    }
+
+                    if (nearBottom || !silent) {
+                        messageScrollEl.scrollTop = messageScrollEl.scrollHeight;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    if (!silent) {
+                        messageListEl.innerHTML =
+                            '<li class="chat-message-system error">메시지를 불러오는 중 오류가 발생했습니다.</li>';
+                    }
+                });
+        }
+
+
+        // ===== 방 활성화 (제목 세팅 + 메시지 로딩 + 폴링 시작) =====
+        function setActiveRoom(roomId, title, type) {
+            currentRoomId = roomId;
+            currentRoomType = type || null;
+
+            const titleText = title || '채팅';
+
+            if (chatRoomTitleEl) {
+                chatRoomTitleEl.textContent = titleText;
+            }
+            if (chatMainTitleEl) {
+                chatMainTitleEl.textContent = titleText;
+            }
+
+            if (messageListEl) {
+                messageListEl.innerHTML =
+                    '<li class="chat-message-system">메시지를 불러오는 중...</li>';
+                messageListEl.dataset.lastMessageId = '';
+            }
+
+            setSendFormEnabled(true);
+
+            openChatPanelInternal();
+            loadMessagesForRoom(roomId, false);
+            startMessagePolling();
+        }
+
+        // ===== 메시지 전송 =====
+        if (sendForm && inputEl && sendBtn) {
+            sendForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (!currentRoomId) {
+                    alert('먼저 채팅방을 선택하세요.');
+                    return;
+                }
+                if (sendBtn.disabled || inputEl.disabled) {
+                    return;
+                }
+
+                const text = inputEl.value.trim();
+                if (!text) return;
+
+                fetch('/api/chat/rooms/' + currentRoomId + '/messages', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({content: text})
+                })
+                    .then(res => {
+                        if (!res.ok) throw new Error('전송 실패');
+                        return res.json();
+                    })
+                    .then(() => {
+                        inputEl.value = '';
+                        loadMessagesForRoom(currentRoomId, false);
+                        if (messageScrollEl) {
+                            setTimeout(() => {
+                                messageScrollEl.scrollTop = messageScrollEl.scrollHeight;
+                            }, 50);
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('메시지 전송에 실패했습니다.');
+                    });
+            });
+
+            // Enter 로 전송, Shift+Enter 는 줄바꿈
+            inputEl.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendForm.dispatchEvent(new Event('submit', {cancelable: true}));
+                }
+            });
+        }
+
+        // ===== 그룹 채팅방 목록 로딩 =====
+        function loadGroupChatRooms() {
+            if (!groupListEl) return;
+            groupListEl.innerHTML = '로딩 중...';
+
+            fetch('/api/chat/my-groups')
+                .then(res => {
+                    if (!res.ok) throw new Error('권한 오류 또는 서버 오류');
+                    return res.json();
+                })
+                .then(data => {
+                    if (!Array.isArray(data) || data.length === 0) {
+                        groupListEl.innerHTML =
+                            '<div style="color:#999; font-size:12px; text-align:center; margin-top:20px;">참여 중인 그룹 채팅이 없습니다.</div>';
+                        return;
+                    }
+
+                    groupListEl.innerHTML = '';
+                    data.forEach(room => {
+                        const div = document.createElement('div');
+                        div.className = 'chat-list-item';
+
+                        //  [수정] unreadCount가 0보다 클 경우 배지 HTML 생성
+                        const badgeHtml = room.unreadCount && room.unreadCount > 0
+                            ? `<span class="chat-unread-badge-inline">${room.unreadCount}</span>`
+                            : '';
+
+                        div.innerHTML = `
+        <div class="chat-list-title">
+            ${room.groupTitle || room.name || '그룹 채팅'}
+            ${badgeHtml} </div>
+        <div class="chat-list-meta">
+            ${room.lastMessagePreview || ''}
+            ${room.unreadCount ? ' • 미확인 ' + room.unreadCount + '개' : ''}
+        </div>
+    `;
+                        div.addEventListener('click', () => {
+                            setActiveRoom(
+                                room.roomId,
+                                room.groupTitle || room.name || '그룹 채팅',
+                                'GROUP'
+                            );
+                        });
+                        groupListEl.appendChild(div);
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    groupListEl.innerHTML =
+                        '<div style="color:#c92a2a; font-size:12px; text-align:center; margin-top:20px;">그룹 채팅 목록을 불러오는 중 오류가 발생했습니다.</div>';
+                });
+        }
+
+        // ===== 1:1 채팅 목록 로딩 =====
+        function loadDirectChatRooms() {
+            if (!directListEl) return;
+            directListEl.innerHTML = '로딩 중...';
+
+            fetch('/api/chat/my-direct')
+                .then(res => {
+                    if (!res.ok) throw new Error('서버 오류');
+                    return res.json();
+                })
+                .then(data => {
+                    if (!Array.isArray(data) || data.length === 0) {
+                        directListEl.innerHTML =
+                            '<div style="color:#999; font-size:12px; text-align:center; margin-top:20px;">진행 중인 1:1 채팅이 없습니다.</div>';
+                        return;
+                    }
+
+                    directListEl.innerHTML = '';
+                    data.forEach(room => {
+                        const div = document.createElement('div');
+                        div.className = 'chat-list-item';
+
+                        const badgeHtml = room.unreadCount && room.unreadCount > 0
+                            ? `<span class="chat-unread-badge-inline">${room.unreadCount}</span>`
+                            : '';
+
+                        div.innerHTML = `
+                            <div class="chat-list-title">
+                                ${room.partnerNickname || '상대방'}
+                                ${badgeHtml}
+                            </div>
+                            <div class="chat-list-meta">
+                                ${room.lastMessagePreview || ''}
+                                ${room.unreadCount ? ' • 미확인 ' + room.unreadCount + '개' : ''}
+                            </div>
+                        `;
+                        div.addEventListener('click', () => {
+                            setActiveRoom(
+                                room.roomId,
+                                room.partnerNickname || '1:1 채팅',
+                                'DIRECT'
+                            );
+                        });
+                        directListEl.appendChild(div);
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    directListEl.innerHTML =
+                        '<div style="color:#c92a2a; font-size:12px; text-align:center; margin-top:20px;">1:1 채팅 목록을 불러오는 중 오류가 발생했습니다.</div>';
+                });
+        }
+
+        // ===== 마이페이지 "메시지 보내기" 버튼에서 호출하는 전역 함수 =====
+        window.openDirectChat = function (targetUserId) {
+            fetch('/api/chat/direct/' + targetUserId, {
+                method: 'POST'
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error('방 생성 실패');
+                    return res.json();
+                })
+                .then(data => {
+                    const roomId = data.roomId;
+                    const title = data.partnerNickname || '1:1 채팅';
+                    setActiveTab('direct');
+                    setActiveRoom(roomId, title, 'DIRECT');
+                    loadDirectChatRooms();  // 왼쪽 리스트 갱신
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('메시지 전송 준비에 실패했습니다. 다시 시도해 주세요.');
+                });
+        };
+
+        // ===== 랜덤 채팅 (API는 추후 구현, 현재는 기본 틀만) =====
+        let randomIntervalId = null;
+
+        function pollRandomStatus() {
+            if (randomIntervalId != null) return;
+            randomIntervalId = setInterval(() => {
+                fetch('/api/chat/random/status')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.roomId) {
+                            clearInterval(randomIntervalId);
+                            randomIntervalId = null;
+                            window.location.href = '/chat/room/' + data.roomId;
+                        }
+                    })
+                    .catch(() => {
+                    });
+            }, 2000);
+        }
+
+        if (randomStartBtn) {
+            randomStartBtn.addEventListener('click', () => {
+                fetch('/api/chat/random/join', {method: 'POST'})
+                    .then(res => {
+                        if (!res.ok) throw new Error();
+                        return res.json();
+                    })
+                    .then(data => {
+                        if (data.roomId) {
+                            window.location.href = '/chat/room/' + data.roomId;
+                            return;
+                        }
+                        randomStartBtn.classList.add('hidden');
+                        randomCancelBtn.classList.remove('hidden');
+                        pollRandomStatus();
+                    })
+                    .catch(() => {
+                        alert('랜덤 채팅 매칭 요청 중 오류가 발생했습니다.');
+                    });
+            });
+        }
+
+        if (randomCancelBtn) {
+            randomCancelBtn.addEventListener('click', () => {
+                fetch('/api/chat/random/cancel', {method: 'POST'})
+                    .finally(() => {
+                        randomStartBtn.classList.remove('hidden');
+                        randomCancelBtn.classList.add('hidden');
+                        if (randomIntervalId != null) {
+                            clearInterval(randomIntervalId);
+                            randomIntervalId = null;
+                        }
+                    });
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

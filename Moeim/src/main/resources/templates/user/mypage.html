@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title th:text="${isOwner} ? '마이페이지 | Moeim' : '회원 페이지 | Moeim'">
+        마이페이지 | Moeim
+    </title>
+    <!-- 마이페이지 전용 CSS -->
+    <link rel="stylesheet" th:href="@{/css/user/mypage.css}">
+</head>
+
+<body>
+<th:block layout:fragment="content">
+
+    <main class="mypage-wrapper">
+        <section class="mypage-container">
+            <!-- 좌측 프로필 카드 -->
+            <aside class="profile-card">
+                <div class="profile-header">
+                    <div class="avatar">
+                        <!-- DB에 이미지가 있을 때 -->
+                        <img th:if="${user != null and user.profileImage != null}"
+                             th:src="@{/user/profile-image/{id}(id=${user.id})}"
+                             alt="프로필 이미지"/>
+
+                        <!-- 없을 때 기본 이미지 -->
+                        <img th:if="${user == null or user.profileImage == null}"
+                             th:src="@{/images/defaultProfilePicture.png}"
+                             alt="기본 프로필 이미지"/>
+                    </div>
+                    <div class="profile-basic">
+                        <h2 class="nickname"
+                            th:text="${user != null && user.nickname != null ? user.nickname : '닉네임'}">
+                            닉네임
+                        </h2>
+                        <p class="email"
+                           th:text="${user != null && user.email != null ? user.email : 'email@example.com'}">
+                            email@example.com
+                        </p>
+                    </div>
+                </div>
+
+                <div class="profile-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">참여 중인 모임</span>
+                        <span class="meta-value"
+                              th:text="${joinedGroupCount} ?: 0">
+                            0
+                        </span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label"
+                              th:text="${isOwner} ? '내 게시글' : '작성한 게시글'">
+                            내 게시글
+                        </span>
+                        <span class="meta-value"
+                              th:text="${postCount} ?: 0">
+                            0
+                        </span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label"
+                              th:text="${isOwner} ? '내 댓글' : '작성한 댓글'">
+                            내 댓글
+                        </span>
+                        <span class="meta-value"
+                              th:text="${commentCount} ?: 0">
+                            0
+                        </span>
+                    </div>
+
+                    <div class="profile-interests" th:if="${userInterests != null and !userInterests.isEmpty()}">
+                        <span class="interests-title">관심사</span>
+                        <div class="interest-chips">
+                            <span class="interest-chip" th:each="cat : ${userInterests}"
+                                  th:text="${cat.title}">운동</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-interests" th:if="${userInterests == null or userInterests.isEmpty()}">
+                        <span class="interests-title">관심사</span>
+                        <span style="font-size: 12px; color: #999;">등록된 관심사가 없습니다.</span>
+                    </div>
+                </div>
+
+                <!-- 본인일 때: 프로필 수정 버튼 -->
+                <div th:if="${loginUser != null and loginUser.id == myPageUser.id}">
+                    <a th:href="@{/user/edit}" style="text-decoration:none;">
+                        <button class="btn-edit-profile" type="button">
+                            프로필 수정
+                        </button>
+                    </a>
+                </div>
+
+                <!--  다른 사람일 때: 메시지 보내기 버튼 -->
+                <div th:if="${!isOwner}">
+                    <button class="btn-edit-profile"
+                            type="button"
+                            th:onclick="|openDirectChat(${user.id})|">
+                        메시지 보내기
+                    </button>
+                </div>
+
+            </aside>
+
+            <!-- 우측 내용 영역 -->
+            <section class="mypage-content">
+
+                <!-- 내 정보 카드 (상단 전체 폭) -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <!-- 내 페이지일 때 -->
+                        <h3 th:if="${isOwner}">내 정보</h3>
+
+                        <!-- 다른 사람 페이지일 때 -->
+                        <h3 th:if="${!isOwner}"
+                            th:text="${user != null && user.nickname != null ? user.nickname + '님의 정보' : '회원 정보'}">
+                            회원 정보
+                        </h3>
+                    </div>
+                    <div class="info-body">
+                        <div class="info-row">
+                            <span class="info-label">이름</span>
+                            <span class="info-value"
+                                  th:text="${user != null && user.nickname != null ? user.nickname : '홍길동'}">
+                                홍길동
+                            </span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">닉네임</span>
+                            <span class="info-value"
+                                  th:text="${user != null && user.nickname != null ? user.nickname : '닉네임'}">
+                                닉네임
+                            </span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">이메일</span>
+                            <span class="info-value"
+                                  th:text="${user != null && user.email != null ? user.email : 'email@example.com'}">
+                                email@example.com
+                            </span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">가입일</span>
+                            <span class="info-value"
+                                  th:text="${user != null && user.createdAt != null ? #temporals.format(user.createdAt, 'yyyy.MM.dd') : '2025.01.01'}">
+                                2025.01.01
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 아래 2×2 그리드: 참여 모임 / 내 일정 / 내 게시글 / 내 댓글 -->
+                <div class="grid-two">
+
+                    <!-- 참여 중인 모임 (좌상단) -->
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <h3>참여 중인 모임</h3>
+                            <a th:href="@{|/user/grouplist/${user.id}|}" class="link-small">전체 모임 보기</a>
+                        </div>
+                        <div class="info-body">
+                            <ul class="group-list">
+                                <!-- joinedGroups: List<GroupUser> -->
+                                <li class="group-item" th:each="gu : ${joinedGroups}">
+                                    <div class="group-main">
+                                        <div class="group-title"
+                                             th:text="${gu.group != null ? gu.group.title : '모임 이름'}">
+                                            모임 이름
+                                        </div>
+                                        <div class="group-meta">
+                                            <span th:text="${gu.group != null && gu.group.category != null ? gu.group.category.title : '카테고리'}">
+                                                카테고리
+                                            </span>
+                                            <span> · </span>
+                                            <span th:text="${gu.createdAt != null ? #temporals.format(gu.createdAt, 'yyyy.MM.dd') : '2025.01.01'}">
+                                                2025.01.01
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="group-actions">
+                                        <a class="btn-outline"
+                                           th:if="${isOwner}"
+                                           th:href="@{/group/home/{id}(id=${gu.group.id})}">
+                                            모임 페이지로
+                                        </a>
+                                    </div>
+                                </li>
+
+                                <li class="activity-item empty"
+                                    th:if="${joinedGroups == null or #lists.isEmpty(joinedGroups)}">
+                                    참여 중인 모임이 없습니다.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 내 일정 (우상단, 달력 박스) -->
+                    <div class="info-card">
+                        <div class="info-card-header"
+                             style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3 th:if="${isOwner}">내 일정</h3>
+                            <h3 th:if="${!isOwner}"
+                                th:text="${user != null && user.nickname != null ? user.nickname + '님의 일정' : '일정'}">
+                                일정
+                            </h3>
+
+                            <button type="button"
+                                    onclick="location.href='/schedule/my/export'"
+                                    style="background-color: white; border: 1px solid #134D38; color: #134D38; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: 0.2s;">
+                                <span>📥</span>
+                                <span th:text="${isOwner} ? '내 일정 내보내기' : '일정 내보내기'">
+                                    내 일정 내보내기
+                                </span>
+                            </button>
+                        </div>
+                        <div class="info-body" style="padding: 0;">
+                            <!--
+                               apiUrl: '/api/schedule/mine' (내 일정 API)
+                               canAdd: false (마이페이지에서는 일정추가 없음)
+                            -->
+                            <div th:if="${isOwner}"
+                                 th:replace="~{schedule/calendar_fragment :: calendarFragment(apiUrl='/api/schedule/mine', canAdd=false)}">
+                            </div>
+
+                            <div th:if="${!isOwner}"
+                                 th:replace="~{schedule/calendar_fragment :: calendarFragment(apiUrl=${'/api/schedule/user/' + user.id}, canAdd=false)}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 내가 쓴 게시글 (좌하단) -->
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <!-- 제목 -->
+                            <h3 th:if="${isOwner}">내 게시글</h3>
+                            <h3 th:if="${!isOwner}"
+                                th:text="${user != null && user.nickname != null ? user.nickname + '님의 게시글' : '게시글'}">
+                                게시글
+                            </h3>
+                            <a th:href="@{|/user/postlist/${user.id}|}"
+                               class="link-small"
+                               th:text="${isOwner} ? '내 글 모아보기' : '글 모아보기'">
+                                내 글 모아보기
+                            </a>
+                        </div>
+                        <div class="info-body">
+                            <ul class="activity-list">
+                                <!-- myPosts: List<Post> -->
+                                <li class="activity-item" th:each="p : ${myPosts}">
+                                    <div class="activity-main">
+                                        <span class="activity-type">게시글</span>
+                                        <a class="activity-title"
+                                           th:href="@{/post/{category}/{id}(category=${p.category.id}, id=${p.id})}"
+                                           th:text="${p.title}">
+                                            게시글 제목
+                                        </a>
+                                    </div>
+                                    <div class="activity-meta">
+                                        <span th:text="${p.createdAt != null ? #temporals.format(p.createdAt, 'yyyy.MM.dd HH:mm') : '2025.01.01 12:00'}">
+                                            2025.01.01 12:00
+                                        </span>
+                                        <span th:if="${p.category != null}">
+                                            · <span th:text="${p.category.title}">카테고리명</span>
+                                        </span>
+                                    </div>
+                                    <div class="activity-actions">
+                                        <a class="btn-outline"
+                                           th:href="@{/post/{category}/{id}(category=${p.category.id}, id=${p.id})}">
+                                            게시글 보기
+                                        </a>
+                                    </div>
+                                </li>
+
+                                <li class="activity-item empty"
+                                    th:if="${myPosts == null or #lists.isEmpty(myPosts)}">
+                                    작성한 게시글이 없습니다.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 내가 쓴 댓글 (우하단) -->
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <h3 th:if="${isOwner}">내 댓글</h3>
+                            <h3 th:if="${!isOwner}"
+                                th:text="${user != null && user.nickname != null ? user.nickname + '님의 댓글' : '댓글'}">
+                                댓글
+                            </h3>
+                            <a th:href="@{|/user/commentlist/${user.id}|}"
+                               class="link-small"
+                               th:text="${isOwner} ? '내 댓글 모아보기' : '댓글 모아보기'">
+                                댓글 모아보기
+                            </a>
+                        </div>
+                        <div class="info-body">
+                            <ul class="activity-list">
+                                <!-- myComments: List<Comment> -->
+                                <li class="activity-item" th:each="c : ${myComments}">
+                                    <div class="activity-main">
+                                        <span class="activity-type">댓글</span>
+                                        <a class="activity-title"
+                                           th:href="@{/post/{category}/{id}(category=${c.post.category.id}, id=${c.post.id})}"
+                                           th:text="${c.text}">
+                                            댓글 내용입니다...
+                                        </a>
+                                    </div>
+                                    <div class="activity-meta">
+                                        <span th:text="${c.createdAt != null ? #temporals.format(c.createdAt, 'yyyy.MM.dd HH:mm') : '2025.01.01 12:00'}">
+                                            2025.01.01 12:00
+                                        </span>
+                                        <span th:if="${c.post != null}">
+                                            · <a class="link-small"
+                                                 th:href="@{/post/{category}/{id}(category=${c.post.category.id}, id=${c.post.id})}"
+                                                 th:text="${c.post.title}">
+                                                원글 제목
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="activity-actions">
+                                        <a class="btn-outline"
+                                           th:href="@{/post/{category}/{id}(category=${c.post.category.id}, id=${c.post.id})}">
+                                            해당 게시글로
+                                        </a>
+                                    </div>
+                                </li>
+
+                                <li class="activity-item empty"
+                                    th:if="${myComments == null or #lists.isEmpty(myComments)}">
+                                    작성한 댓글이 없습니다.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- TODO (적당한 위치에 재설정) 내 평점 (Overall) -->
+                <div class="info-card" style="margin-bottom: 40px;">
+
+                    <div class="info-card-header">
+                        <h3>
+                            받은 평가 <span style="color:#0f6b4a;">([[${stats.reviewCount}]])</span>
+                        </h3>
+                        <a th:href="@{|/review/user/${user.id}/list|}" class="link-small">
+                            전체 보기
+                        </a>
+                    </div>
+
+                    <div class="info-body">
+
+                        <div class="review-summary-container">
+
+                            <div class="review-total-area">
+                                <div class="total-score-num" th:text="${stats.averageTotal}">0.0</div>
+
+                                <div class="star-rating-display" th:title="|평점 ${stats.averageTotal}점|">
+                                    <div class="star-base">★★★★★</div>
+                                    <div class="star-fill"
+                                         th:style="|width: ${(stats.averageTotal / 5.0) * 100}%|">
+                                        ★★★★★
+                                    </div>
+                                </div>
+                                <div class="total-score-label">종합 평점</div>
+                            </div>
+
+                            <div class="review-chart-area">
+
+                                <div class="chart-item">
+                                    <div class="bar-label">
+                                        <span>매너/태도</span>
+                                        <span th:text="${stats.averageManner}">0.0</span>
+                                    </div>
+                                    <div class="bar-bg">
+                                        <div class="bar-fill"
+                                             th:style="|width: ${stats.averageManner * 20}%|"></div>
+                                    </div>
+                                </div>
+
+                                <div class="chart-item">
+                                    <div class="bar-label">
+                                        <span>기여도</span>
+                                        <span th:text="${stats.averageContribution}">0.0</span>
+                                    </div>
+                                    <div class="bar-bg">
+                                        <div class="bar-fill"
+                                             th:style="|width: ${stats.averageContribution * 20}%|"></div>
+                                    </div>
+                                </div>
+
+                                <div class="chart-item">
+                                    <div class="bar-label">
+                                        <span>시간 엄수</span>
+                                        <span th:text="${stats.averagePunctuality}">0.0</span>
+                                    </div>
+                                    <div class="bar-bg">
+                                        <div class="bar-fill"
+                                             th:style="|width: ${stats.averagePunctuality * 20}%|"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </section>
+    </main>
+
+</th:block>
+</body>
+</html>

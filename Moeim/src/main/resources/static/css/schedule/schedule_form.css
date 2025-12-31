@@ -1,0 +1,183 @@
+
+:root {
+    --primary-color: #0f6b4a;      /* 진한 녹색 */
+    --primary-hover: #0c553a;      /* 호버 시 더 진한 녹색 */
+    --bg-base: #f5f7f6;            /* 기본 배경색 */
+    --text-title: #0b3c2a;         /* 제목 색상 */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-base);
+    color: #333;
+}
+
+/* 전체 래퍼 */
+.schedule-wrapper {
+    min-height: 100vh;
+    padding: 40px 16px 60px;
+    box-sizing: border-box;
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 폼 컨테이너 */
+.form-container {
+    background: white;
+    width: 100%;
+    max-width: 600px;
+    padding: 40px 50px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    border: 1px solid #e2ece7;
+}
+
+/* 헤더 스타일 */
+.form-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-header h2 {
+    margin: 0 0 10px;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-title);
+}
+
+/* 입력 필드 공통 스타일 */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #2b4238;
+    font-size: 14px;
+}
+
+/* 배경색 흰색으로 변경, 테두리 회색으로 변경 */
+.form-input, .form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0; /* 중립적인 회색 테두리 */
+    border-radius: 12px;
+    font-size: 15px;
+    background-color: #ffffff; /* 흰색 배경 */
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    color: #333;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+/* 입력 포커스 효과 (클릭했을 때만 녹색 포인트) */
+.form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(15, 107, 74, 0.1);
+}
+
+/* 날짜 입력 필드 가로 배치 */
+.date-row {
+    display: flex;
+    gap: 16px;
+}
+.date-col {
+    flex: 1;
+}
+
+/* 버튼 영역 */
+.btn-area {
+    margin-top: 40px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+/* 공통 버튼 스타일 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s ease;
+}
+
+/* 취소 버튼 */
+.btn-cancel {
+    background: #ffffff;
+    color: var(--primary-color);
+    border: 1px solid #cfe1d9;
+}
+
+.btn-cancel:hover {
+    background: #f5fbf8;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(15, 107, 74, 0.1);
+}
+
+/* 저장 버튼 */
+.btn-save {
+    background: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(15, 107, 74, 0.25);
+}
+
+.btn-save:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 8px 20px rgba(15, 107, 74, 0.3);
+    transform: translateY(-2px);
+}
+
+/* 삭제 버튼 */
+.btn-delete {
+    background: #fff5f5;
+    color: #e03131;
+    border: 1px solid #ffc9c9;
+    margin-right: auto;
+}
+
+.btn-delete:hover {
+    background: #ffe3e3;
+    border-color: #ffa8a8;
+}
+
+/* 반응형 */
+@media (max-width: 640px) {
+    .schedule-wrapper {
+        padding: 20px 16px;
+    }
+    .form-container {
+        padding: 30px 24px;
+    }
+    .date-row {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .btn-area {
+        flex-direction: column-reverse;
+    }
+    .btn {
+        width: 100%;
+    }
+    .btn-delete {
+        margin-right: 0;
+        margin-top: 10px;
+    }
+}

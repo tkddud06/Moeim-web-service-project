@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>아이디 찾기 | Moeim</title>
+    <link rel="stylesheet" th:href="@{/css/user/findId.css}">
+</head>
+
+<body>
+<th:block layout:fragment="content">
+
+    <main class="findid-wrapper">
+        <section class="findid-card">
+            <h1 class="findid-title">아이디 찾기</h1>
+            <p class="findid-subtitle">
+                가입 시 사용한 <strong>닉네임</strong>으로 로그인 아이디(이메일)를 찾을 수 있습니다.
+            </p>
+
+            <!-- 에러 메시지 -->
+            <div th:if="${errorMessage}" class="findid-alert findid-alert-error"
+                 th:text="${errorMessage}">
+                에러 메시지
+            </div>
+
+            <!-- 성공 메시지 -->
+            <div th:if="${foundId}" class="findid-alert findid-alert-success">
+                <p>회원님의 로그인 아이디는 다음과 같습니다.</p>
+                <p class="found-id">
+                    <span th:text="${foundId}">ex****@moeim.com</span>
+                </p>
+            </div>
+
+            <form th:action="@{/user/findId}" method="post" class="findid-form">
+                <div class="form-group">
+                    <label for="nickname">닉네임</label>
+                    <input type="text"
+                           id="nickname"
+                           name="nickname"
+                           placeholder="가입 시 사용한 닉네임을 입력하세요"
+                           th:value="${inputNickname}"
+                           required>
+                </div>
+
+                <button type="submit" class="btn-findid">아이디 찾기</button>
+
+                <p class="findid-bottom">
+                    아이디를 찾으셨나요?
+                    <a th:href="@{/user/login_form}" class="link-strong">로그인하러 가기</a>
+                </p>
+
+                <p class="findid-bottom">
+                    비밀번호가 기억나지 않나요?
+                    <a th:href="@{/user/findPassword}" class="link-strong">비밀번호 찾기</a>
+                </p>
+            </form>
+        </section>
+    </main>
+
+</th:block>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>채팅 | Moeim</title>
+
+    <!-- 필요하면 공통 CSS / 위젯 CSS 추가 -->
+    <!-- <link rel="stylesheet" th:href="@{/css/chat_widget.css}"> -->
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f5f7f9;
+        }
+
+        .chat-page-wrapper {
+            max-width: 960px;
+            margin: 30px auto;
+            padding: 0 16px 40px;
+            box-sizing: border-box;
+        }
+
+        .chat-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e3e9f0;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+            min-height: 480px;
+            overflow: hidden;
+        }
+
+        /* 헤더 */
+        .chat-header {
+            padding: 14px 18px;
+            border-bottom: 1px solid #edf1f5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #0f6b4a 0%, #134D38 50%, #0d3b29 100%);
+            color: #ffffff;
+        }
+
+        .chat-header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .chat-room-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .chat-room-sub {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .chat-header-right a {
+            font-size: 12px;
+            color: #e3f2eb;
+            text-decoration: none;
+        }
+
+        .chat-header-right a:hover {
+            text-decoration: underline;
+        }
+
+        /* 메시지 영역 */
+        .chat-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(circle at top, #e8f5ff 0, #f5f7f9 45%, #f5f7f9 100%);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 16px 18px 12px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #c3d2e0 transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #c3d2e0;
+            border-radius: 999px;
+        }
+
+        .msg-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .msg-row.me {
+            justify-content: flex-end;
+        }
+
+        .msg-row.other {
+            justify-content: flex-start;
+        }
+
+        .msg-bubble-wrapper {
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .msg-meta {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .msg-meta .nickname {
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .msg-bubble {
+            padding: 8px 12px;
+            border-radius: 14px;
+            font-size: 13px;
+            line-height: 1.5;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .msg-row.me .msg-bubble {
+            background: #0f6b4a;
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg-row.other .msg-bubble {
+            background: #ffffff;
+            color: #222;
+            border: 1px solid #dde3eb;
+            border-bottom-left-radius: 4px;
+        }
+
+        /* 인풋 영역 */
+        .chat-input-area {
+            border-top: 1px solid #e2e7ee;
+            padding: 10px 12px;
+            background: #f9fafc;
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .chat-input-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .chat-textarea {
+            width: 100%;
+            resize: none;
+            min-height: 40px;
+            max-height: 100px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid #d3dbe6;
+            font-size: 13px;
+            font-family: inherit;
+            box-sizing: border-box;
+            outline: none;
+            background: #ffffff;
+        }
+
+        .chat-textarea:focus {
+            border-color: #0f6b4a;
+            box-shadow: 0 0 0 1px rgba(15, 107, 74, 0.1);
+        }
+
+        .chat-input-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #999;
+        }
+
+        .chat-send-btn {
+            flex-shrink: 0;
+            border: none;
+            border-radius: 999px;
+            padding: 8px 16px;
+            background: #0f6b4a;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 6px 16px rgba(15, 107, 74, 0.3);
+            transition: background 0.18s ease, transform 0.1s ease, box-shadow 0.18s ease;
+        }
+
+        .chat-send-btn:hover {
+            background: #0c553a;
+            box-shadow: 0 8px 18px rgba(15, 107, 74, 0.35);
+        }
+
+        .chat-send-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(15, 107, 74, 0.25);
+        }
+
+        @media (max-width: 640px) {
+            .chat-card {
+                height: calc(100vh - 120px);
+                border-radius: 0;
+                margin: 0 -16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+
+    <main class="chat-page-wrapper">
+        <section class="chat-card"
+                 id="chat-root"
+                 th:data-room-id="${room.id}"
+                 th:data-room-key="${room.roomKey}"
+                 th:data-user-id="${loginUser.id}"
+                 th:data-user-nickname="${loginUser.nickname}">
+
+            <!-- 헤더 -->
+            <header class="chat-header">
+                <div class="chat-header-left">
+                    <!-- 방 이름 또는 상대 닉네임 -->
+                    <div class="chat-room-title"
+                         th:text="${room.name} ?: (${targetUser != null} ? ${targetUser.nickname} : '채팅')">
+                        채팅방
+                    </div>
+                    <div class="chat-room-sub">
+                        <span th:text="'대화 상대: ' + ${targetUser.nickname}">대화 상대: 닉네임</span>
+                    </div>
+                </div>
+                <div class="chat-header-right">
+                    <a th:href="@{/user/mypage}">마이페이지로</a>
+                </div>
+            </header>
+
+            <!-- 메시지 영역 -->
+            <section class="chat-body">
+                <div class="chat-messages" id="chat-messages">
+                    <!-- JS로 메시지 렌더링 -->
+                </div>
+
+                <!-- 입력 영역 -->
+                <div class="chat-input-area">
+                    <div class="chat-input-box">
+                        <textarea id="chat-input"
+                                  class="chat-textarea"
+                                  placeholder="메시지를 입력하세요. (Enter: 전송, Shift+Enter: 줄바꿈)"
+                                  rows="1"></textarea>
+                        <div class="chat-input-meta">
+                            <span th:text="'나: ' + ${loginUser.nickname}">나: 닉네임</span>
+                            <span>Enter로 전송 · Shift+Enter로 줄바꿈</span>
+                        </div>
+                    </div>
+                    <button type="button" class="chat-send-btn" id="chat-send-btn">
+                        <span>전송</span> 📩
+                    </button>
+                </div>
+            </section>
+
+        </section>
+    </main>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const rootEl      = document.getElementById('chat-root');
+            const messagesEl  = document.getElementById('chat-messages');
+            const inputEl     = document.getElementById('chat-input');
+            const sendBtn     = document.getElementById('chat-send-btn');
+
+            if (!rootEl) return;
+
+            const roomId       = rootEl.dataset.roomId;
+            const roomKey      = rootEl.dataset.roomKey;
+            const loginUserId  = parseInt(rootEl.dataset.userId);
+            const loginNickname = rootEl.dataset.userNickname;
+
+            let lastMessageId = null;   // 필요하면 이후에 "신규만 로딩" 등에 사용 가능
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                return text
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            function formatTime(isoString) {
+                if (!isoString) return '';
+                try {
+                    const d = new Date(isoString);
+                    const yyyy = d.getFullYear();
+                    const MM = ('0' + (d.getMonth() + 1)).slice(0,2).slice(-2);
+                    const dd = ('0' + d.getDate()).slice(-2);
+                    const hh = ('0' + d.getHours()).slice(-2);
+                    const mm = ('0' + d.getMinutes()).slice(-2);
+                    return `${yyyy}.${MM}.${dd} ${hh}:${mm}`;
+                } catch (e) {
+                    return isoString;
+                }
+            }
+
+            function renderMessages(list) {
+                messagesEl.innerHTML = '';
+
+                list.forEach(msg => {
+                    const isMe = msg.senderId === loginUserId;
+
+                    const row = document.createElement('div');
+                    row.className = 'msg-row ' + (isMe ? 'me' : 'other');
+
+                    const wrap = document.createElement('div');
+                    wrap.className = 'msg-bubble-wrapper';
+
+                    const meta = document.createElement('div');
+                    meta.className = 'msg-meta';
+
+                    const nickSpan = document.createElement('span');
+                    nickSpan.className = 'nickname';
+                    nickSpan.textContent = isMe ? loginNickname : (msg.senderNickname || '익명');
+
+                    const timeSpan = document.createElement('span');
+                    timeSpan.className = 'time';
+                    timeSpan.textContent = formatTime(msg.createdAt);
+
+                    meta.appendChild(nickSpan);
+                    if (timeSpan.textContent) {
+                        meta.appendChild(timeSpan);
+                    }
+
+                    const bubble = document.createElement('div');
+                    bubble.className = 'msg-bubble';
+                    bubble.innerHTML = escapeHtml(msg.content || '');
+
+                    wrap.appendChild(meta);
+                    wrap.appendChild(bubble);
+                    row.appendChild(wrap);
+                    messagesEl.appendChild(row);
+                });
+
+                // 스크롤 맨 아래로
+                messagesEl.scrollTop = messagesEl.scrollHeight;
+            }
+
+            async function loadMessages() {
+                try {
+                    const res = await fetch(`/api/chat/messages?roomId=${roomId}`);
+                    if (!res.ok) {
+                        console.warn('메시지 로드 실패', res.status);
+                        return;
+                    }
+                    const data = await res.json();
+                    // data가 배열이라고 가정 (List<ChatMessageDTO>)
+                    renderMessages(data);
+                } catch (e) {
+                    console.error('메시지 로드 중 오류', e);
+                }
+            }
+
+            async function sendMessage() {
+                const text = inputEl.value.trim();
+                if (!text) return;
+
+                // 잠시 비활성화
+                sendBtn.disabled = true;
+
+                try {
+                    const res = await fetch('/api/chat/send', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            roomId: roomId,
+                            content: text
+                        })
+                    });
+
+                    if (!res.ok) {
+                        alert('메시지 전송에 실패했습니다.');
+                        return;
+                    }
+
+                    inputEl.value = '';
+                    // 전송 후 전체 리로드 (간단 버전)
+                    await loadMessages();
+                } catch (e) {
+                    console.error('메시지 전송 중 오류', e);
+                    alert('메시지 전송 중 오류가 발생했습니다.');
+                } finally {
+                    sendBtn.disabled = false;
+                    inputEl.focus();
+                }
+            }
+
+            // 전송 버튼
+            sendBtn.addEventListener('click', sendMessage);
+
+            // Enter 전송, Shift+Enter 줄바꿈
+            inputEl.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // 최초 로딩
+            loadMessages();
+
+            // 필요하면 주기적으로 새 메시지 가져오기 (간단 폴링)
+            setInterval(loadMessages, 5000);
+        });
+    </script>
+
+</th:block>
+</body>
+</html>

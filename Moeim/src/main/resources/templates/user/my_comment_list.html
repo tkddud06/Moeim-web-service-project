@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>내 댓글</title>
+    <link rel="stylesheet" th:href="@{/css/user/my_activity_list.css}">
+</head>
+
+<div layout:fragment="content">
+    <div class="list-wrapper">
+        <div class="list-container">
+
+            <div class="list-header">
+                <h2 class="page-title" th:if="${isOwner}">
+                    내가 쓴 댓글
+                </h2>
+
+                <h2 class="page-title" th:if="${!isOwner}"
+                    th:text="${user != null && user.nickname != null ? user.nickname + '님의 댓글' : '댓글'}">
+                    댓글
+                </h2>
+                <a th:href="@{|/user/mypage/${user.id}|}" class="back-link">&lt; 마이페이지</a>
+            </div>
+
+            <div class="empty-state" th:if="${commentPaging.isEmpty()}">
+                <span class="empty-icon">💬</span>
+                <p>작성한 댓글이 없습니다.</p>
+            </div>
+
+            <div class="list-content">
+                <a th:each="comment : ${commentPaging}"
+                   th:href="@{|/post/${comment.post.category.id}/${comment.post.id}|}"
+                   class="item-card">
+
+                    <div class="item-header">
+                        <span class="meta-badge" style="background:#fff; border:1px solid #ddd; color:#666;">
+                            원글: <span th:text="${comment.post.title}">게시글 제목</span>
+                        </span>
+                        <span class="item-meta"
+                              th:text="${#temporals.format(comment.createdAt, 'yyyy.MM.dd HH:mm')}">날짜</span>
+                    </div>
+
+                    <div class="item-body" th:text="${comment.text}">
+                        댓글 내용이 여기에 표시됩니다.
+                    </div>
+                </a>
+            </div>
+
+            <div class="pagination" th:if="${commentPaging != null and !commentPaging.isEmpty()}">
+                <a class="page-item"
+                   th:href="@{|/user/commentlist/${user.id}?page=${commentPaging.number - 1}|}"
+                   th:if="${commentPaging.hasPrevious()}">&lt;</a>
+
+                <th:block th:each="page : ${#numbers.sequence(0, commentPaging.totalPages - 1)}">
+                    <a class="page-item"
+                       th:href="@{|/user/commentlist/${user.id}?page=${page}|}"
+                       th:text="${page + 1}"
+                       th:classappend="${page == commentPaging.number} ? 'active'">
+                    </a>
+                </th:block>
+
+                <a class="page-item"
+                   th:href="@{|/user/commentlist/${user.id}?page=${commentPaging.number + 1}|}"
+                   th:if="${commentPaging.hasNext()}">&gt;</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+</html>

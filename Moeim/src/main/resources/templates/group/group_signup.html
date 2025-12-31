@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>그룹 가입 신청</title>
+    <link rel="stylesheet" th:href="@{/css/group/group_signup.css}">
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <div class="back-ground">
+
+    <div class="signup-wrapper">
+
+        <h1 class="signup-title">그룹 가입 신청</h1>
+        <p class="signup-subtitle">아래 내용을 확인하고 가입 신청을 완료해주세요.</p>
+
+        <script th:if="${alert}">
+            alert([[${alert}]]);
+        </script>
+
+        <!--  모임 카드  -->
+        <section class="signup-card-box">
+            <div class="signup-card">
+
+                <div class="signup-card-thumb">
+                    <img th:if="${group.bannerImage != null}"
+                         th:src="@{|/group/banner/${group.id}|}"
+                         alt="배너 이미지">
+                </div>
+
+                <div class="signup-card-info">
+                    <h2 th:text="${group.title}">소모임 제목</h2>
+                    <p class="signup-category" th:text="${group.category.title}">카테고리</p>
+
+                    <p class="signup-member">
+                        멤버 <span th:text="${group.nowCount}"></span>
+                        /
+                        <span th:text="${group.maxCount}"></span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <form method="post" th:action="@{/group/signup}">
+
+            <input type="hidden" name="id" th:value="${group.id}">
+
+            <!-- 가입 인사 -->
+            <section class="signup-input-area">
+                <label class="input-label">가입 인사 또는 신청 이유</label>
+                <textarea class="signup-textarea"
+                          placeholder="간단한 가입 인사를 300자 이내로 남겨주세요."
+                          name="message"
+                          maxlength="300"></textarea>
+            </section>
+
+            <!-- 체크박스 -->
+            <div class="signup-checkbox-area">
+                <input type="checkbox" id="agreeCheck">
+                <label for="agreeCheck">그룹 규칙을 읽었으며 이에 동의합니다.</label>
+            </div>
+
+            <!-- 버튼 -->
+            <div class="signup-btn-area">
+                <button id="submitBtn" class="submit-btn" disabled>
+                    가입 신청하기
+                </button>
+            </div>
+
+        </form>
+
+        <a href="javascript:history.back()" class="back-btn">← 돌아가기</a>
+
+    </div>
+    </div>
+    <script>
+        /* 체크박스 체크해야 버튼 활성화 */
+        const agreeCheck = document.getElementById("agreeCheck");
+        const submitBtn = document.getElementById("submitBtn");
+
+        agreeCheck.addEventListener("change", () => {
+            if (agreeCheck.checked) {
+                submitBtn.removeAttribute("disabled");
+            } else {
+                submitBtn.setAttribute("disabled", true);
+            }
+        });
+
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const result = urlParams.get("result");
+
+        if (result === "success") {
+            alert("가입 신청이 완료되었습니다!");
+        } else if (result === "duplicate") {
+            alert("이미 가입한 모임입니다.");
+        } else if (result === "full") {
+            alert("정원이 가득 찼습니다.");
+        }
+
+    </script>
+
+</th:block>
+</body>
+</html>

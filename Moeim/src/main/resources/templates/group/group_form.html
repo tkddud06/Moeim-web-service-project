@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>소모임 만들기</title>
+    <link rel="stylesheet" th:href="@{/css/group/group_form.css}">
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="group-wrapper">
+        <div class="group-container">
+
+            <h2 class="group-title">소모임 만들기</h2>
+
+            <form th:action="@{/group/form}" method="post" enctype="multipart/form-data">
+
+                <!-- 카테고리 -->
+                <label class="group-label">카테고리</label>
+                <select class="group-select category-small" name="categoryId" required>
+                    <option value="2">운동</option>
+                    <option value="3">공부</option>
+                    <option value="4">취미</option>
+                    <option value="5">식사</option>
+                    <option value="6">독서</option>
+                    <option value="7">여행</option>
+                    <option value="8">게임</option>
+                    <option value="9">기타</option>
+                </select>
+
+                <!-- 최대 인원 -->
+                <label class="group-label" style="margin-top:20px;">최대 인원</label>
+                <input type="number"
+                       min="2"
+                       max="99"
+                       class="group-input max-people"
+                       name="maxCount"
+                       required>
+
+                <!-- 제목 -->
+                <label class="group-label" style="margin-top:20px;">제목</label>
+                <input type="text"
+                       class="group-input"
+                       name="title"
+                       maxlength="100"
+                       required>
+
+                <!-- 본문 -->
+                <label class="group-label" style="margin-top:20px;">소개 / 설명</label>
+                <textarea class="group-textarea large-textarea"
+                          name="description"
+                          maxlength="2000"
+                          required></textarea>
+
+                <!-- 대표 이미지 -->
+                <label class="group-label" style="margin-top:20px;">대표 이미지 (선택)</label>
+                <input type="file"
+                       class="group-filebox"
+                       name="bannerFile"
+                       accept="image/*">
+
+                <!-- 제출 버튼 -->
+                <div class="group-btn-right">
+                    <button class="group-submit-btn" type="submit">만들기</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</th:block>
+
+</html>

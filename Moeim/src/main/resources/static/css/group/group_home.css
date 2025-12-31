@@ -1,0 +1,431 @@
+body {
+    margin: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f5f7f6;
+}
+
+.home-back-ground{
+    width: 100%;
+    display: flex;
+
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+}
+
+/* 전체 wrapper */
+.group-home-wrapper {
+
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 40px 16px;
+
+}
+
+/* 상단 정보 박스 */
+.banner-box {
+    width: 100%;
+    background: white;
+    border-radius: 0 0 18px 18px;
+    border: 1px solid #e2ece7;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    padding: 40px 50px;
+    margin-bottom: 32px;
+    box-sizing: border-box;
+}
+
+.group-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #0b3c2a;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.group-desc {
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.info-line {
+    display: flex;
+    gap: 28px;
+    font-size: 14px;
+    color: #2b4238;
+}
+
+
+.content-area {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+}
+
+/* 모든 박스 공통 */
+.box {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+    border: 1px solid #e3ebe6;
+    padding: 20px 22px;
+    box-sizing: border-box;
+}
+
+/* 박스 헤더 */
+.box-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.box-header h3 {
+    margin: 0;
+    font-weight: 700;
+    color: #123a2b;
+}
+
+.view-all {
+    font-size: 12px;
+    color: #0f6b4a;
+    text-decoration: none;
+}
+
+.view-all:hover {
+    text-decoration: underline;
+}
+
+/* ------------------------- */
+/*    멤버 리스트 디자인    */
+/* ------------------------- */
+
+.member-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 4px;
+    border-bottom: 1px dashed #e5ebe7;
+}
+
+.member-item:last-child {
+    border-bottom: none;
+}
+
+.member-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.member-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #d9e4df;
+    object-fit: cover;
+}
+
+.member-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.member-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.member-role {
+    font-size: 12px;
+    color: #7b8d86;
+}
+
+/* 관리자 추방 버튼 */
+.btn-kick {
+    padding: 4px 10px;
+    border: 1px solid #b23535;
+    background: white;
+    color: #b23535;
+    font-size: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.btn-kick:hover {
+    background: #b23535;
+    color: white;
+}
+
+.settings-link {
+    width: 100%;
+    margin-top: 40px;
+    text-align: right;
+    padding-right: 20px;
+}
+
+.settings-link a {
+    font-size: 16px;
+    color: #535353;
+    text-decoration: none;
+    border-bottom: 1px solid #cfcfcf;
+    padding-bottom: 2px;
+}
+
+.settings-link a:hover {
+    color: #555;
+    border-bottom: 1px solid #555;
+}
+
+ /* 리뷰 버튼용 스타일 */
+.btn-review {
+    /* 크기 및 패딩 */
+    padding: 10px 18px;
+    height: 40px;
+
+    /* 배경 및 테두리 */
+    background-color: #5cb85c; /* 눈에 띄는 녹색 계열 (성공/긍정적 액션) */
+    color: white; /* 텍스트 색상 */
+    border: none;
+    border-radius: 5px;
+
+    /* 폰트 및 커서 */
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    /* 그림자 (선택 사항) */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    /* 애니메이션 효과 */
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-review:hover {
+    background-color: #4cae4c; /* 호버 시 더 어두운 색상 */
+}
+
+.btn-review:active {
+    transform: translateY(1px); /* 클릭 시 살짝 눌리는 효과 */
+}
+
+.star-rating-display {
+    position: relative; display: inline-block; font-size: 24px; line-height: 1;
+}
+.star-base {
+    color: #E0E0E0;
+}
+.star-fill {
+    position: absolute; top: 0; left: 0; color: #FFD700; overflow: hidden; white-space: nowrap;
+}
+
+/* 상단 배너 */
+.group-banner-top {
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;  /* 위만 둥글게 */
+}
+
+
+.group-banner-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 프로필 이미지 */
+.member-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* 캘린더 꽉 채우기 (음수 마진) */
+.calendar-wrapper {
+    margin-top: 20px;
+    margin-left: -22px;
+    margin-right: -22px;
+    margin-bottom: -20px;
+
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    overflow: hidden;
+    min-height: 500px;
+    background-color: #fff;
+    position: relative;
+}
+
+/* 캘린더 툴바 패딩 보정 */
+.calendar-wrapper .fc-header-toolbar {
+    padding-top: 10px;
+    padding-left: 22px;
+    padding-right: 22px;
+}
+
+.group-settings-box {
+    position: relative;
+    padding: 20px;
+}
+
+.settings-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #30673b;
+    color: white;
+    padding: 13px 30px;
+    border-radius: 999px;
+    font-size: 17px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(11, 77, 56, 0.25);
+}
+
+.settings-btn:hover {
+    background-color: #30673b;
+}
+
+
+
+
+
+/* 내보내기 버튼 스타일 */
+.btn-export-schedule {
+    background-color: white;
+    border: 1px solid #134D38;
+    color: #134D38;
+
+    /* 크기 및 간격 */
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+
+    /* 배치 */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+
+    /* 애니메이션 */
+    transition: all 0.2s ease;
+}
+
+/* 호버 효과 (마우스 올렸을 때) */
+.btn-export-schedule:hover {
+    background-color: #e3f2eb; /* 아주 연한 초록색 배경 */
+    transform: translateY(-2px); /* 살짝 위로 떠오르는 효과 */
+    box-shadow: 0 2px 5px rgba(19, 77, 56, 0.15);
+}
+
+/* 클릭 효과 */
+.btn-export-schedule:active {
+    transform: translateY(0);
+}
+
+/* 작성자 닉네임 셀 드롭다운 컨테이너 */
+.member-name-wrap {
+    position: relative;
+    overflow: visible;
+}
+
+.member-name {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* 드롭다운 메뉴 스타일 */
+.member-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    transform: none;
+    margin-top: 5px;
+
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 8px 0;
+    min-width: 140px;
+
+    display: none;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+
+}
+/* 드롭다운이 활성화(보여야 할 때) 스타일 */
+.member-dropdown.active {
+    display: block;
+    opacity: 1;
+}
+
+/* 드롭다운 내부 아이템 스타일 */
+.dropdown-item {
+    display: block;
+    padding: 10px 15px;
+    font-size: 15px;
+    color: var(--text-black);
+    text-align: left;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.1s;
+}
+
+.dropdown-item:hover {
+    background-color: #f5f5f5;
+    color: var(--primary-color);
+}
+
+.leave-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    background-color: #d9534f;    /* 빨간색 계열 */
+    color: white;
+    padding: 13px 30px;
+    border-radius: 999px;
+    font-size: 17px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(217, 83, 79, 0.25);
+}
+
+.leave-btn:hover {
+    background-color: #c64541;
+}
+
+/* 유저 평가 버튼 스타일 */
+.btn-rate-user {
+    display: inline-block;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0f6b4a;
+    background-color: white;
+    border: 1px solid #d1e1da;
+    border-radius: 50px; /* 둥근 칩 형태 */
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-rate-user:hover {
+    background-color: #0f6b4a;
+    color: white;
+    border-color: #0f6b4a;
+}

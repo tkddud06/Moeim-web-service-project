@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>소모임 보기</title>
+    <link rel="stylesheet" th:href="@{/css/group/group_view.css}">
+</head>
+
+<body>
+<th:block layout:fragment="content">
+
+    <!-- 박스 밖, 맨 아래에 뒤로가기 버튼 -->
+
+    <main class="view-container">
+
+        <div class="group-card">
+
+            <!--  상단 배너 -->
+            <div class="banner">
+                <img th:if="${group.bannerImage != null}"
+                     th:src="@{|/group/banner/${group.id}|}"
+                     alt="배너 이미지">
+
+            </div>
+
+            <!--  내용 영역 -->
+            <div class="content-box">
+
+                <h2 class="title" th:text="${group.title}">그룹 제목</h2>
+
+                <p class="meta">
+                    <span th:text="${group.category.title}">카테고리</span> ·
+                    멤버 <span th:text="${group.nowCount}">1</span> /
+                    <span th:text="${group.maxCount}">10</span>
+                </p>
+
+                <section class="desc-section">
+                    <h3>모임 소개</h3>
+                    <p class="description" th:text="${group.description}">
+                        소개글
+                    </p>
+                </section>
+
+                <!--  버튼 (우측 하단 고정) -->
+                <div class="button-area">
+
+                    <!-- 1) 이미 가입한 유저 -->
+                    <button th:if="${isUserExist}"
+                            class="apply-btn disabled"
+                            disabled>
+                        이미 가입한 모임입니다
+                    </button>
+
+                    <!-- 2) 이미 신청한 유저 -->
+                    <button th:if="${isPending} and !${isFull}"
+                            class="apply-btn disabled"
+                            disabled>
+                        이미 신청한 모임입니다
+                    </button>
+
+                    <!-- 3) 정원 가득 -->
+                    <button th:if="!${isUserExist} and  ${isFull}"
+                            class="apply-btn disabled"
+                            disabled>
+                        정원이 가득 찼습니다
+                    </button>
+
+                    <!-- 4) 신청 가능 -->
+                    <button th:if="!${isUserExist} and !${isPending} and !${isFull}"
+                            class="apply-btn"
+                            th:onclick="|location.href='/group/signup?id=${group.id}'|">
+                        신청하기
+                    </button>
+
+                </div>
+
+
+            </div>
+        </div>
+        <!-- 리뷰 통계 섹션 -->
+        <div class="review-stats-section">
+
+            <!-- 헤더 -->
+            <div class="review-stats-header">
+                <h3>그룹 리뷰 <span class="review-count">([[${stats.reviewCount}]])</span></h3>
+            </div>
+
+            <!-- 본문 -->
+            <div class="review-stats-body">
+
+                <!-- 왼쪽: 총점 -->
+                <div class="review-total-score">
+                    <div class="score-number" th:text="${stats.averageTotal}">0.0</div>
+
+                    <div class="star-rating-display" th:title="|평점 ${stats.averageTotal}점|">
+                        <div class="star-base">★★★★★</div>
+
+                        <div class="star-fill"
+                             th:style="|width: ${(stats.averageTotal / 5.0) * 100}%|">
+                            ★★★★★
+                        </div>
+                    </div>
+
+                    <div style="font-size: 13px; color: #888; margin-top: 5px;">종합 평점</div>
+                </div>
+
+                <!-- 오른쪽: 항목별 -->
+                <div class="review-bars">
+
+                    <div class="review-bar-item">
+                        <div class="review-bar-label">
+                            <span>참여/신뢰도</span>
+                            <span th:text="${stats.averageReliability}"></span>
+                        </div>
+                        <div class="review-bar-bg">
+                            <div class="review-bar-fill"
+                                 th:style="|width: ${stats.averageReliability * 20}%|"></div>
+                        </div>
+                    </div>
+
+                    <div class="review-bar-item">
+                        <div class="review-bar-label">
+                            <span>준비/운영</span>
+                            <span th:text="${stats.averagePreparation}"></span>
+                        </div>
+                        <div class="review-bar-bg">
+                            <div class="review-bar-fill"
+                                 th:style="|width: ${stats.averagePreparation * 20}%|"></div>
+                        </div>
+                    </div>
+
+                    <div class="review-bar-item">
+                        <div class="review-bar-label">
+                            <span>만족도/재미</span>
+                            <span th:text="${stats.averageSatisfaction}"></span>
+                        </div>
+                        <div class="review-bar-bg">
+                            <div class="review-bar-fill"
+                                 th:style="|width: ${stats.averageSatisfaction * 20}%|"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div> <!-- body 끝 -->
+
+            <!-- 리뷰 작성 -->
+            <div th:if="${isUserExist} and !${isReviewed}" class="review-write-btn-box">
+                <a th:href="@{|/review/group/${group.id}|}"
+                   class="review-write-btn">
+                    ✍️ 리뷰 작성하기
+                </a>
+            </div>
+
+        </div>
+
+
+
+
+    </main>
+
+
+</th:block>
+</body>
+</html>

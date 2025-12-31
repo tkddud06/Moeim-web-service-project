@@ -1,0 +1,171 @@
+:root {
+    --primary-color: #134D38; /* 메인 짙은 녹색 */
+    --primary-hover: #0e3b2b; /* 버튼 호버 색 */
+    --bg-base: #f5f7f6; /* 기본 배경색 */
+    --text-title: #0b3c2a; /* 제목 색상 */
+    --text-body: #333333; /* 본문 텍스트 */
+    --border-color: #e0e0e0; /* 회색 테두리 */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-body);
+}
+
+/* 전체 래퍼: 배경 그라데이션 및 중앙 정렬 */
+.write-container {
+    /*min-height: 100vh;*/
+    padding: 40px 16px 60px;
+    box-sizing: border-box;
+    /* 통합된 배경 그라데이션 */
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 폼 박스 (흰색 카드 스타일) */
+.form-box {
+    background-color: white;
+    width: 100%;
+    max-width: 800px; /* 게시글 작성은 넓게 */
+    padding: 50px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2ece7;
+}
+
+/* 1. 헤더 영역 */
+.form-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e2ece7;
+}
+
+.form-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-title);
+    margin: 0 0 10px 0;
+}
+
+.form-subtitle {
+    font-size: 15px;
+    color: #666;
+}
+
+/* 2. 입력 폼 */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #2b4238;
+    font-size: 15px;
+}
+
+/* 입력창 공통 스타일 (회색 테두리, 흰색 배경) */
+.form-input, .form-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 15px;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    color: var(--text-body);
+    font-family: inherit;
+}
+
+.form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(19, 77, 56, 0.1);
+}
+
+.form-textarea {
+    height: 400px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+/* 3. 버튼 영역 */
+.btn-area {
+    margin-top: 40px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* 공통 버튼 스타일 (알약 모양) */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 30px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: all 0.18s ease;
+}
+
+/* 취소 버튼 */
+.btn-cancel {
+    background-color: #ffffff;
+    border: 1px solid #cfe1d9;
+    color: var(--primary-color);
+}
+
+.btn-cancel:hover {
+    background-color: #f5fbf8;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(19, 77, 56, 0.1);
+}
+
+/* 등록/수정 버튼 */
+.btn-submit {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 6px 16px rgba(19, 77, 56, 0.25);
+}
+
+.btn-submit:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(19, 77, 56, 0.3);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+    .write-container {
+        padding: 20px 16px;
+    }
+
+    .form-box {
+        padding: 30px 20px;
+    }
+
+    .form-textarea {
+        height: 300px;
+    }
+
+    .btn-area {
+        flex-direction: column-reverse;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}

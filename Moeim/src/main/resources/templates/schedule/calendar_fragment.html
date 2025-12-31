@@ -1,0 +1,702 @@
+<!-- calendar_fragment.html-->
+
+<div th:fragment="calendarFragment(apiUrl, canAdd)">
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #134D38;
+            --bg-light: #F9F9F9;
+            --border-color: #E0E0E0;
+            --text-black: #222222;
+            --text-gray: #666666;
+        }
+
+        /* ===== 캘린더 메인 ===== */
+        .fc {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+
+            /* 하단 여백 확보: 버튼이 날짜를 가리지 않도록 70px로 늘림 */
+            padding: 10px 24px 70px 24px;
+
+            font-family: 'Noto Sans KR', sans-serif;
+            max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .fc { padding: 8px 10px 60px 10px !important; }
+            .fc-toolbar-title { font-size: 16px !important; }
+        }
+
+        .fc-header-toolbar {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .fc-header-toolbar .fc-toolbar-chunk {
+            display: flex;
+            align-items: center;
+        }
+
+        .fc-toolbar-title {
+            font-size: 20px !important;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
+        }
+
+        .fc-button-group {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 4px;
+        }
+
+        .fc-button {
+            background-color: transparent !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--text-gray) !important;
+            font-size: 13px !important;
+            font-weight: 500;
+            padding: 4px 10px !important;
+            border-radius: 8px !important;
+            box-shadow: none !important;
+            transition: 0.2s;
+        }
+
+        .fc-button:hover {
+            background-color: var(--bg-light) !important;
+            color: var(--text-black) !important;
+            border-color: #CCC !important;
+        }
+
+        .fc-button:active,
+        .fc-button-active {
+            background-color: var(--primary-color) !important;
+            color: #fff !important;
+            border-color: var(--primary-color) !important;
+        }
+
+        .fc-col-header-cell {
+            padding: 10px 0 !important;
+            border: none !important;
+            border-bottom: 1px solid #f0f0f0 !important;
+        }
+
+        .fc-col-header-cell-cushion {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-gray);
+            text-decoration: none !important;
+        }
+
+        .fc-day-sun .fc-col-header-cell-cushion {
+            color: #d94a4a;
+        }
+
+        .fc-scrollgrid,
+        .fc-theme-standard td,
+        .fc-theme-standard th {
+            border: none !important;
+        }
+
+        .fc-daygrid-day {
+            border-radius: 0;
+            transition: 0.2s;
+            min-height: 80px;
+        }
+
+        /* 날짜 클릭 가능 효과 */
+        .clickable-date {
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .clickable-date:not(:has(.fc-event:hover)):hover {
+            background-color: #e8f5e9 !important;
+        }
+
+        .fc-daygrid-day-top {
+            justify-content: center;
+            padding-top: 6px;
+        }
+
+        .fc-daygrid-day-number {
+            font-size: 12px;
+            color: #333;
+            text-decoration: none !important;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .fc-day-today {
+            background-color: #f0f7f4 !important;
+            border-radius: 8px;
+        }
+
+        .fc-day-today .fc-daygrid-day-number {
+            background-color: transparent;
+            color: var(--primary-color);
+            font-weight: 800;
+        }
+
+        .fc-event {
+            border: none !important;
+            padding: 3px 6px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+        }
+
+        .fc-event .fc-event-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 우측 하단 플로팅 버튼 */
+        .btn-floating-add {
+            position: absolute;
+            bottom: 20px; /* 위치 미세 조정 */
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(19, 77, 56, 0.3);
+            transition: all 0.2s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-floating-add:hover {
+            background-color: #0e3b2b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(19, 77, 56, 0.4);
+        }
+
+        /* ===== 모달 ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-container {
+            background: white;
+            width: 420px;
+            max-width: 90%;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+            animation: slideUp 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to   { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background: white;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-black);
+            letter-spacing: -0.5px;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            color: #999;
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+            transition: 0.2s;
+            padding: 0;
+        }
+
+        .btn-close:hover { color: var(--text-black); }
+
+        .modal-body { padding: 30px 25px; flex: 1; }
+
+        .modal-row { margin-bottom: 25px; }
+
+        .modal-label {
+            display: block;
+            font-size: 13px;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .modal-value {
+            font-size: 16px;
+            color: var(--text-black);
+            font-weight: 500;
+            letter-spacing: -0.3px;
+        }
+
+        .modal-desc {
+            font-size: 15px;
+            color: #444;
+            background: var(--bg-light);
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-top: 5px;
+            border: 1px solid #EEE;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 1px solid var(--border-color);
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-left { display: flex; gap: 10px; }
+        .footer-right { display: flex; gap: 10px; }
+
+        .btn-confirm {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .btn-confirm:hover { background: #0e3b2b; }
+
+        .btn-edit {
+            background: #f1f3f5;
+            color: var(--text-black);
+            border: 1px solid #dcdcdc;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-edit:hover { background: #e9ecef; }
+
+        .btn-delete {
+            background: #fff5f5;
+            color: #fa5252;
+            border: 1px solid #ffc9c9;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-delete:hover { background: #ffe3e3; }
+
+        /* 글자 세로 깨짐 방지 */
+        .fc,
+        .fc * {
+            writing-mode: horizontal-tb;
+        }
+
+        .fc-toolbar-title,
+        .fc-col-header-cell-cushion,
+        .fc-daygrid-day-number,
+        .fc-event-title {
+            white-space: nowrap;
+            word-break: keep-all;
+        }
+
+        /* 모달 css */
+        /* ===== 모달 안 그룹 블럭 ===== */
+        .modal-group-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 6px;
+            text-decoration: none;
+        }
+
+        .modal-group-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #f5f5f5;
+            border: 1px solid #eee;
+        }
+
+        .modal-group-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .modal-group-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .modal-group-sub {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .modal-group-wrapper:hover .modal-group-sub {
+            color: #666;
+        }
+
+        /* 모달 안 그룹 링크 예쁘게 정리 */
+        .modal-group-wrapper:link,
+        .modal-group-wrapper:visited,
+        .modal-group-wrapper:hover,
+        .modal-group-wrapper:active {
+            text-decoration: none !important;  /* 밑줄 강제 제거 */
+            color: inherit;                    /* 글자색은 주변 텍스트 색 따라가기 */
+        }
+
+        /* hover 시에만 살짝 배경 강조 */
+        .modal-group-wrapper:hover {
+            background-color: #f5f5f5;
+        }
+
+
+    </style>
+
+    <div style="position: relative;">
+        <div id="calendar"></div>
+
+        <button id="addScheduleBtn" class="btn-floating-add" th:if="${canAdd}">
+            <span>+</span> 일정 추가
+        </button>
+    </div>
+
+    <div id="eventModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modalTitle">일정 제목</h3>
+                <button id="closeModal" class="btn-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-row">
+                    <span class="modal-label">GROUP</span>
+                    <a id="modalGroupLink" class="modal-group-wrapper" href="#" target="_self">
+                        <div class="modal-group-thumb">
+                            <img id="modalGroupImage" src="/images/default_banner.jpg" alt="그룹 이미지">
+                        </div>
+                        <div class="modal-group-info">
+                            <div id="modalGroupName" class="modal-value">그룹 이름</div>
+                            <div class="modal-group-sub">그룹 페이지로 이동</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">DATE & TIME</span>
+                    <span id="modalTime" class="modal-value">시간 정보</span>
+                </div>
+                <div class="modal-row">
+                    <span class="modal-label">DESCRIPTION</span>
+                    <p id="modalDesc" class="modal-desc">상세 내용이 여기에 표시됩니다.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="footer-left">
+                    <button id="deleteBtn" class="btn-delete" style="display:none;">삭제</button>
+                </div>
+                <div class="footer-right">
+                    <button id="editBtn" class="btn-edit" style="display:none;">수정</button>
+                    <button id="confirmModal" class="btn-confirm">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl   = document.getElementById('calendar');
+            const apiUrl       = /*[[${apiUrl}]]*/ '/api/default';
+            const canAdd       = /*[[${canAdd}]]*/ false;
+            const groupId      = /*[[${groupId}]]*/ null;
+
+            const modal           = document.getElementById('eventModal');
+            const modalTitle      = document.getElementById('modalTitle');
+            const modalGroupLink  = document.getElementById('modalGroupLink');
+            const modalGroupImage = document.getElementById('modalGroupImage');
+            const modalGroupName  = document.getElementById('modalGroupName');
+            const modalTime       = document.getElementById('modalTime');
+            const modalDesc       = document.getElementById('modalDesc');
+
+            const closeModalBtn   = document.getElementById('closeModal');
+            const confirmModalBtn = document.getElementById('confirmModal');
+            const editBtn         = document.getElementById('editBtn');
+            const deleteBtn       = document.getElementById('deleteBtn');
+            const addScheduleBtn  = document.getElementById('addScheduleBtn');
+
+            // 파스텔 톤 형광펜 5색 (일정마다 자동 배정)
+            const pastelColors = [
+                '#FFE5EC', // 연한 핑크
+                '#FFF3BF', // 연노랑
+                '#D8F5A2', // 연연두
+                '#D0EBFF', // 연하늘
+                '#E5DBFF'  // 연보라
+            ];
+
+            // 동일한 일정은 어디서 보든 항상 같은 색이 되도록
+            function getColorForEvent(event) {
+                // 우선순위: id → title → fallback
+                const key = (event.id ? String(event.id) : '') + '|' + (event.title || '');
+                let hash = 0;
+
+                for (let i = 0; i < key.length; i++) {
+                    hash = (hash * 31 + key.charCodeAt(i)) >>> 0; // 32비트 정수 해시
+                }
+
+                const index = hash % pastelColors.length;
+                return pastelColors[index];
+            }
+
+            function closeEventModal() {
+                if (modal) modal.classList.remove('active');
+            }
+
+            if (modal) {
+                modal.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+                modal.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (e.target === modal) closeEventModal();
+                });
+            }
+
+            if (closeModalBtn)  closeModalBtn.addEventListener('click', closeEventModal);
+            if (confirmModalBtn) confirmModalBtn.addEventListener('click', closeEventModal);
+
+            if (addScheduleBtn && canAdd && groupId) {
+                addScheduleBtn.addEventListener('click', function() {
+                    window.location.href = '/schedule/' + groupId + '/create';
+                });
+            }
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'ko',
+                displayEventTime: false,
+                height: 'auto',
+                contentHeight: 'auto',
+
+                headerToolbar: {
+                    left: 'prev',
+                    center: 'title',
+                    right: 'next'
+                },
+
+                titleFormat: { year: 'numeric', month: 'long' },
+
+                selectable: false,
+                editable: false,
+
+                dayCellClassNames: function(arg) {
+                    return canAdd ? ['clickable-date'] : [];
+                },
+
+                dateClick: function(info) {
+                    if (canAdd && groupId) {
+                        window.location.href = '/schedule/' + groupId + '/create?date=' + info.dateStr;
+                    }
+                },
+
+                dayCellContent: function(info) {
+                    let number = document.createElement("a");
+                    number.classList.add("fc-daygrid-day-number");
+                    number.innerHTML = info.dayNumberText.replace("일", "");
+                    if (info.view.type === "dayGridMonth") {
+                        return { html: number.innerHTML };
+                    }
+                    return { domNodes: [] };
+                },
+
+                events: apiUrl,
+                eventDisplay: 'block',
+                dayMaxEvents: 2,
+
+                eventDidMount: function(info) {
+                    // 형광펜 색 자동 배정
+                    const bgColor = getColorForEvent(info.event);
+                    info.el.style.backgroundColor = bgColor;
+                    info.el.style.color = '#333333';
+                    info.el.style.border = "none";
+
+                    // 살짝 형광펜 느낌을 위해 패딩/라운드 유지
+                    info.el.style.boxShadow = "0 0 0 1px rgba(0,0,0,0.03)";
+
+                    const titleEl = info.el.querySelector('.fc-event-title');
+                    if (titleEl) {
+                        let text = titleEl.innerText || '';
+                        const maxLen = 8; // 일정 제목 조금 더 보이게
+                        if (text.length > maxLen) {
+                            titleEl.innerText = text.slice(0, maxLen) + '…';
+                        }
+                    }
+                },
+                eventClick: function(info) {
+                    if (!modal) return;
+
+                    modalTitle.innerText = info.event.title;
+
+                    const ext = info.event.extendedProps || {};
+
+                    //  groupId 가져오기 (extendedProps 최우선, 그다음 event.groupId)
+                    const groupIdForEvent =
+                        ext.groupId != null ? ext.groupId :
+                            (info.event.groupId != null ? info.event.groupId : null);
+
+                    const groupTitle = ext.groupTitle || '';
+
+                    if (modalGroupLink) {
+                        if (groupIdForEvent) {
+                            // 링크 + 썸네일 노출
+                            modalGroupLink.style.display = 'flex';
+                            const targetUrl = '/group/home/' + groupIdForEvent;
+
+                            modalGroupLink.href = targetUrl;
+                            modalGroupLink.onclick = function(e) {
+                                e.preventDefault();
+                                window.location.href = targetUrl;
+                            };
+
+                            if (modalGroupName) {
+                                modalGroupName.innerText = groupTitle || '그룹 페이지';
+                            }
+                            if (modalGroupImage) {
+                                modalGroupImage.src = '/group/banner/' + groupIdForEvent;
+                            }
+                        } else {
+                            // 그룹 정보 없으면 숨김 + 링크 제거
+                            modalGroupLink.style.display = 'none';
+                            modalGroupLink.href = 'javascript:void(0);';
+                            modalGroupLink.onclick = null;
+                        }
+                    }
+
+                    // ===== 시간 표시 =====
+                    let timeStr = "";
+                    if (info.event.allDay) {
+                        timeStr = "하루 종일";
+                    } else if (info.event.start) {
+                        const startStr = info.event.start.toLocaleTimeString('ko-KR', {
+                            month: 'long', day: 'numeric',
+                            hour: '2-digit', minute: '2-digit'
+                        });
+                        timeStr = startStr;
+
+                        if (info.event.end) {
+                            const isSameDay =
+                                info.event.start.toDateString() === info.event.end.toDateString();
+                            if (isSameDay) {
+                                timeStr += " ~ " + info.event.end.toLocaleTimeString('ko-KR', {
+                                    hour: '2-digit', minute: '2-digit'
+                                });
+                            } else {
+                                timeStr += " ~ " + info.event.end.toLocaleTimeString('ko-KR', {
+                                    month: 'long', day: 'numeric',
+                                    hour: '2-digit', minute: '2-digit'
+                                });
+                            }
+                        }
+                    }
+                    modalTime.innerText = timeStr;
+
+                    // 설명
+                    const desc = ext.description;
+                    modalDesc.innerText = desc ? desc : "상세 내용이 없습니다.";
+
+                    // 수정/삭제 버튼은 기존 로직 유지
+                    if (canAdd && groupId) {
+                        if (editBtn) {
+                            editBtn.style.display = 'block';
+                            editBtn.onclick = function() {
+                                window.location.href = '/schedule/' + groupId + '/' + info.event.id + '/modify';
+                            };
+                        }
+                        if (deleteBtn) {
+                            deleteBtn.style.display = 'block';
+                            deleteBtn.onclick = function() {
+                                if (confirm('정말로 이 일정을 삭제하시겠습니까?')) {
+                                    const form = document.createElement('form');
+                                    form.method = 'post';
+                                    form.action = '/schedule/' + groupId + '/' + info.event.id + '/delete';
+                                    document.body.appendChild(form);
+                                    form.submit();
+                                }
+                            };
+                        }
+                    } else {
+                        if (editBtn)   editBtn.style.display = 'none';
+                        if (deleteBtn) deleteBtn.style.display = 'none';
+                    }
+
+                    modal.classList.add('active');
+                }
+
+            });
+
+            calendar.render();
+        });
+    </script>
+</div>

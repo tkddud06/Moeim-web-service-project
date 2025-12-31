@@ -1,0 +1,206 @@
+    <!doctype html>
+    <html lang="ko"
+          xmlns:th="http://www.thymeleaf.org"
+          xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+          layout:decorate="~{layout}">
+
+    <head>
+        <title>소모임 설정</title>
+        <link rel="stylesheet" th:href="@{/css/group/group_settings.css}">
+    </head>
+
+    <th:block layout:fragment="content">
+
+        <!-- flash alert 처리 -->
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var msg = [[${alert}]];
+            if (msg != null) {
+                alert(msg);
+            }
+            /*]]>*/
+        </script>
+
+
+
+        <div class="settings-wrapper">
+
+            <div class="settings-container">
+
+                <h2 class="settings-title">소모임 설정</h2>
+
+                <!-- 소모임 정보 수정 -->
+                <form th:action="@{/group/settings/{id}(id=${group.id})}"
+                      method="post"
+                      enctype="multipart/form-data">
+
+
+                <!-- 소개 -->
+                    <label class="settings-label">소개 / 설명</label>
+                    <textarea class="settings-textarea"
+                              name="description"
+                              maxlength="2000"
+                              th:text="${group.description}"></textarea>
+
+                    <!-- 최대 인원 -->
+                    <label class="settings-label">최대 인원</label>
+                    <input type="number" min="2" max="99"
+                           class="settings-input"
+                           name="maxCount"
+                           th:value="${group.maxCount}"/>
+
+                    <!-- 카테고리 (읽기 전용) -->
+                    <label class="settings-label">카테고리</label>
+                    <input type="text"
+                           class="settings-input readonly"
+                           th:value="${group.category.title}"
+                           disabled/>
+
+                    <!-- 제목 (수정 불가 처리) -->
+                    <label class="settings-label">소모임 이름</label>
+                    <input type="text"
+                           class="settings-input readonly"
+                           th:value="${group.title}"
+                           disabled/>
+
+                    <!-- 소모임 배너 이미지 변경 -->
+                    <label class="settings-label">소모임 배너 이미지</label>
+                    <div class="banner-preview-box">
+                        <img th:if="${group.bannerImage != null}"
+                             th:src="@{/group/banner/{id}(id=${group.id})}"
+                             class="banner-preview">
+                        <img th:if="${group.bannerImage == null}"
+                             src="/images/default_banner.jpg"
+                             class="banner-preview">
+                    </div>
+
+                    <input type="file" name="bannerFile" accept="image/*" class="settings-input">
+
+                    <div class="btn-right">
+                        <button class="group-submit-btn" type="submit">저장하기</button>
+                    </div>
+
+                </form>
+
+                <!-- 가입 신청 관리 -->
+                <h3 class="settings-subtitle">가입 신청 관리</h3>
+
+                <div class="gray-box" th:if="${#lists.isEmpty(requests)}">
+                    가입 신청이 없습니다.
+                </div>
+
+                <table class="request-table" th:if="${!#lists.isEmpty(requests)}">
+                    <thead>
+                    <tr>
+                        <th>닉네임</th>
+                        <th>요청 메시지</th>
+                        <th>승인</th>
+                        <th>거절</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="req : ${requests}">
+                        <td class="nickname-cell" th:text="${req.user.nickname}"></td>
+                        <td class="message-cell" th:text="${req.text}"></td>
+
+                        <td>
+                            <form th:action="@{|/group/join/${req.id}/approve/${group.id}|}" method="post">
+                                <button type="submit" class="small-btn accept">승인</button>
+                            </form>
+                        </td>
+
+
+                        <td>
+                            <form th:action="@{|/group/join/${req.id}/reject/${group.id}|}" method="post">
+                                <button type="submit" class="small-btn reject">거절</button>
+                            </form>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- 멤버 관리 -->
+                <h3 class="settings-subtitle">멤버 관리</h3>
+
+                <table class="member-table">
+                    <thead>
+                    <tr>
+                        <th>닉네임</th>
+                        <th>소개</th>
+                        <th>권한</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="m : ${members}">
+                        <td class="nickname-cell" th:text="${m.user.nickname}"></td>
+                        <td class="bio-cell" th:text="${m.user.bio}"></td>
+
+                        <td th:text="${m.position}"></td>
+
+                        <td>
+                            <!-- ADMIN이면 추방 버튼 숨김 -->
+                            <form th:if="${m.position.name != 'ADMIN'}"
+                                  th:action="@{/group/kick/{gid}/{uid}(gid=${group.id}, uid=${m.user.id})}"
+                                  method="post"
+                                  onsubmit="return confirm('정말로 이 멤버를 추방하시겠습니까?');">
+                                <button class="small-btn danger">추방</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div id="schedule-section" class="schedule-section-header">
+                    <h3 class="settings-subtitle">일정 관리</h3>
+
+                    <button type="button" class="btn-export-schedule"
+                            th:onclick="|location.href='@{/schedule/group/{groupId}/export(groupId=${group.id})}'|">
+                        <span>📥</span> 내보내기
+                    </button>
+                </div>
+
+                <div class="calendar-container-box">
+                    <th:block th:replace="~{schedule/calendar_fragment :: calendarFragment(
+                    apiUrl=@{/api/schedule(groupId=${group.id})},
+                    canAdd=true,
+                    groupId=${group.id}
+                 )}">
+                    </th:block>
+                </div>
+
+                <hr class="divider divider-large-gap">
+
+                <h3 class="settings-subtitle">소모임 삭제</h3>
+
+                <div class="danger-box">
+                    <p class="danger-text">⚠️ 소모임을 삭제하면 모든 정보가 영구적으로 삭제됩니다.</p>
+
+                    <form th:action="@{/group/delete/{id}(id=${group.id})}"
+                          method="post"
+                          onsubmit="return confirm('정말로 소모임을 삭제하시겠습니까? 되돌릴 수 없습니다.');">
+                        <button class="danger-btn" type="submit">소모임 삭제하기</button>
+                    </form>
+
+
+                </div>
+                <div class="btn-bottom-right">
+                    <a th:href="@{/group/home/{id}(id=${group.id})}" class="group-submit-btn back-green">
+                        뒤로가기
+                    </a>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+    </th:block>
+
+
+
+    </html>

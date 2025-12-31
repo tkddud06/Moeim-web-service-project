@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>소모임 목록</title>
+    <link rel="stylesheet" th:href="@{/css/group/group_list.css}">
+</head>
+
+<body>
+<th:block layout:fragment="content">
+
+    <main class="grouplist-wrapper">
+
+        <!-- 페이지 제목 -->
+        <section class="grouplist-header">
+            <h1 class="grouplist-title">소모임 모아보기</h1>
+            <p class="grouplist-subtitle">관심사 기반으로 소모임을 찾아보세요.</p>
+        </section>
+
+        <!-- 검색 + 필터 -->
+        <form class="grouplist-search-form"
+              th:action="@{/group/list}"
+              method="get">
+
+            <!-- 검색창 -->
+
+
+            <div class="grouplist-searchbox">
+                <input type="text"
+                       name="keyword"
+                       placeholder="찾고 싶은 모임을 검색하세요"
+                       th:value="${keyword}">
+                <button class="grouplist-search-btn" type="submit">
+                    <img th:src="@{/images/search-icon.png}" alt="검색">
+                </button>
+            </div>
+
+            <!-- 카테고리 / 정렬 -->
+            <section class="grouplist-filter">
+
+                <!-- 카테고리 -->
+                <div class="filter-box">
+                    <label class="filter-label">카테고리</label>
+                    <select class="filter-select category-small" name="categoryId"
+                            onchange="this.form.submit()">
+
+                        <option value=""
+                                th:selected="${categoryId == null or categoryId == '' or categoryId == 0}">
+                            전체
+                        </option>
+                        <option th:value="2" th:selected="${categoryId == 2}">운동</option>
+                        <option th:value="3" th:selected="${categoryId == 3}">공부</option>
+                        <option th:value="4" th:selected="${categoryId == 4}">취미</option>
+                        <option th:value="5" th:selected="${categoryId == 5}">식사</option>
+                        <option th:value="6" th:selected="${categoryId == 6}">독서</option>
+                        <option th:value="7" th:selected="${categoryId == 7}">여행</option>
+                        <option th:value="8" th:selected="${categoryId == 8}">게임</option>
+                        <option th:value="9" th:selected="${categoryId == 9}">기타</option>
+                    </select>
+                </div>
+
+                <!-- 정렬 -->
+                <div class="filter-box">
+                    <label class="filter-label">정렬</label>
+                    <select class="filter-select" name="sort"
+                            onchange="this.form.submit()">
+
+                    <option value="popular"
+                                th:selected="${sort == 'popular'}">
+                            인기순
+                        </option>
+                        <option value="latest"
+                                th:selected="${sort == 'latest'}">
+                            최신순
+                        </option>
+                        <option value="deadline"
+                                th:selected="${sort == 'deadline'}">
+                            마감순
+                        </option>
+                    </select>
+                </div>
+
+                <!-- 가입한 소모임 숨기기 -->
+                <div class="filter-box filter-checkbox">
+                    <label>
+                        <input type="checkbox"
+                               name="hideJoined"
+                               value="true"
+                               th:checked="${hideJoined}"
+                               onchange="this.form.submit()"/>
+                        가입한 소모임 숨기기
+                    </label>
+                </div>
+            </section>
+        </form>
+
+        <!-- 소모임 카드 리스트 -->
+        <section class="grouplist-cards">
+
+            <!-- 소모임 없음 -->
+            <div class="grouplist-empty"
+                 th:if="${#lists.isEmpty(groups)}">
+                아직 생성된 소모임이 없습니다.
+            </div>
+
+            <!-- 소모임 카드 -->
+            <a class="group-card"
+               th:each="g : ${groups}"
+               th:href="@{/group/view(id=${g.id})}">
+
+                <!-- 이미지 영역 -->
+                <div class="card-thumb">
+                    <img th:if="${g.bannerImage != null}"
+                         th:src="@{|/group/banner/${g.id}|}"
+                         alt="대표 이미지">
+                </div>
+
+                <!-- 카드 정보 -->
+                <div class="card-info">
+                    <h3 class="card-title" th:text="${g.title}">소모임 제목</h3>
+                    <p class="card-desc" th:text="${g.description}">설명</p>
+
+                    <div class="card-meta">
+                        <span th:text="${g.category != null ? g.category.title : '카테고리'}"></span>
+                        <span>·</span>
+                        <span>
+                            멤버 <span th:text="${g.nowCount}"></span>
+                            /
+                            <span th:text="${g.maxCount}"></span>
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+        </section>
+
+        <!-- 페이지네이션 (post_list 스타일 적용) -->
+        <div class="bottom-controls" th:if="${page != null and page.totalElements > 0}">
+            <div class="pagination">
+
+                <!-- 블록 페이징 계산 -->
+                <th:block th:with="
+            blockSize=5,
+            currentBlock=${page.number / blockSize},
+            start=${currentBlock * blockSize + 1},
+            end=${(currentBlock * blockSize + blockSize) < page.totalPages ? (currentBlock * blockSize + blockSize) : page.totalPages}
+        ">
+
+                    <!-- 맨 처음 페이지 -->
+                    <a class="page-item"
+                       th:href="@{/group/list(page=0, keyword=${keyword}, categoryId=${categoryId}, sort=${sort}, hideJoined=${hideJoined})}"
+                       th:if="${!page.first}">
+                        &laquo;
+                    </a>
+
+                    <!-- 이전 페이지 -->
+                    <a class="page-item"
+                       th:href="@{/group/list(page=${page.number - 1}, keyword=${keyword}, categoryId=${categoryId}, sort=${sort}, hideJoined=${hideJoined})}"
+                       th:if="${page.hasPrevious()}">
+                        &lsaquo;
+                    </a>
+
+                    <!-- 페이지 번호 -->
+                    <th:block th:each="p : ${#numbers.sequence(start, end)}">
+                        <a class="page-item"
+                           th:href="@{/group/list(page=${p - 1}, keyword=${keyword}, categoryId=${categoryId}, sort=${sort}, hideJoined=${hideJoined})}"
+                           th:text="${p}"
+                           th:classappend="${page.number + 1 == p} ? 'active'"></a>
+                    </th:block>
+
+                    <!-- 다음 페이지 -->
+                    <a class="page-item"
+                       th:href="@{/group/list(page=${page.number + 1}, keyword=${keyword}, categoryId=${categoryId}, sort=${sort}, hideJoined=${hideJoined})}"
+                       th:if="${page.hasNext()}">
+                        &rsaquo;
+                    </a>
+
+                    <!-- 맨 끝 페이지 -->
+                    <a class="page-item"
+                       th:href="@{/group/list(page=${page.totalPages - 1}, keyword=${keyword}, categoryId=${categoryId}, sort=${sort}, hideJoined=${hideJoined})}"
+                       th:if="${!page.last}">
+                        &raquo;
+                    </a>
+
+                </th:block>
+            </div>
+        </div>
+
+
+
+    </main>
+
+</th:block>
+</body>
+</html>

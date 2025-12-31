@@ -1,0 +1,341 @@
+.settings-wrapper {
+    padding: 40px 0 60px;
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+}
+
+.settings-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 18px;
+    border: 1px solid #e4eee9;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
+}
+
+/* 제목 */
+.settings-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #134d38;
+}
+
+/* 라벨 */
+.settings-label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+/* 인풋 */
+.settings-input,
+.settings-textarea {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    background: #f7f9f8;
+    border: 1px solid #d8e5de;
+    border-radius: 10px;
+
+    padding: 11px 14px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+/* 읽기 전용 input */
+.settings-input.readonly {
+    background: #f1f3f2;
+    color: #6a6a6a;
+    font-weight: 500;
+    cursor: not-allowed;
+}
+
+/* textarea */
+.settings-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* 저장 버튼 */
+.btn-right {
+    text-align: right;
+}
+
+.group-submit-btn {
+    padding: 10px 22px;
+    background: #30673b;
+    color: white;
+
+    border: none;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.15s;
+    box-shadow: 0 4px 12px rgba(11, 77, 56, 0.25);
+}
+
+.group-submit-btn:hover {
+    background: #30673b;
+}
+
+/* --- 테이블 공통 --- */
+.member-table,
+.request-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+.member-table th,
+.member-table td,
+.request-table th,
+.request-table td {
+    padding: 12px 10px;
+    border-bottom: 1px dashed #dfe7e3;
+    font-size: 14px;
+}
+
+/* ADMIN 표시 */
+.admin-lock {
+    color: #999;
+    font-weight: 600;
+}
+
+/* 추방 버튼 */
+.small-btn {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+}
+
+.small-btn.danger {
+    background: #d85f5f;
+    color: white;
+}
+
+.small-btn.danger:hover {
+    background: #c14e4e;
+}
+
+/* 삭제 박스 */
+.danger-box {
+    background: #fff4f4;
+    padding: 18px 20px;
+    border-radius: 10px;
+    border: 1px solid #ffdede;
+}
+
+.danger-text {
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #b63535;
+    font-weight: 600;
+}
+
+.danger-btn {
+    background: #d9534f;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.danger-btn:hover {
+    background: #c74642;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+.save-fixed-btn {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    background-color: #30673b;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 15px;
+    z-index: 2000;
+}
+
+.floating-save-form {
+    position: fixed;
+    bottom: 35px;
+    right: 35px;
+    z-index: 9999;
+}
+
+.floating-save-btn {
+    background-color: #29613e;
+    color: white;
+    border: none;
+    padding: 14px 26px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    transition: 0.2s;
+}
+
+.floating-save-btn:hover {
+    background-color: #29613e;
+    transform: translateY(-2px);
+}
+
+.btn-bottom-right {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.banner-preview {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+/* 내보내기 버튼 스타일 */
+.btn-export-schedule {
+    background-color: white;
+    border: 1px solid #30673b;
+    color: #30673b;
+
+    /* 크기 및 간격 */
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+
+    /* 배치 */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+
+    /* 애니메이션 */
+    transition: all 0.2s ease;
+}
+
+/* 호버 효과 (마우스 올렸을 때) */
+.btn-export-schedule:hover {
+    background-color: #e3f2eb; /* 아주 연한 초록색 배경 */
+    transform: translateY(-2px); /* 살짝 위로 떠오르는 효과 */
+    box-shadow: 0 2px 5px rgba(19, 77, 56, 0.15);
+}
+
+/* 클릭 효과 */
+.btn-export-schedule:active {
+    transform: translateY(0);
+}
+
+#schedule-section {
+    /* 앵커로 이동했을 때, 요소 위쪽에 100px만큼 여유 공간을 두고 멈춤 */
+    scroll-margin-top: 10px;
+}
+
+/* 일정 관리 헤더 영역 (제목 + 버튼) */
+.schedule-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+
+    border-bottom: 2px solid #eee;
+}
+
+/* 헤더 내부의 제목 스타일 재정의 (기존 settings-subtitle 스타일 덮어쓰기) */
+.schedule-section-header .settings-subtitle {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+/* 캘린더를 감싸는 흰색 박스 */
+.calendar-container-box {
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+/* 하단 구분선 여백 */
+.divider-large-gap {
+    margin-top: 50px;
+}
+
+/* 가입 신청 메시지 줄바꿈 + 칸 넘침 방지 */
+.request-table td.message-cell {
+    white-space: pre-line;      /* 엔터(\n) 보존 */
+    word-break: break-word;     /* 긴 단어 강제 줄바꿈 */
+    max-width: 280px;           /* 필요하면 열 폭 조정 가능 */
+    vertical-align: top;        /* 글을 위쪽 정렬 */
+}
+
+/* 가입 신청 닉네임 줄바꿈 */
+.request-table td.nickname-cell,
+.member-table td.nickname-cell {
+    white-space: normal;       /* 일반 줄바꿈 허용 */
+    word-break: break-word;    /* 긴 단어/닉네임도 강제 줄바꿈 */
+    max-width: 150px;          /* 필요하면 폭 조절 */
+    vertical-align: top;
+}
+/* 가입 신청 메시지 줄바꿈 */
+.request-table td.message-cell {
+    white-space: pre-line;
+    word-break: break-word;
+    max-width: 280px;
+    vertical-align: top;
+}
+
+/* 가입 신청 닉네임 줄바꿈 */
+.request-table td.nickname-cell {
+    white-space: normal;
+    word-break: break-word;
+    max-width: 150px;
+    vertical-align: top;
+}
+
+/* 멤버 닉네임 줄바꿈 */
+.member-table td.nickname-cell {
+    white-space: normal;
+    word-break: break-word;
+    max-width: 150px;
+    vertical-align: top;
+}
+
+/* 멤버 소개 줄바꿈 */
+.member-table td.bio-cell {
+    white-space: pre-line;    /* 엔터(\n)까지 반영하고 싶으면 pre-line */
+    word-break: break-word;
+    max-width: 280px;
+    vertical-align: top;
+}

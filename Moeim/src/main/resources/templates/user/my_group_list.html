@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>참여 중인 모임</title>
+    <link rel="stylesheet" th:href="@{/css/user/my_activity_list.css}">
+</head>
+
+<div layout:fragment="content">
+    <div class="list-wrapper">
+        <div class="list-container">
+
+            <div class="list-header">
+                <h2 class="page-title" th:if="${isOwner}">
+                    내가 참여중인 모임
+                </h2>
+
+                <h2 class="page-title" th:if="${!isOwner}"
+                    th:text="${user != null && user.nickname != null ? user.nickname + '님이 참여중인 모임 ' : '모임'}">
+                    모임
+                </h2>
+                <a th:href="@{|/user/mypage/${user.id}|}" class="back-link">&lt; 마이페이지</a>
+            </div>
+
+            <div class="empty-state" th:if="${groupPaging.isEmpty()}">
+                <span class="empty-icon">🌱</span>
+                <p>아직 참여 중인 모임이 없습니다.</p>
+            </div>
+
+            <div class="list-content">
+                <!-- 모임 카드 리스트 -->
+                <a th:each="gu : ${groupPaging}"
+                   th:href="${isOwner} ? @{|/group/home/${gu.group.id}|} : null"
+                   class="item-card"
+                   th:style="${!isOwner} ? 'cursor: default;' : ''">
+
+                    <div class="item-header">
+                        <span class="item-title" th:text="${gu.group.title}">모임 제목</span>
+                    </div>
+
+                    <div class="item-meta">
+                        <span class="meta-badge" th:text="${gu.group.category.title}">카테고리</span>
+                        <span>가입일: <span
+                                th:text="${#temporals.format(gu.createdAt, 'yyyy.MM.dd')}">2025.01.01</span></span>
+                        <span>멤버: <span th:text="${gu.group.nowCount} + '/' + ${gu.group.maxCount}">1/10</span></span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 페이징 (공통 로직 사용) -->
+            <div class="pagination" th:if="${groupPaging != null and !groupPaging.isEmpty()}">
+                <a class="page-item"
+                   th:href="@{|/user/grouplist/${user.id}?page=${groupPaging.number - 1}|}"
+                   th:if="${groupPaging.hasPrevious()}">&lt;</a>
+
+                <th:block th:each="page : ${#numbers.sequence(0, groupPaging.totalPages - 1)}">
+                    <a class="page-item"
+                       th:href="@{|/user/grouplist/${user.id}?page=${page}|}"
+                       th:text="${page + 1}"
+                       th:classappend="${page == groupPaging.number} ? 'active'">
+                    </a>
+                </th:block>
+
+                <a class="page-item"
+                   th:href="@{|/user/grouplist/${user.id}?page=${groupPaging.number + 1}|}"
+                   th:if="${groupPaging.hasNext()}">&gt;</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+</html>

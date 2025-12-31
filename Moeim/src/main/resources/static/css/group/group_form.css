@@ -1,0 +1,119 @@
+
+.group-wrapper {
+    /*min-height: calc(100vh - 60px);*/
+    padding: 40px 16px 60px;
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+    box-sizing: border-box;
+}
+
+/* 가운데 박스 */
+.group-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+}
+
+/* 제목 */
+.group-title {
+    margin: 0 0 24px 0;
+    font-size: 26px;
+    font-weight: 800;
+    color: #0b3c2a;
+}
+
+/* 라벨 */
+.group-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* 공통 입력 요소 */
+.group-input,
+.group-select,
+.group-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #d6e4dd;
+    border-radius: 10px;
+    font-size: 15px;
+    background: #ffffff;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.15s ease, background 0.15s ease;
+}
+
+.group-input:focus,
+.group-select:focus,
+.group-textarea:focus {
+    border-color: #0f6b4a;
+    background: #ffffff;
+}
+
+/* 본문 크게 */
+.large-textarea {
+    min-height: 260px;
+    resize: vertical;
+}
+
+/* 카테고리 select를 짧게 */
+.category-small {
+    width: 180px;
+}
+
+/* 최대 인원 박스 크기 */
+.max-people {
+    width: 220px;
+}
+
+/* 파일 업로드 */
+.group-filebox {
+    margin-top: 6px;
+}
+
+/* 오른쪽 정렬 버튼 */
+.group-btn-right {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 28px;
+}
+
+/* 제출 버튼 */
+.group-submit-btn {
+    background: #0f6b4a;
+    color: #ffffff;
+    padding: 14px 22px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    width: 180px;
+    transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.08s ease;
+}
+
+.group-submit-btn:hover {
+    background: #0c553a;
+    box-shadow: 0 8px 18px rgba(15, 107, 74, 0.25);
+}
+
+.group-submit-btn:active {
+    transform: translateY(1px);
+}
+
+/* 반응형 */
+@media (max-width: 700px) {
+    .group-container {
+        padding: 28px;
+    }
+}
+
+
+
+
+

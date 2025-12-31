@@ -1,0 +1,347 @@
+<!-- 달력 컴포넌트: schedule/calendar.html -->
+<section class="calendar-card" th:fragment="calendar">
+
+    <link rel="stylesheet" th:href="@{/css/schedule/calendar.css}">
+    <div class="calendar-header">
+        <div class="calendar-title">
+            <span id="calendar-year"></span>년
+            <span id="calendar-month"></span>월
+        </div>
+        <div class="calendar-today">
+            오늘&nbsp;&nbsp;<strong id="calendar-today"></strong>
+        </div>
+    </div>
+
+    <div class="calendar-body">
+        <div class="calendar-weekdays">
+            <div>일</div>
+            <div>월</div>
+            <div>화</div>
+            <div>수</div>
+            <div>목</div>
+            <div>금</div>
+            <div>토</div>
+        </div>
+
+        <div class="calendar-grid" id="calendar-grid">
+            <!-- JS에서 실제 날짜로 채움 -->
+        </div>
+
+        <!-- 날짜 클릭 시 일정 목록을 보여주는 카드 -->
+        <div class="calendar-hover-card" id="calendar-hover-card">
+            날짜를 클릭하면 해당 날짜의 일정을 볼 수 있습니다.
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        (function () {
+
+            // === 로그인 여부 ===
+            const isLoggedIn = /*[[${session.user != null}]]*/ false;
+
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth(); // 0 ~ 11
+            const date = today.getDate();
+
+            const yearEl = document.getElementById("calendar-year");
+            const monthEl = document.getElementById("calendar-month");
+            const todayEl = document.getElementById("calendar-today");
+            const grid = document.getElementById("calendar-grid");
+            const hoverCard = document.getElementById("calendar-hover-card");
+
+            if (!yearEl || !monthEl || !todayEl || !grid || !hoverCard) return;
+
+            // 상단 날짜 표시
+            yearEl.textContent = year;
+            monthEl.textContent = (month + 1);
+            todayEl.textContent =
+                year + "." +
+                String(month + 1).padStart(2, "0") + "." +
+                String(date).padStart(2, "0");
+
+            // ===== 날짜 관련 공통 함수 / 데이터 =====
+
+            function formatDateKey(d) {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, "0");
+                const da = String(d.getDate()).padStart(2, "0");
+                return y + "-" + m + "-" + da;
+            }
+
+            const eventsByDate = {}; // 날짜별 일정 모으는 맵
+
+            const pastelColors = [
+                '#FFE5EC',
+                '#FFF3BF',
+                '#D8F5A2',
+                '#D0EBFF',
+                '#E5DBFF'
+            ];
+
+            function getColorForEvent(event) {
+                const key = (event.id ? String(event.id) : '') + '|' + (event.title || '');
+                let hash = 0;
+                for (let i = 0; i < key.length; i++) {
+                    hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+                }
+                const index = hash % pastelColors.length;
+                return pastelColors[index];
+            }
+
+            // 아래 호버 카드에 일정 목록 그리는 함수
+            function renderDayDetail(dateKey) {
+                const list = eventsByDate[dateKey] || [];
+
+                if (!list.length) {
+                    hoverCard.innerHTML =
+                        '<div class="calendar-hover-header">' + dateKey + '</div>' +
+                        '<div class="calendar-hover-empty">일정이 없습니다.</div>';
+                    return;
+                }
+
+                let html = '<div class="calendar-hover-header">' + dateKey + '</div>';
+
+                list.forEach(function (ev) {
+                    const title = ev.title || "제목 없음";
+
+                    // DTO 형태(ev.groupId, ev.groupTitle)와
+                    // FullCalendar extendedProps 둘 다 지원
+                    const ext = ev.extendedProps || {};
+                    const groupTitle = ev.groupTitle || ext.groupTitle || "";
+                    const groupId = ev.groupId || ext.groupId || null;
+
+                    let timeStr = "";
+                    if (ev.start) {
+                        const start = new Date(ev.start);
+                        const end = ev.end ? new Date(ev.end) : null;
+
+                        const startStr = start.toLocaleTimeString('ko-KR', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
+                        if (end) {
+                            const endStr = end.toLocaleTimeString('ko-KR', {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+                            timeStr = startStr + " ~ " + endStr;
+                        } else {
+                            timeStr = startStr;
+                        }
+                    }
+
+                    const groupPageUrl = groupId ? ('/group/home/' + groupId) : '';
+                    const bannerUrl = groupId
+                        ? ('/group/banner/' + groupId)
+                        : '/images/default_banner.jpg';
+
+                    // ✅ 그룹이 있으면 <a href="...">로 감싸서 바로 이동
+                    if (groupPageUrl) {
+                        html +=
+                            '<a class="calendar-hover-item" href="' + groupPageUrl + '">' +
+                            '  <div class="calendar-hover-thumb">' +
+                            '    <img src="' + bannerUrl + '" alt="' + (groupTitle || '그룹 배너') + '">' +
+                            '  </div>' +
+                            '  <div class="calendar-hover-text">' +
+                            '    <div class="calendar-hover-title">' + title + '</div>' +
+                            '    <div class="calendar-hover-meta">' +
+                            (groupTitle ? (groupTitle + ' · ') : '') +
+                            (timeStr || '') +
+                            '    </div>' +
+                            '  </div>' +
+                            '</a>';
+                    } else {
+                        // 혹시 그룹 없이 개인 일정 같은 게 있다면 div로만 표시
+                        html +=
+                            '<div class="calendar-hover-item">' +
+                            '  <div class="calendar-hover-thumb">' +
+                            '    <img src="' + bannerUrl + '" alt="일정 배너">' +
+                            '  </div>' +
+                            '  <div class="calendar-hover-text">' +
+                            '    <div class="calendar-hover-title">' + title + '</div>' +
+                            '    <div class="calendar-hover-meta">' + (timeStr || '') + '</div>' +
+                            '  </div>' +
+                            '</div>';
+                    }
+                });
+
+                hoverCard.innerHTML = html;
+            }
+
+
+            // ===== 달력 그리드 생성 (로그인 여부와 무관하게 항상 숫자는 그림) =====
+
+            const firstDay = new Date(year, month, 1);
+            const firstWeekday = firstDay.getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
+            const prevLastDate = new Date(year, month, 0).getDate();
+            const totalCells = 42; // 6주
+            const cells = [];
+
+            grid.innerHTML = "";
+
+            for (let i = 0; i < totalCells; i++) {
+                const cell = document.createElement("div");
+                cell.classList.add("calendar-day");
+
+                let cellDate;
+                let dayNum;
+
+                if (i < firstWeekday) {
+                    // 이전 달
+                    dayNum = prevLastDate - firstWeekday + 1 + i;
+                    cellDate = new Date(year, month - 1, dayNum);
+                    cell.classList.add("other-month");
+                } else if (i < firstWeekday + lastDate) {
+                    // 이번 달
+                    dayNum = i - firstWeekday + 1;
+                    cellDate = new Date(year, month, dayNum);
+
+                    if (dayNum === date) {
+                        cell.classList.add("today");
+                    }
+                } else {
+                    // 다음 달
+                    dayNum = i - (firstWeekday + lastDate) + 1;
+                    cellDate = new Date(year, month + 1, dayNum);
+                    cell.classList.add("other-month");
+                }
+
+                const numberEl = document.createElement("div");
+                numberEl.classList.add("calendar-number");
+                numberEl.textContent = dayNum;
+                cell.appendChild(numberEl);
+
+                const dateKey = formatDateKey(cellDate);
+                cell.dataset.date = dateKey;
+
+                // 날짜 클릭 → 로그인한 경우에만 아래 호버 카드 내용 변경
+                cell.addEventListener("click", function () {
+                    if (!isLoggedIn) return;
+                    renderDayDetail(dateKey);
+                    hoverCard.classList.add("active");
+                });
+
+                grid.appendChild(cell);
+                cells.push(cell);
+            }
+
+            // 🔒 비로그인일 때: 숫자/그리드는 그대로 두고, 카드만 안 보이게 + 더 이상 진행 안 함
+            if (!isLoggedIn) {
+                hoverCard.style.display = "none";
+                return;
+            }
+
+            // ===== 여기서부터는 "로그인 한 경우"만 실행됨 =====
+
+            // 호버 카드 안에서 그룹 카드 클릭 시 이동
+            // hoverCard.addEventListener('click', function (e) {
+            //     const item = e.target.closest('.calendar-hover-item[data-group-url]');
+            //     if (!item) return;
+            //     const url = item.getAttribute('data-group-url');
+            //     if (url) {
+            //         window.location.href = url;
+            //     }
+            // });
+
+            // 내 일정 API: 이번 달 1일 ~ 다음 달 1일
+            const startParam = formatDateKey(new Date(year, month, 1));
+            const endParam = formatDateKey(new Date(year, month + 1, 1));
+            const apiUrl = '/api/schedule/mine?start=' + startParam + '&end=' + endParam;
+
+            fetch(apiUrl, {credentials: 'same-origin'})
+                .then(function (res) {
+                    if (!res.ok) {
+                        throw new Error("HTTP " + res.status);
+                    }
+                    const contentType = res.headers.get("content-type") || "";
+                    if (!contentType.includes("application/json")) {
+                        throw new Error("Not JSON");
+                    }
+                    return res.json();
+                })
+                .then(function (events) {
+                    if (!Array.isArray(events)) return;
+
+                    // 날짜별로 모으기
+                    events.forEach(function (ev) {
+                        if (!ev.start) return;
+
+                        const start = new Date(ev.start);
+                        const end = ev.end ? new Date(ev.end) : new Date(ev.start);
+
+                        // 시간은 버리고 '날짜'만 비교하도록 정규화
+                        let cur = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+                        const last = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+
+                        // 시작일 ~ 종료일 모두 eventsByDate에 등록
+                        while (cur <= last) {
+                            const key = formatDateKey(cur); // yyyy-MM-dd
+                            if (!eventsByDate[key]) eventsByDate[key] = [];
+                            eventsByDate[key].push(ev);
+
+                            // 다음 날로 이동
+                            cur.setDate(cur.getDate() + 1);
+                        }
+                    });
+
+                    // 각 날짜 칸에 점 찍기
+                    const maxDots = 4;
+
+                    cells.forEach(function (cell) {
+                        const key = cell.dataset.date;
+                        const list = eventsByDate[key];
+                        if (!list || !list.length) return;
+
+                        cell.classList.add("has-events");
+
+                        const dotsWrap = document.createElement("div");
+                        dotsWrap.classList.add("calendar-dots");
+
+                        list.slice(0, maxDots).forEach(function (ev) {
+                            const dot = document.createElement("span");
+                            dot.classList.add("calendar-dot");
+                            dot.style.backgroundColor = getColorForEvent(ev);
+                            dotsWrap.appendChild(dot);
+                        });
+
+                        if (list.length > maxDots) {
+                            const more = document.createElement("span");
+                            more.classList.add("calendar-more");
+                            more.textContent = "+" + (list.length - maxDots);
+                            dotsWrap.appendChild(more);
+                        }
+
+                        cell.appendChild(dotsWrap);
+                    });
+
+                })
+                .catch(function (err) {
+                    console.warn("내 일정 불러오기 실패: ", err);
+                });
+
+
+            //호버 닫기
+            // 팝업 내부 클릭은 버블링 막기 (닫히지 않게)
+            hoverCard.addEventListener("click", function (e) {
+                e.stopPropagation();
+            });
+
+            // 바깥 아무 곳이나 클릭하면 팝업 닫기
+            document.addEventListener("click", function (e) {
+                if (!hoverCard.classList.contains("active")) return;
+
+                // 날짜칸 클릭은 팝업 열기 용이니 여기서는 닫지 않음
+                const isDayCell = e.target.closest(".calendar-day");
+                if (isDayCell) return;
+
+                hoverCard.classList.remove("active");
+            });
+        })();
+
+
+    </script>
+
+</section>

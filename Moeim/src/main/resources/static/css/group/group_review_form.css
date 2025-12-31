@@ -1,0 +1,211 @@
+:root {
+    --primary-color: #0f6b4a;      /* 진한 녹색 */
+    --primary-hover: #0c553a;      /* 호버 시 더 진한 녹색 */
+    --bg-base: #f5f7f6;            /* 기본 배경색 */
+    --text-title: #0b3c2a;         /* 제목 색상 */
+    --text-body: #333333;
+
+    /* 별점 전용 색상 */
+    --star-active: #FFD700;        /* 활성화된 별 (골드) */
+    --star-inactive: #E0E0E0;      /* 비활성 별 (회색) */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-body);
+}
+
+/* 전체 래퍼: 배경 그라데이션 및 중앙 정렬 */
+.review-wrapper {
+    min-height: 100vh;
+    padding: 40px 16px 60px;
+    box-sizing: border-box;
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 리뷰 카드 컨테이너 */
+.review-card {
+    background: white;
+    width: 100%;
+    max-width: 680px;
+    padding: 40px 50px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    border: 1px solid #e2ece7;
+}
+
+/* 헤더 영역 */
+.review-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e2ece7;
+}
+
+.review-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-title);
+    margin-bottom: 12px;
+}
+
+.review-desc {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.group-name {
+    color: var(--primary-color);
+    font-weight: 700;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* 평가 항목 섹션 */
+.score-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #e2ece7;
+}
+
+.score-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.score-header {
+    margin-bottom: 12px;
+}
+
+.score-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2b4238;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.score-desc {
+    font-size: 13px;
+    color: #888;
+}
+
+/* 별점 UI (Flex Row Reverse 트릭) */
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    gap: 4px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 40px;
+    color: var(--star-inactive);
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.1s;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: var(--star-active);
+}
+
+.star-rating label:hover {
+    transform: scale(1.1);
+}
+
+/* 텍스트 에어리어 */
+.desc-textarea {
+    width: 100%;
+    height: 140px;
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 15px;
+    background-color: #ffffff;
+    resize: none;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+}
+
+.desc-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(15, 107, 74, 0.1);
+}
+
+/* 버튼 영역 */
+.btn-area {
+    margin-top: 40px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* 공통 버튼 스타일 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 30px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.18s ease;
+    border: none;
+}
+
+/* 취소 버튼 */
+.btn-cancel {
+    background: #ffffff;
+    color: var(--primary-color);
+    border: 1px solid #cfe1d9;
+}
+
+.btn-cancel:hover {
+    background: #f5fbf8;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(15, 107, 74, 0.1);
+    color: var(--primary-hover);
+}
+
+/* 제출 버튼 */
+.btn-submit {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 6px 16px rgba(15, 107, 74, 0.25);
+}
+
+.btn-submit:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 107, 74, 0.3);
+}
+
+/* 반응형 */
+@media (max-width: 640px) {
+    .review-wrapper { padding: 20px 16px; }
+    .review-card { padding: 30px 24px; }
+    .btn-area { flex-direction: column-reverse; }
+    .btn { width: 100%; }
+}

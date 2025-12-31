@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title th:text="${group.title} + ' | 소모임 홈'">소모임 홈</title>
+    <link rel="stylesheet" th:href="@{/css/group/group_home.css}">
+</head>
+
+<body>
+<th:block layout:fragment="content">
+<div class="home-back-ground">
+    <div class="group-home-wrapper">
+
+
+        <!--  상단 배너 -->
+        <div class="group-banner-top">
+            <img th:if="${group.bannerImage != null}"
+                 th:src="@{|/group/banner/${group.id}|}"
+                 alt="배너 이미지">
+        </div>
+
+        <!-- 상단 정보 박스 -->
+        <div class="banner-box">
+            <div class="banner-text-section">
+                <h1 class="group-title" th:text="${group.title}">모임 제목</h1>
+                <p class="group-desc" th:text="${group.description}">모임 설명</p>
+
+                <div class="info-line">
+                    <span th:text="'카테고리 : ' + ${group.category.title}">카테고리</span>
+                    <span th:text="'인원 : ' + ${group.nowCount} + ' / ' + ${group.maxCount}">인원</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 아래 2개 박스 (멤버 / 일정) -->
+        <div class="content-area">
+
+            <!-- 멤버 박스 -->
+            <div class="box">
+                <div class="box-header">
+                    <h3>멤버</h3>
+                </div>
+
+                <ul class="member-list">
+
+                    <!-- 멤버 목록 -->
+                    <li class="member-item" th:each="m : ${members}">
+
+                        <div class="member-left">
+                            <img th:if="${m.user.profileImage != null}"
+                                 th:src="@{|/user/profile-image/${m.user.id}|}"
+                                 class="member-avatar">
+                            <img th:if="${m.user.profileImage == null}"
+                                 src="/images/defaultProfilePicture.png"
+                                 class="member-avatar">
+
+                            <div class="member-name-wrap">
+                                <span class="member-name" th:text="${m.user.nickname}">닉네임</span>
+
+                                <div class="member-dropdown">
+                                    <a th:href="@{|/user/mypage/${m.user.id}|}" class="dropdown-item">마이페이지</a>
+                                    <a th:if="${session.user == null}" href="/user/login_form" class="dropdown-item">1:1 채팅</a>
+                                    <a th:if="${session.user != null and m.user.id != session.user.id}" href="javascript:void(0);" class="dropdown-item" th:onclick="|openDirectChat(${m.user.id})|">1:1 채팅</a>
+                                </div>
+                            </div>
+
+                            <span class="member-role"
+                                  th:if="${m.position.name() == 'ADMIN'}">모임장</span>
+                        </div>
+
+                        <div class="member-right"
+                             th:if="${session.user != null and session.user.id != m.user.id and !#lists.contains(reviewedTargetIds, m.user.id)}">
+                            <a th:href="@{|/review/user/${group.id}/${m.user.id}|}"
+                               class="btn-rate-user">
+                                평가하기
+                            </a>
+                        </div>
+
+                        <div class="member-right"
+                             th:if="${session.user != null
+              and session.user.id != m.user.id
+              and #lists.contains(reviewedTargetIds, m.user.id)}">
+                            <span style="font-size:12px; color:#999; font-weight:600;">평가완료</span>
+                        </div>
+
+                    </li>
+
+                    <!-- 멤버 없을 때 -->
+                    <li class="member-item empty"
+                        th:if="${members == null or #lists.isEmpty(members)}">
+                        멤버가 없습니다.
+                    </li>
+
+                </ul>
+            </div>
+
+            <!-- 일정 박스 -->
+            <div class="box">
+                <div class="box-header">
+                    <h3>일정</h3>
+
+                    <button type="button" class="btn-export-schedule"
+                            th:onclick="|location.href='@{/schedule/group/{groupId}/export(groupId=${group.id})}'|">
+                        <span>📥</span> 내보내기
+                    </button>
+                </div>
+
+                <div class="calendar-wrapper" th:with="groupId=${group.id}">
+                    <th:block th:replace="~{schedule/calendar_fragment :: calendarFragment(apiUrl=@{/api/schedule(groupId=${group.id})}, canAdd=false)}">
+                    </th:block>
+                </div>
+            </div>
+
+            <!--  리뷰 통계 섹션 (Overall) -->
+            <!-- TODO 디자인 마감때 통일감 맞추기 -->
+            <div class="review-stats-section" style="margin-top: 50px; padding: 30px; background: #F9F9F9; border-radius: 16px; border: 1px solid #EEE;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 20px; font-weight: 700; margin: 0; color: #333;">
+                        그룹 리뷰 <span style="color:#134D38;">([[${stats.reviewCount}]])</span>
+                    </h3>
+                    <a th:href="@{|/review/group/${group.id}/list|}" style="font-size: 14px; color: #666; text-decoration: none;">
+                        리뷰 더보기 >
+                    </a>
+                </div>
+
+                <div style="display: flex; gap: 40px; align-items: center;">
+                    <!-- 왼쪽: 종합 점수 -->
+                    <div style="text-align: center; width: 150px;">
+                        <div style="font-size: 48px; font-weight: 800; color: #134D38;" th:text="${stats.averageTotal}">0.0</div>
+
+                        <!-- 별점 그래프 -->
+                        <div class="star-rating-display" th:title="|평점 ${stats.averageTotal}점|">
+                            <div class="star-base">★★★★★</div>
+                            <div class="star-fill" th:style="'width:' + ${(stats.averageTotal / 5.0) * 100} + '%'">★★★★★</div>
+                        </div>
+                        <div style="font-size: 13px; color: #888; margin-top: 5px;">종합 평점</div>
+                    </div>
+
+                    <!-- 오른쪽: 항목별 점수 (바 그래프) -->
+                    <div style="flex: 1;">
+                        <!-- 1. 참여/신뢰도 -->
+                        <div style="margin-bottom: 12px;">
+                            <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px; color:#555; font-weight:600;">
+                                <span>참여/신뢰도</span> <span th:text="${stats.averageReliability}">0.0</span>
+                            </div>
+                            <div style="background:#E0E0E0; height:8px; border-radius:4px; overflow:hidden;">
+                                <div th:style="'background-color:#134D38; height:100%; width:' + ${stats.averageReliability * 20} + '%'"></div>
+                            </div>
+                        </div>
+
+                        <!-- 2. 준비/운영 -->
+                        <div style="margin-bottom: 12px;">
+                            <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px; color:#555; font-weight:600;">
+                                <span>준비/운영</span> <span th:text="${stats.averagePreparation}">0.0</span>
+                            </div>
+                            <div style="background:#E0E0E0; height:8px; border-radius:4px; overflow:hidden;">
+                                <div th:style="'background-color:#134D38; height:100%; width:' + ${stats.averagePreparation * 20} + '%'"></div>
+                            </div>
+                        </div>
+
+                        <!-- 3. 만족도/재미 -->
+                        <div>
+                            <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px; color:#555; font-weight:600;">
+                                <span>만족도/재미</span> <span th:text="${stats.averageSatisfaction}">0.0</span>
+                            </div>
+                            <div style="background:#E0E0E0; height:8px; border-radius:4px; overflow:hidden;">
+                                <div th:style="'background-color:#134D38; height:100%; width:' + ${stats.averageSatisfaction * 20} + '%'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${isUserExist} and !${isReviewed}" style="text-align: center; margin-top: 30px;">
+                    <a th:href="@{|/review/group/${group.id}|}"
+                       style="display:inline-block; background:white; border:1px solid #134D38; color:#134D38; padding:10px 30px; border-radius:50px; text-decoration:none; font-weight:700; transition:0.2s;"
+                       onmouseover="this.style.backgroundColor='#E8F5E9'"
+                       onmouseout="this.style.backgroundColor='white'">
+                        ✍️ 리뷰 작성하기
+                    </a>
+                </div>
+
+
+            </div> <!-- content-area 끝 -->
+
+
+            <!-- 그룹 설정 / 나가기 버튼 -->
+            <div class="group-settings-box">
+
+                <!--  모임장(Admin)일 때: 설정 버튼 -->
+                <a th:if="${isAdmin}"
+                   th:href="@{/group/settings/{id}(id=${group.id})}"
+                   class="settings-btn">
+                    설정
+                </a>
+
+                <!--  일반 멤버일 때: 나가기 버튼 -->
+                <form th:if="${!isAdmin}"
+                      th:action="@{/group/leave/{id}(id=${group.id})}"
+                      method="post"
+                      onsubmit="return confirm('정말 소모임에서 나가시겠습니까?');">
+                    <button type="submit" class="leave-btn">탈퇴</button>
+                </form>
+
+            </div>
+
+
+        </div> <!-- group-home-wrapper 끝 -->
+    </div>
+</div>
+    <script th:inline="javascript">
+        // 닉네임 클릭 이벤트 리스너
+        document.addEventListener('DOMContentLoaded', function() {
+            const memberNicknames = document.querySelectorAll('.member-name');
+
+            memberNicknames.forEach(nickname => {
+                nickname.addEventListener('click', function(event) {
+                    event.stopPropagation(); // 이벤트 버블링 방지
+
+                    // 현재 활성화된 드롭다운 메뉴를 닫기
+                    document.querySelectorAll('.member-dropdown').forEach(dropdown => {
+                        if (dropdown !== this.nextElementSibling) {
+                            dropdown.classList.remove('active');
+                        }
+                    });
+
+                    // 클릭된 닉네임 바로 다음에 있는 드롭다운 메뉴를 토글
+                    const dropdown = this.nextElementSibling;
+                    if (dropdown && dropdown.classList.contains('member-dropdown')) {
+                        dropdown.classList.toggle('active');
+                    }
+                });
+            });
+
+            // 화면 아무 곳이나 클릭해서 드롭다운 메뉴 닫기
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.member-dropdown.active').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            });
+        });
+    </script>
+</th:block>
+
+</body>
+</html>

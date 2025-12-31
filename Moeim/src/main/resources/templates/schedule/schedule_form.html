@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>일정 관리</title>
+    <link rel="stylesheet" th:href="@{/css/schedule/schedule_form.css}">
+</head>
+<body>
+
+<div class="schedule-wrapper">
+
+    <div class="form-container">
+
+        <div class="form-header">
+            <h2 th:text="${scheduleId == null ? '새 일정 등록' : '일정 수정'}">일정 관리</h2>
+        </div>
+
+        <form th:action="${scheduleId == null
+                            ? '/schedule/' + groupId + '/create'
+                            : '/schedule/' + groupId + '/' + scheduleId + '/modify'}"
+              th:object="${form}" method="post">
+
+            <div class="form-group">
+                <label class="form-label">제목</label>
+                <input type="text" class="form-input" th:field="*{title}" placeholder="일정 제목을 입력하세요" required>
+            </div>
+
+            <div class="form-group date-row">
+                <div class="date-col">
+                    <label class="form-label">시작 일시</label>
+                    <input type="datetime-local" id="startDate" class="form-input" th:field="*{startDate}" required>
+                </div>
+                <div class="date-col">
+                    <label class="form-label">종료 일시</label>
+                    <input type="datetime-local" id="endDate" class="form-input" th:field="*{endDate}" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">상세 내용</label>
+                <textarea class="form-textarea" th:field="*{description}" placeholder="일정에 대한 상세 내용을 입력하세요"></textarea>
+            </div>
+
+            <div class="btn-area">
+                <button type="button" class="btn btn-cancel" onclick="history.back()">취소</button>
+
+                <button type="button" class="btn btn-delete"
+                        th:if="${scheduleId != null}"
+                        th:onclick="|deleteSchedule(${groupId}, ${scheduleId})|">삭제</button>
+
+                <button type="submit" class="btn btn-save">저장</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    const sInput = document.getElementById('startDate');
+    const eInput = document.getElementById('endDate');
+
+    if (sInput && eInput) {
+
+        // (1) 시작 일시 변경 감지
+        sInput.addEventListener('change', function() {
+            if (this.value) {
+                // 종료일의 최소값을 시작일로 설정 (과거 날짜 선택 방지)
+                eInput.min = this.value;
+
+                // '종료 일시가 비어있거나' OR '시작 일시가 종료 일시보다 늦은 경우' -> 자동 조정
+                if (!eInput.value || this.value > eInput.value) {
+                    // 사용자 경험을 위해, 값이 있을 때만 경고창 띄우기 (처음 입력 시엔 조용히 세팅)
+                    if (eInput.value) {
+                        alert('시작 일시가 종료 일시보다 늦습니다.\n종료 일시를 시작 일시 1시간 뒤로 자동 설정합니다.');
+                    }
+
+                    const date = new Date(this.value);
+                    date.setHours(date.getHours() + 1); // 1시간 더하기
+
+                    // KST 시간 오차 보정 후 대입
+                    const offset = date.getTimezoneOffset() * 60000;
+                    eInput.value = new Date(date.getTime() - offset).toISOString().slice(0, 16);
+                }
+            }
+        });
+
+        // (2) 종료 일시 변경 감지 (역전 방지)
+        eInput.addEventListener('change', function() {
+            if (sInput.value && this.value < sInput.value) {
+                alert('종료 일시는 시작 일시보다 빠를 수 없습니다.');
+                this.value = sInput.value; // 시작 일시와 동일하게 리셋
+            }
+        });
+
+        // 페이지 로드 시 min 속성 초기화
+        if (sInput.value) eInput.min = sInput.value;
+    }
+
+    // 일정 삭제 요청 함수
+    function deleteSchedule(groupId, scheduleId) {
+        if (confirm('정말로 이 일정을 삭제하시겠습니까?')) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = '/schedule/' + groupId + '/' + scheduleId + '/delete';
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
+
+</body>
+</html>

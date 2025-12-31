@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입 - Moeim</title>
+
+    <!-- 회원가입 전용 스타일 -->
+    <link rel="stylesheet" th:href="@{/css/user/signup.css}">
+</head>
+
+<body>
+<div layout:fragment="content">
+    <section class="signup-wrapper">
+
+        <div class="signup-card">
+            <h1 class="signup-title">회원가입</h1>
+            <p class="signup-subtitle">모임을 만들고 참여하기 위해 계정을 생성하세요.</p>
+
+            <!-- 에러 메시지 영역 (서버에서 error 넘겨줄 때 사용) -->
+            <div th:if="${error}" class="signup-alert">
+                <span th:text="${error}"></span>
+            </div>
+
+            <form th:action="@{/user/signup}" method="post" class="signup-form" onsubmit="return checkPassword();">
+                <!-- 이메일 -->
+                <div class="form-group">
+                    <label for="email">이메일 <span class="required">*</span></label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="example@moeim.com"
+                           required>
+                </div>
+
+                <!-- 비밀번호 -->
+                <div class="form-group">
+                    <label for="password">비밀번호 <span class="required">*</span></label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           placeholder="8자 이상 입력하세요"
+                           minlength="8"
+                           required>
+                </div>
+
+                <!-- 비밀번호 확인 -->
+                <div class="form-group">
+                    <label for="passwordConfirm">비밀번호 확인 <span class="required">*</span></label>
+                    <input type="password"
+                           id="passwordConfirm"
+                           name="passwordConfirm"
+                           placeholder="비밀번호를 다시 입력하세요"
+                           minlength="8"
+                           required>
+                </div>
+
+                <!-- 닉네임 -->
+                <div class="form-group">
+                    <label for="nickname">닉네임 <span class="required">*</span></label>
+                    <input type="text"
+                           id="nickname"
+                           name="nickname"
+                           placeholder="커뮤니티에서 사용할 이름"
+                           maxlength="30"
+                           required>
+                </div>
+
+                <!-- 한 줄 소개 (bio) -->
+                <div class="form-group">
+                    <label for="bio">한 줄 소개 (선택)</label>
+                    <textarea id="bio"
+                              name="bio"
+                              rows="3"
+                              placeholder="예) 개발과 운동을 좋아하는 대학생입니다."></textarea>
+                </div>
+
+                <!-- 관심사 선택 ( 중복 선택 가능) -->
+                <div class="form-group">
+                    <label>관심사 (중복 선택 가능)</label>
+                    <div class="category-group">
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="2">
+                            <span>운동</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="3">
+                            <span>공부</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="4">
+                            <span>취미</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="5">
+                            <span>식사</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="6">
+                            <span>독서</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="7">
+                            <span>여행</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="8">
+                            <span>게임</span>
+                        </label>
+
+                        <label class="category-item">
+                            <input type="checkbox" name="categoryIds" value="9">
+                            <span>기타</span>
+                        </label>
+
+                    </div>
+                    <p class="field-help">가입 시 관심사를 선택하면 관련 모임 추천에 사용됩니다.</p>
+                </div>
+
+
+                <button type="submit" class="signup-btn">회원가입</button>
+
+                <p class="signup-footer">
+                    이미 계정이 있으신가요?
+                    <a th:href="@{/user/login_form}">로그인하기</a>
+                </p>
+            </form>
+        </div>
+
+    </section>
+</div>
+
+<th:block layout:fragment="script">
+    <script>
+        function checkPassword() {
+            const pw = document.getElementById("password").value;
+            const pw2 = document.getElementById("passwordConfirm").value;
+
+            if (pw !== pw2) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</th:block>
+
+</body>
+</html>

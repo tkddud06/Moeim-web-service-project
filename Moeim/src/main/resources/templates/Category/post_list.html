@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>MOEIM - [[${category.title}]]</title>
+    <link rel="stylesheet" th:href="@{/css/Category/post_list.css}">
+</head>
+
+<div layout:fragment="content" class="category-container">
+
+    <!-- 상단 카테고리 선택 바 -->
+    <nav class="category-nav">
+        <a th:each="item : ${categoryList}"
+           th:href="@{|/category/${item.id}|}"
+           class="category-chip"
+           th:text="${item.title}"
+           th:classappend="${item.id == category.id} ? 'active'">
+            자유게시판
+        </a>
+    </nav>
+
+    <!-- 헤더 -->
+    <div class="category-header">
+        <h2 class="category-title" th:text="${category.title}">카테고리 이름</h2>
+        <a th:if="${category.id != 0}" th:href="@{|/post/${category.id}/create|}" class="btn-write">✏️ 글쓰기</a>
+    </div>
+
+    <!-- 메인 컨텐츠 -->
+    <div class="content-wrapper">
+
+        <!-- [좌측] 게시글 리스트 -->
+        <section class="post-section">
+            <table class="post-table">
+                <thead class="col-hide-mobile">
+                <tr>
+                    <th class="th-title">제목</th>
+                    <th class="th-vote">추천</th>
+                    <th class="th-author">작성자</th>
+                    <th class="th-date">날짜</th>
+                    <th class="th-views">조회</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:if="${postPaging != null}">
+                    <tr th:each="post : ${postPaging}">
+                        <td class="text-left">
+                            <a th:href="@{|/post/${post.category.id}/${post.id}|}" class="post-link">
+                                <span th:text="${post.title}">게시글 제목</span>
+                                <span class="badge-count comment-cnt"
+                                      th:if="${#lists.size(post.comments) > 0}"
+                                      th:text="|[${#lists.size(post.comments)}]|">
+                                </span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <span class="vote-count">
+                                ♥ <span th:text="${@postVoteService.getVoteCount(post.id, 'UP')}">0</span>
+                            </span>
+                        </td>
+
+                        <td class="author-cell"> <span class="author-nickname" th:text="${post.user.nickname}">닉네임</span>
+                            <div class="author-dropdown">
+                                <a th:href="@{|/user/mypage/${post.user.id}|}" class="dropdown-item">마이페이지</a>
+                                <a th:if="${session.user == null}" href="/user/login_form" class="dropdown-item">1:1 채팅</a>
+                                <a th:if="${session.user != null and post.user.id != session.user.id}" href="javascript:void(0);" class="dropdown-item" th:onclick="|openDirectChat(${post.user.id})|">1:1 채팅</a>
+                            </div>
+                        </td>
+                        <td class="col-hide-mobile" th:text="${post.formattedDate}">날짜</td>
+                        <td class="col-hide-mobile" th:text="${post.viewCount}">0</td>
+                    </tr>
+                </th:block>
+
+                <tr th:if="${postPaging != null and postPaging.isEmpty()}">
+                    <td colspan="5" style="padding: 60px; color:#999; text-align: center;">
+                        <div style="font-size: 40px; margin-bottom: 10px;">📝</div>
+                        아직 등록된 게시글이 없습니다.
+                    </td>
+                </tr>
+
+                <tr th:if="${postPaging == null}">
+                    <td colspan="5" style="padding: 60px; color:#999; text-align: center;">
+                        게시글을 불러오지 못했습니다.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- 하단 컨트롤 -->
+            <div class="bottom-controls">
+                <div class="pagination" th:if="${postPaging != null and !postPaging.isEmpty()}">
+
+                    <!--
+                       페이징 계산 로직 (블록 단위)
+                       - blockSize: 한 블록에 보여줄 페이지 수 (5개)
+                       - currentBlock: 현재 페이지가 속한 블록 번호 (0부터 시작)
+                       - start: 해당 블록의 시작 페이지 (1, 6, 11 ...)
+                       - end: 해당 블록의 끝 페이지 (5, 10, 15 ... 단, 전체 페이지 수를 넘지 않음)
+                    -->
+                    <th:block th:with="blockSize=5,
+                                       currentBlock=${postPaging.number / blockSize},
+                                       start=${currentBlock * blockSize + 1},
+                                       end=${(currentBlock * blockSize + blockSize) < postPaging.totalPages ? (currentBlock * blockSize + blockSize) : postPaging.totalPages}">
+
+                        <!-- 맨 처음 버튼 -->
+                        <a class="page-item"
+                           th:href="@{|/category/${category.id}?page=1&keyword=${keyword}&searchType=${searchType}|}"
+                           th:if="${postPaging.number > 0}">&lt;&lt;</a>
+
+                        <!-- 이전 버튼 -->
+                        <a class="page-item"
+                           th:href="@{|/category/${category.id}?page=${currentPage - 1}&keyword=${keyword}&searchType=${searchType}|}"
+                           th:if="${postPaging.hasPrevious()}">&lt;</a>
+
+                        <!-- 페이지 번호 반복 -->
+                        <th:block th:each="page : ${#numbers.sequence(start, end)}">
+                            <a class="page-item"
+                               th:href="@{|/category/${category.id}?page=${page}&keyword=${keyword}&searchType=${searchType}|}"
+                               th:text="${page}"
+                               th:classappend="${page == currentPage} ? 'active'">
+                            </a>
+                        </th:block>
+
+                        <!-- 다음 버튼 -->
+                        <a class="page-item"
+                           th:href="@{|/category/${category.id}?page=${currentPage + 1}&keyword=${keyword}&searchType=${searchType}|}"
+                           th:if="${postPaging.hasNext()}">&gt;</a>
+
+                        <!-- 맨 끝 버튼 -->
+                        <a class="page-item"
+                           th:href="@{|/category/${category.id}?page=${postPaging.totalPages}&keyword=${keyword}&searchType=${searchType}|}"
+                           th:if="${postPaging.number < postPaging.totalPages - 1}">&gt;&gt;</a>
+
+                    </th:block>
+                </div>
+                <!-- 검색 -->
+                <form class="search-box" method="get" th:action="@{|/category/${category.id}|}">
+                    <!-- 검색 타입 선택 -->
+                    <select name="searchType" class="search-select">
+                        <option value="all" th:selected="${searchType == 'all'}">제목+내용</option>
+                        <option value="title" th:selected="${searchType == 'title'}">제목</option>
+                        <option value="user" th:selected="${searchType == 'user'}">작성자</option>
+                    </select>
+
+                    <input type="text" name="keyword" class="search-input"
+                           placeholder="검색어를 입력하세요" th:value="${keyword}">
+                    <button type="submit" class="btn-search">검색</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 우측 소모임 사이드바 -->
+        <aside class="group-sidebar"
+               th:if="${category.type?.name == 'CATEGORY'}">
+
+            <div class="sidebar-header">
+                <span class="sidebar-title">🌱 소모임 목록</span>
+                <a href="/group/list" class="sidebar-more">더보기 ></a>
+            </div>
+
+            <th:block th:if="${groupPaging != null}">
+                <div class="group-list">
+                    <a th:href="@{|/group/view?id=${group.id}|}" class="group-card" th:each="group : ${groupPaging}">
+                        <div class="group-img-placeholder">
+                            <img th:if="${group.bannerImage != null}"
+                                 th:src="@{|/group/banner/${group.id}|}"
+                                 alt="대표 이미지">
+                        </div>
+
+                        <div class="group-content">
+                            <span class="group-name" th:text="${group.title}">소모임 이름</span>
+                            <span class="group-desc" th:text="${group.description}">설명</span>
+
+                            <div class="group-meta">
+                                <span class="group-category" th:text="${group.category.title}">카테고리</span>
+                                <span>멤버 <span th:text="${group.nowCount}">1</span>/<span th:text="${group.maxCount}">10</span></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div th:if="${groupPaging.isEmpty()}" style="text-align:center; color:#999; padding:20px;">
+                        생성된 소모임이 없습니다.
+                    </div>
+                </div>
+            </th:block>
+
+            <div th:if="${groupPaging == null}" style="text-align:center; color:#999; padding:20px;">
+                소모임 목록을 불러올 수 없습니다.
+            </div>
+
+            <div style="margin-top:20px; text-align:center;">
+                <a href="/group/form" style="font-size:14px; color:#134D38; font-weight:bold; text-decoration:underline;">
+                    + 새로운 소모임 만들기
+                </a>
+            </div>
+        </aside>
+
+        <script th:inline="javascript">
+            // 닉네임 클릭 이벤트 리스너
+            document.addEventListener('DOMContentLoaded', function() {
+                const authorNicknames = document.querySelectorAll('.author-nickname');
+
+                authorNicknames.forEach(nickname => {
+                    nickname.addEventListener('click', function(event) {
+                        event.stopPropagation(); // 이벤트 버블링 방지
+
+                        // 현재 활성화된 드롭다운 메뉴를 닫기
+                        document.querySelectorAll('.author-dropdown').forEach(dropdown => {
+                            if (dropdown !== this.nextElementSibling) {
+                                dropdown.classList.remove('active');
+                            }
+                        });
+
+                        // 클릭된 닉네임 바로 다음에 있는 드롭다운 메뉴를 토글
+                        const dropdown = this.nextElementSibling;
+                        if (dropdown && dropdown.classList.contains('author-dropdown')) {
+                            dropdown.classList.toggle('active');
+                        }
+                    });
+                });
+
+                // 화면 아무 곳이나 클릭해서 드롭다운 메뉴 닫기
+                document.addEventListener('click', function() {
+                    document.querySelectorAll('.author-dropdown.active').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                });
+            });
+        </script>
+
+    </div>
+
+</div>
+</html>

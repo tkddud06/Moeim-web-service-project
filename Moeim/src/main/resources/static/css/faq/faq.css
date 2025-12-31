@@ -1,0 +1,154 @@
+body {
+    margin: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f5f7f6;
+}
+
+/* 전체 래퍼 */
+.faq-wrapper {
+    min-height: calc(100vh - 60px);
+    padding: 40px 16px 60px;
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+    box-sizing: border-box;
+}
+
+/* 가운데 정렬 컨테이너 */
+.faq-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* 헤더 영역 */
+.faq-header {
+    text-align: left;
+    margin-bottom: 24px;
+}
+
+.faq-title {
+    margin: 0 0 8px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #0b3c2a;
+}
+
+.faq-subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* 탭 버튼 영역 */
+.faq-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0 18px;
+}
+
+.faq-tab {
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid #d1e1da;
+    background: #ffffff;
+    font-size: 13px;
+    cursor: pointer;
+    color: #33534a;
+    transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.faq-tab.active {
+    background: #0f6b4a;
+    color: #ffffff;
+    border-color: #0f6b4a;
+    box-shadow: 0 6px 16px rgba(15, 107, 74, 0.28);
+}
+
+.faq-tab:hover:not(.active) {
+    background: #f0f7f3;
+    border-color: #0f6b4a;
+}
+
+/* FAQ 리스트 */
+.faq-list {
+    margin: 0;
+    padding: 0;
+}
+
+/* 개별 FAQ 아이템 (details) */
+.faq-item {
+    margin-bottom: 10px;
+    border-radius: 12px;
+    border: 1px solid #dfe8e3;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+/* summary 스타일 */
+.faq-item > summary {
+    list-style: none;
+}
+
+.faq-item > summary::-webkit-details-marker {
+    display: none; /* 기본 화살표 제거 (크롬/사파리) */
+}
+
+.faq-question {
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e2b24;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+/* 화살표 아이콘처럼 보이는 before */
+.faq-question::after {
+    content: "⌄";
+    font-size: 16px;
+    color: #7a8b83;
+    transition: transform 0.18s ease;
+}
+
+/* 열렸을 때 화살표 회전 */
+.faq-item[open] .faq-question::after {
+    transform: rotate(180deg);
+}
+
+/* hover 효과 */
+.faq-question:hover {
+    background: #f5fbf8;
+}
+
+/* 답변 영역 */
+.faq-answer {
+    padding: 10px 16px 14px;
+    border-top: 1px solid #edf2ef;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.7;
+    background: #fbfdfc;
+}
+
+.faq-answer p {
+    margin: 0;
+}
+
+/* 반응형 */
+@media (max-width: 640px) {
+    .faq-wrapper {
+        padding: 28px 12px 40px;
+    }
+    .faq-title {
+        font-size: 22px;
+    }
+    .faq-question {
+        padding: 12px 14px;
+    }
+    .faq-answer {
+        padding: 8px 14px 12px;
+    }
+}

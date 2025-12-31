@@ -1,0 +1,192 @@
+body {
+    margin: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f5f7f6;
+}
+
+/* 전체 래퍼 */
+.findid-wrapper {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 16px;
+    box-sizing: border-box;
+    background: radial-gradient(circle at top, #e3f2eb 0, #f5f7f6 45%, #f5f7f6 100%);
+}
+
+/* 카드 */
+.findid-card {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #e2ece7;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
+    padding: 30px 26px 26px;
+    box-sizing: border-box;
+}
+
+/* 제목/설명 */
+.findid-title {
+    margin: 0 0 8px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #0b3c2a;
+}
+
+.findid-subtitle {
+    margin: 0 0 22px;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* 폼 */
+.findid-form .form-group {
+    margin-bottom: 14px;
+}
+
+.findid-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+}
+
+.findid-form input {
+    width: 100%;
+    padding: 9px 11px;
+    border-radius: 10px;
+    border: 1px solid #d3ded8;
+    font-size: 14px;
+    box-sizing: border-box;
+    background: #f9fbfa;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.findid-form input::placeholder {
+    color: #b0b8b5;
+}
+
+.findid-form input:focus {
+    outline: none;
+    border-color: #0f6b4a;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(15, 107, 74, 0.12);
+}
+
+/* 안내 문구 */
+.findid-info {
+    margin: 6px 0 16px;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.6;
+}
+
+/* 버튼 */
+.btn-findid {
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    background: #0f6b4a;
+    color: #ffffff;
+    box-shadow: 0 10px 20px rgba(15, 107, 74, 0.28);
+    transition: background 0.18s ease, transform 0.08s ease, box-shadow 0.18s ease;
+}
+
+.btn-findid:hover {
+    background: #0c553a;
+    box-shadow: 0 12px 24px rgba(15, 107, 74, 0.32);
+}
+
+.btn-findid:active {
+    transform: translateY(1px);
+    box-shadow: 0 7px 15px rgba(15, 107, 74, 0.24);
+}
+
+/* 결과 영역 */
+.findid-result {
+    margin-top: 18px;
+    padding: 12px 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(15, 107, 74, 0.18);
+    background: #f4fbf7;
+}
+
+.result-title {
+    margin: 0 0 4px;
+    font-size: 13px;
+    color: #0f6b4a;
+    font-weight: 600;
+}
+
+.result-value {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    word-break: break-all;
+}
+
+.btn-go-login {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 999px;
+    text-decoration: none;
+    background: #0f6b4a;
+    color: #ffffff;
+}
+
+/* 에러 메시지 */
+.findid-error {
+    margin-top: 14px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #fff4f4;
+    border: 1px solid #f4c5c5;
+    font-size: 12px;
+    color: #c74444;
+}
+
+/* 하단 링크 */
+.findid-bottom {
+    margin: 16px 0 0;
+    text-align: center;
+    font-size: 12px;
+    color: #777;
+}
+
+.link-strong {
+    text-decoration: none;
+    font-weight: 600;
+    color: #0f6b4a;
+}
+
+.link-strong:hover {
+    text-decoration: underline;
+}
+
+/* 반응형 */
+@media (max-width: 640px) {
+    .findid-wrapper {
+        padding: 28px 12px 36px;
+    }
+    .findid-card {
+        padding: 24px 18px 20px;
+        border-radius: 16px;
+    }
+    .findid-title {
+        font-size: 20px;
+    }
+}

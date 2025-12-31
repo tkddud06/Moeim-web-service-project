@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>로그인 | Moeim</title>
+    <!-- 로그인 페이지 전용 CSS -->
+    <link rel="stylesheet" th:href="@{/css/user/login.css}">
+</head>
+
+<body>
+<th:block layout:fragment="content">
+
+    <main class="login-wrapper">
+        <section class="login-card">
+            <h1 class="login-title">로그인</h1>
+            <div th:if="${error != null and !#strings.isEmpty(error)}" class = "alert-box alert-error">
+                <span th:text="${error}">error massage</span>
+            </div>
+            <p class="login-subtitle">
+                서비스 이용을 위해 로그인해 주세요.
+            </p>
+
+            <form class="login-form" th:action="@{/user/login}" method="post">
+
+                <!-- 보던 페이지 리다이렉트용 정보 -->
+                <input type="hidden" name="redirectURL" th:value="${redirectURL}">
+                <!-- 스프링 시큐리티 사용 시 CSRF -->
+                <input type="hidden"
+                       th:if="${_csrf != null}"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="example@email.com"
+                            required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="비밀번호를 입력하세요"
+                            required
+                    />
+                </div>
+
+                <div class="form-options">
+                    <label class="remember">
+                        <input type="checkbox" name="remember-me" />
+                        <span>로그인 상태 유지</span>
+                    </label>
+                    <a th:href="@{/user/findId}" class="link-small">아이디 / 비밀번호 찾기</a>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    로그인
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>또는</span>
+            </div>
+
+            <div class="social-login">
+                <button type="button" class="btn-social kakao">
+                    카카오로 로그인
+                </button>
+                <button type="button" class="btn-social google">
+                    Google로 로그인
+                </button>
+            </div>
+
+            <p class="signup-text">
+                아직 회원이 아니신가요?
+                <a th:href="@{/user/signup_form}" class="link-strong">회원가입 하기</a>
+            </p>
+        </section>
+    </main>
+
+</th:block>
+</body>
+</html>

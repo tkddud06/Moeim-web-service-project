@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>MOEIM - [[${post.title}]]</title>
+
+    <link rel="stylesheet" th:href="@{/css/Category/post_view.css}">
+</head>
+
+<div layout:fragment="content">
+    <div class="post-view-wrapper">
+        <div class="view-container">
+
+            <!-- 상단 네비게이션 -->
+            <div class="category-breadcrumb">
+                <a th:href="@{|/category/${post.category.id}|}" class="category-link">
+                    <span class="back-arrow"> &lt; </span>
+                    <span th:text="${post.category.title}">자유게시판</span>
+                </a>
+            </div>
+
+            <div class="post-box">
+
+                <!-- 게시글 헤더 -->
+                <div class="post-header">
+                    <h1 class="post-title" th:text="${post.title}">게시글 제목</h1>
+
+                    <div class="post-info">
+                        <div class="info-left">
+                            <img th:if="${post.user.profileImage != null}"
+                                 th:src="@{|/user/profile-image/${post.user.id}|}"
+                                 alt="프로필 이미지"
+                                 class="author-profile-img" />
+
+                            <img th:if="${post.user.profileImage == null}"
+                                 th:src="@{/images/defaultProfilePicture.png}"
+                                 alt="기본 프로필 이미지"
+                                 class="author-profile-img" />
+
+                            <div class="author-cell">
+                                <span class="author-nickname" th:text="${post.user.nickname}">닉네임</span>
+                                <div class="author-dropdown">
+                                    <a th:href="@{|/user/mypage/${post.user.id}|}" class="dropdown-item">마이페이지</a>
+                                    <a th:if="${session.user == null}" href="/user/login_form" class="dropdown-item">1:1 채팅</a>
+                                    <a th:if="${session.user != null and post.user.id != session.user.id}" href="javascript:void(0);" class="dropdown-item" th:onclick="|openDirectChat(${post.user.id})|">1:1 채팅</a>
+                                </div>
+                            </div>
+                            <div class="info-divider"></div>
+
+                            <span th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd HH:mm')}">
+                                2025.11.22 13:43
+                            </span>
+
+                            <div class="info-divider"></div>
+                            <span>조회 <span th:text="${post.viewCount}">0</span></span>
+                        </div>
+
+                        <!-- 게시글 수정/삭제 버튼 (본인 확인) -->
+                        <div class="info-right"
+                             th:if="${session.user != null and session.user.id == post.user.id}">
+                            <a th:href="@{|/post/${post.id}/modify|}" class="btn-action btn-edit">수정</a>
+                            <a th:href="@{|/post/${post.category.id}/${post.id}/delete|}" class="btn-action btn-delete"
+                               onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 게시글 본문 -->
+                <div class="post-content" th:utext="${post.text}">
+                    본문 내용이 들어갑니다.
+                </div>
+
+                <!-- 추천/비추천 -->
+                <div class="vote-area">
+
+                    <a th:href="@{|/vote/${post.id}?type=UP|}"
+                       class="btn-vote up">
+                        <span class="vote-icon">👍</span>
+                        <span class="vote-count" th:text="${upCount}">0</span>
+                    </a>
+
+                    <a th:href="@{|/vote/${post.id}?type=DOWN|}"
+                       class="btn-vote down">
+                        <span class="vote-icon">👎</span>
+                        <span class="vote-count" th:text="${downCount}">0</span>
+                    </a>
+                </div>
+
+                <!-- 댓글 영역 -->
+                <div class="comment-wrap">
+                    <div class="comment-count-title">
+                        댓글 <span style="color:var(--primary-color); margin-left:4px;"
+                                 th:text="${commentList != null ? #lists.size(commentList) : 0}">0</span>개
+                    </div>
+
+                    <!-- 댓글 리스트 -->
+                    <th:block th:if="${commentList != null}">
+                        <ul class="comment-list">
+                            <li th:each="comment : ${commentList}" class="comment-item">
+                                <div class="comment-meta">
+                                    <div class="comment-author-wrap">
+                                        <span class="comment-author author-nickname" th:text="${comment.user.nickname}">닉네임</span>
+
+                                        <div class="author-dropdown">
+                                            <a th:href="@{|/user/mypage/${comment.user.id}|}" class="dropdown-item">마이페이지</a>
+                                            <a th:if="${session.user == null}" href="/user/login_form" class="dropdown-item">1:1 채팅</a>
+                                            <a th:if="${session.user != null and comment.user.id != session.user.id}" href="javascript:void(0);" class="dropdown-item" th:onclick="|openDirectChat(${comment.user.id})|">1:1 채팅</a>
+                                        </div>
+                                    </div>
+
+                                    <!-- 우측 부분(날짜 + 삭제 버튼) -->
+                                    <div class="comment-right">
+                                        <span class="comment-date" th:text="${#temporals.format(comment.createdAt, 'yyyy.MM.dd HH:mm')}">날짜</span>
+
+                                        <!-- 삭제 버튼 (댓글 작성자 본인일 때만 표시) -->
+                                        <a th:if="${session.user != null and session.user.id == comment.user.id}"
+                                           th:href="@{|/comment/delete/${comment.id}|}"
+                                           class="btn-comment-delete"
+                                           onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</a>
+                                    </div>
+                                </div>
+                                <div class="comment-text" th:text="${comment.text}">내용</div>
+                            </li>
+
+                            <li th:if="${#lists.isEmpty(commentList)}" style="text-align:center; color:#999; padding:20px;">
+                                등록된 댓글이 없습니다. 첫 번째 댓글을 남겨보세요!
+                            </li>
+                        </ul>
+                    </th:block>
+
+                    <div th:if="${commentList == null}" style="text-align:center; color:#999; padding:20px;">
+                        댓글 목록을 불러올 수 없습니다.
+                    </div>
+
+                    <form class="comment-form" method="post" th:action="@{|/comment/${post.id}/create|}" th:object="${commentForm}">
+                        <textarea class="comment-input" placeholder="댓글을 남겨보세요" th:field="*{text}"></textarea>
+                        <button type="submit" class="btn-comment">등록</button>
+                    </form>
+                </div>
+
+    </div>
+
+    <!-- 목록으로 버튼 -->
+    <div class="btn-list-area">
+        <a th:href="@{|/category/${post.category.id}|}" class="btn-list">목록으로</a>
+    </div>
+
+        </div>
+    </div>
+    <script th:inline="javascript">
+        // 닉네임 클릭 이벤트 리스너
+        document.addEventListener('DOMContentLoaded', function() {
+            const authorNicknames = document.querySelectorAll('.author-nickname');
+
+            authorNicknames.forEach(nickname => {
+                nickname.addEventListener('click', function(event) {
+                    event.stopPropagation(); // 이벤트 버블링 방지
+
+                    // 현재 활성화된 드롭다운 메뉴를 닫기
+                    document.querySelectorAll('.author-dropdown').forEach(dropdown => {
+                        if (dropdown !== this.nextElementSibling) {
+                            dropdown.classList.remove('active');
+                        }
+                    });
+
+                    // 클릭된 닉네임 바로 다음에 있는 드롭다운 메뉴를 토글
+                    const dropdown = this.nextElementSibling;
+                    if (dropdown && dropdown.classList.contains('author-dropdown')) {
+                        dropdown.classList.toggle('active');
+                    }
+                });
+            });
+
+            // 화면 아무 곳이나 클릭해서 드롭다운 메뉴 닫기
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.author-dropdown.active').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            });
+        });
+    </script>
+</div>
+</html>

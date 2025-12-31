@@ -1,0 +1,192 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+}
+
+/* 헤더 전체 */
+.header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 12px 0;
+}
+
+/* 헤더 내부 정렬 */
+.header-inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 로고 */
+.logo-area {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #111;
+    gap: 10px;
+}
+
+.logo-area img {
+    width: 32px;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* 검색창 */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #f7f7f7;
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    width: 260px;
+}
+
+.search-box input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.search-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.search-btn img {
+    width: 18px;
+}
+
+/* 메뉴 */
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #111;
+    font-size: 14px;
+}
+
+.menu span {
+    color: #aaa;
+}
+
+/* 햄버거 버튼 */
+.hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 22px;
+    height: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.hamburger-btn span {
+    height: 3px;
+    background: #333;
+    border-radius: 2px;
+}
+
+/* ====== 공통 푸터 ====== */
+.site-footer {
+    width: 100%;
+    border-top: 1px solid #e0e0e0;
+    background-color: #f9f9f9;
+    margin-top: 40px;
+    padding: 10px 0;
+    font-size: 12px;
+    color: #777777;
+}
+
+.footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+}
+
+.footer-text {
+    white-space: nowrap;
+}
+
+.footer-link {
+    text-decoration: none;
+    font-weight: 500;
+    color: #555555;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
+}
+
+.footer-members {
+    font-size: 12px;
+    color: #999999;
+}
+
+
+.chat-input.disabled,
+.chat-input:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.chat-send-btn.disabled,
+.chat-send-btn:disabled {
+    background-color: #cccccc;
+    border-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+}
+
+/* 푸터 아래 고정 */
+/* 화면 전체 높이 사용 */
+html, body {
+    height: 100%;
+}
+
+/* 세로 플렉스 레이아웃으로: 헤더 - 컨텐츠 - 푸터 */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 화면 높이 꽉 채우기 */
+}
+
+/* 푸터는 맨 아래로 밀기 */
+.site-footer {
+    margin-top: auto; /* 이게 핵심! */
+    flex-shrink: 0;
+}
+
+/* 페이지 본문 쪽은 남는 공간을 차지하게 (여기 클래스들은 상황에 맞게 추가) */
+main,
+.main-wrapper,
+.mypage-wrapper {
+    flex: 1 0 auto;
+}

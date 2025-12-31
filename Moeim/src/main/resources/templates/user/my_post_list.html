@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>내 게시글</title>
+    <link rel="stylesheet" th:href="@{/css/user/my_activity_list.css}">
+</head>
+
+<div layout:fragment="content">
+    <div class="list-wrapper">
+        <div class="list-container">
+
+            <div class="list-header">
+                <h2 class="page-title" th:if="${isOwner}">
+                    내가 쓴 게시글
+                </h2>
+
+                <h2 class="page-title" th:if="${!isOwner}"
+                    th:text="${user != null && user.nickname != null ? user.nickname + '님의 게시글' : '게시글'}">
+                    게시글
+                </h2>
+                <a th:href="@{|/user/mypage/${user.id}|}" class="back-link">&lt; 마이페이지</a>
+            </div>
+
+            <div class="empty-state" th:if="${postPaging.isEmpty()}">
+                <span class="empty-icon">📝</span>
+                <p>작성한 게시글이 없습니다.</p>
+            </div>
+
+            <div class="list-content">
+                <a th:each="post : ${postPaging}"
+                   th:href="@{|/post/${post.category.id}/${post.id}|}"
+                   class="item-card">
+
+                    <div class="item-header">
+                        <span class="item-title" th:text="${post.title}">게시글 제목</span>
+                    </div>
+
+                    <div class="item-meta">
+                        <span class="meta-badge" th:text="${post.category.title}">카테고리</span>
+                        <span th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd HH:mm')}">날짜</span>
+                        <span>조회 <span th:text="${post.viewCount}">0</span></span>
+                        <span style="color:#ff6b6b;">♥ <span
+                                th:text="${@postVoteService.getVoteCount(post.id, 'UP')}">0</span></span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="pagination" th:if="${postPaging != null and !postPaging.isEmpty()}">
+                <a class="page-item"
+                   th:href="@{|/user/postlist/${user.id}?page=${postPaging.number - 1}|}"
+                   th:if="${postPaging.hasPrevious()}">&lt;</a>
+
+                <th:block th:each="page : ${#numbers.sequence(0, postPaging.totalPages - 1)}">
+                    <a class="page-item"
+                       th:href="@{|/user/postlist/${user.id}?page=${page}|}"
+                       th:text="${page + 1}"
+                       th:classappend="${page == postPaging.number} ? 'active'">
+                    </a>
+                </th:block>
+
+                <a class="page-item"
+                   th:href="@{|/user/postlist/${user.id}?page=${postPaging.number + 1}|}"
+                   th:if="${postPaging.hasNext()}">&gt;</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+</html>
