@@ -1,0 +1,323 @@
+2025-12-01 12:43:58.151252Z database: flush
+org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/bells/IdeaProjects/OpenSW_group3/Moeim/data/moeimdb.mv.db [2.3.232/7]" [50000-232]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:407)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:1546)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:371)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:291)
+	at org.h2.mvstore.MVStore$Builder.open(MVStore.java:2035)
+	at org.h2.mvstore.db.Store.<init>(Store.java:133)
+	at org.h2.engine.Database.<init>(Database.java:326)
+	at org.h2.engine.Engine.openSession(Engine.java:92)
+	at org.h2.engine.Engine.openSession(Engine.java:222)
+	at org.h2.engine.Engine.createSession(Engine.java:201)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:344)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:124)
+	at org.h2.Driver.connect(Driver.java:59)
+	at com.intellij.database.remote.jdbc.helpers.JdbcHelperImpl.connect(JdbcHelperImpl.java:786)
+	at com.intellij.database.remote.jdbc.impl.RemoteDriverImpl.connect(RemoteDriverImpl.java:47)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(UnicastServerRef.java:360)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:200)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:197)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:714)
+	at java.rmi/sun.rmi.transport.Transport.serviceCall(Transport.java:196)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(TCPTransport.java:598)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(TCPTransport.java:844)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(TCPTransport.java:721)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(TCPTransport.java:720)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/bells/IdeaProjects/OpenSW_group3/Moeim/data/moeimdb.mv.db [2.3.232/7]" [50000-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 32 more
+Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/bells/IdeaProjects/OpenSW_group3/Moeim/data/moeimdb.mv.db [2.3.232/7]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	at org.h2.mvstore.SingleFileStore.lockFileChannel(SingleFileStore.java:143)
+	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:117)
+	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:81)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:286)
+	... 26 more
+2025-12-01 12:44:33.348659Z database: flush
+org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/bells/IdeaProjects/OpenSW_group3/Moeim/data/moeimdb.mv.db [2.3.232/7]" [50000-232]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:407)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:1546)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:371)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:291)
+	at org.h2.mvstore.MVStore$Builder.open(MVStore.java:2035)
+	at org.h2.mvstore.db.Store.<init>(Store.java:133)
+	at org.h2.engine.Database.<init>(Database.java:326)
+	at org.h2.engine.Engine.openSession(Engine.java:92)
+	at org.h2.engine.Engine.openSession(Engine.java:222)
+	at org.h2.engine.Engine.createSession(Engine.java:201)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:344)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:124)
+	at org.h2.Driver.connect(Driver.java:59)
+	at com.intellij.database.remote.jdbc.helpers.JdbcHelperImpl.connect(JdbcHelperImpl.java:786)
+	at com.intellij.database.remote.jdbc.impl.RemoteDriverImpl.connect(RemoteDriverImpl.java:47)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(UnicastServerRef.java:360)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:200)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:197)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:714)
+	at java.rmi/sun.rmi.transport.Transport.serviceCall(Transport.java:196)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(TCPTransport.java:598)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(TCPTransport.java:844)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(TCPTransport.java:721)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(TCPTransport.java:720)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/bells/IdeaProjects/OpenSW_group3/Moeim/data/moeimdb.mv.db [2.3.232/7]" [50000-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 32 more
+Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/bells/IdeaProjects/OpenSW_group3/Moeim/data/moeimdb.mv.db [2.3.232/7]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	at org.h2.mvstore.SingleFileStore.lockFileChannel(SingleFileStore.java:143)
+	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:117)
+	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:81)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:286)
+	... 26 more
+2025-12-02 12:33:41.851515+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "네, 요청하신 카테고리 ID(2[*]\\~9)에 맞춰 다양한 주제의 소모임 더미 데이터 30개를 생성했습니다.\000d\000a\000d\000a`BaseTimeEntity`가 있으므로 `created_at`, `updated_at` 컬럼도 함께 채워넣었습니다. H2 콘솔에 그대로 복사해서 실행하시면 됩니다.\000d\000a\000d\000a```sql\000d\000aINSERT INTO groups (category_id, title, description, now_count, max_count, created_at, updated_at) VALUES\000d\000a-- 2: 운동\000d\000a(2, '매일 아침 6시 조깅 크루', '혼자 뛰기 심심하신 분들 함께해요! 비 오는 날 제외하고 매일 뜁니다.', 3, 10, NOW(), NOW()),\000d\000a(2, '주말 풋살 하실 분 (초보 환영)', '실력 상관없이 즐겁게 땀 흘리실 분 모집합니다. 장비 없어도 됩니다.', 8, 12, NOW(), NOW()),\000d\000a(2, '한강 라이딩 & 치맥', '주말에 가볍게 자전거 타고 반포 한강공원에서 치킨 먹어요.', 4, 6, NOW(), NOW()),\000d\000a(2, '클라이밍 입문반', '클라이밍 처음 배우시는 분들 같이 강습 듣고 서로 봐줘요.', 2, 4, NOW(), NOW()),\000d\000a(2, '다이어트 챌린지 30일', '서로 식단 인증하고 운동 인증하며 으쌰으쌰 합시다.', 15, 20, NOW(), NOW()),\000d\000a\000d\000a-- 3: 공부\000d\000a(3, '토익 900점 목표 스터디', '매일 아침 영단어 시험 보고 주말에 기출문제 풀이합니다.', 4, 6, NOW(), NOW()),\000d\000a(3, '알고리즘 코딩 테스트 준비 (Java)', '백준 골드 이상 목표. 매주 3문제 풀고 코드 리뷰해요.', 2, 4, NOW(), NOW()),\000d\000a(3, '직장인 일본어 회화', '퇴근 후 강남역 근처에서 가볍게 프리토킹 연습하실 분.', 3, 5, NOW(), NOW()),\000d\000a(3, '임용고시 기상 인증방', '아침 7시 착석 인증. 잡담 금지. 공부 시간만 공유합니다.', 25, 50, NOW(), NOW()),\000d\000a\000d\000a-- 4: 취미\000d\000a(4, '필름 카메라 출사 모임', '서울 근교 예쁜 곳 찾아다니며 사진 찍고 서로 찍어줘요.', 5, 8, NOW(), NOW()),\000d\000a(4, '주말 뜨개질 & 수다', '카페에서 각자 뜨개질하면서 소소하게 이야기 나누실 분.', 3, 6, NOW(), NOW()),\000d\000a(4, '직장인 밴드 보컬 구합니다', '현재 기타, 베이스, 드럼 있습니다. 락발라드 위주로 연습해요.', 4, 5, NOW(), NOW()),\000d\000a(4, '보드게임 파티 (전략게임 위주)', '티켓투라이드, 스플렌더 등 전략 게임 좋아하시는 분들 오세요.', 4, 6, NOW(), NOW()),\000d\000a\000d\000a-- 5: 식사\000d\000a(5, '강남역 점심 메이트', '직장인 점심 혼밥 하기 싫으신 분들 같이 먹어요. N/1.', 3, 4, NOW(), NOW()),\000d\000a(5, '전국 빵지순례 원정대', '맛있는 빵집 찾아서 주말마다 투어 다닙니다. 빵순이 빵돌이 환영!', 6, 8, NOW(), NOW()),\000d\000a(5, '비건 요리 레시피 공유', '건강하고 맛있는 비건 요리 해먹고 사진 공유하는 모임입니다.', 12, 30, NOW(), NOW()),\000d\000a(5, '불금엔 치맥 파티', '이번 주 금요일 저녁 홍대 근처에서 가볍게 한잔하실 분?', 1, 6, NOW(), NOW()),\000d\000a\000d\000a-- 6: 독서\000d\000a(6, '한 달에 한 권 읽기', '부담 없이 한 달에 딱 한 권만 읽고 느낀 점 나눠요.', 7, 10, NOW(), NOW()),\000d\000a(6, '인문학 깊이 읽기', '철학, 역사 등 인문학 서적을 읽고 깊이 있는 토론을 합니다.', 4, 6, NOW(), NOW()),\000d\000a(6, '미스터리/추리 소설 매니아', '히가시노 게이고, 애거서 크리스티 등 추리 소설 좋아하시는 분!', 3, 5, NOW(), NOW()),\000d\000a\000d\000a-- 7: 여행\000d\000a(7, '제주도 게하 스탭 정보 공유', '제주도 살이, 게스트하우스 스탭 경험 나누고 정보 공유해요.', 18, 50, NOW(), NOW()),\000d\000a(7, '이번 주말 강릉 당일치기', 'KTX 타고 가서 바다 보고 커피 마시고 오실 분 구합니다.', 2, 4, NOW(), NOW()),\000d\000a(7, '유럽 배낭여행 동행 (7월)', '7월 중순 파리, 스위스 일정 겹치시는 분 밥이라도 같이 먹어요.', 1, 4, NOW(), NOW()),\000d\000a\000d\000a-- 8: 게임\000d\000a(8, '롤(LoL) 자랭 즐겜 유저', '티어 상관없습니다. 욕설 금지. 매너 게임 하실 분만.', 3, 5, NOW(), NOW()),\000d\000a(8, '배틀그라운드 스쿼드 모집', '저녁 8시~11시 고정으로 하실 분. 디스코드 필수.', 2, 4, NOW(), NOW()),\000d\000a(8, '스팀 게임 할인 정보 공유', '할인할 때 같이 사고 멀티 게임도 같이 해요.', 45, 99, NOW(), NOW()),\000d\000a\000d\000a-- 9: 기타\000d\000a(9, '반려견 산책 친구 (소형견)', '우리 강아지 사회성 길러주고 싶은 견주님들 함께 산책해요.', 4, 8, NOW(), NOW()),\000d\000a(9, '미국 주식 투자 공부방', '뉴스 공유하고 서로 종목 분석 공유합니다. 리딩방 아님.', 10, 20, NOW(), NOW()),\000d\000a(9, '동네 마실 친구 구함', '심심할 때 편의점 커피 한잔하거나 다이소 구경 가실 동네 친구.', 1, 2, NOW(), NOW()),\000d\000a(9, '미라클 모닝 챌린지', '새벽 5시 기상 인증하고 하루 목표 공유하기.', 11, 15, NOW(), NOW()),\000d\000a(9, '영화 관람 소모임', '개봉하는 영화 같이 보고 카페에서 이야기 나눠요.', 3, 4, NOW(), NOW())"; SQL statement:
+네, 요청하신 카테고리 ID(2\~9)에 맞춰 다양한 주제의 소모임 더미 데이터 30개를 생성했습니다.
+
+`BaseTimeEntity`가 있으므로 `created_at`, `updated_at` 컬럼도 함께 채워넣었습니다. H2 콘솔에 그대로 복사해서 실행하시면 됩니다.
+
+```sql
+INSERT INTO groups (category_id, title, description, now_count, max_count, created_at, updated_at) VALUES
+-- 2: 운동
+(2, '매일 아침 6시 조깅 크루', '혼자 뛰기 심심하신 분들 함께해요! 비 오는 날 제외하고 매일 뜁니다.', 3, 10, NOW(), NOW()),
+(2, '주말 풋살 하실 분 (초보 환영)', '실력 상관없이 즐겁게 땀 흘리실 분 모집합니다. 장비 없어도 됩니다.', 8, 12, NOW(), NOW()),
+(2, '한강 라이딩 & 치맥', '주말에 가볍게 자전거 타고 반포 한강공원에서 치킨 먹어요.', 4, 6, NOW(), NOW()),
+(2, '클라이밍 입문반', '클라이밍 처음 배우시는 분들 같이 강습 듣고 서로 봐줘요.', 2, 4, NOW(), NOW()),
+(2, '다이어트 챌린지 30일', '서로 식단 인증하고 운동 인증하며 으쌰으쌰 합시다.', 15, 20, NOW(), NOW()),
+
+-- 3: 공부
+(3, '토익 900점 목표 스터디', '매일 아침 영단어 시험 보고 주말에 기출문제 풀이합니다.', 4, 6, NOW(), NOW()),
+(3, '알고리즘 코딩 테스트 준비 (Java)', '백준 골드 이상 목표. 매주 3문제 풀고 코드 리뷰해요.', 2, 4, NOW(), NOW()),
+(3, '직장인 일본어 회화', '퇴근 후 강남역 근처에서 가볍게 프리토킹 연습하실 분.', 3, 5, NOW(), NOW()),
+(3, '임용고시 기상 인증방', '아침 7시 착석 인증. 잡담 금지. 공부 시간만 공유합니다.', 25, 50, NOW(), NOW()),
+
+-- 4: 취미
+(4, '필름 카메라 출사 모임', '서울 근교 예쁜 곳 찾아다니며 사진 찍고 서로 찍어줘요.', 5, 8, NOW(), NOW()),
+(4, '주말 뜨개질 & 수다', '카페에서 각자 뜨개질하면서 소소하게 이야기 나누실 분.', 3, 6, NOW(), NOW()),
+(4, '직장인 밴드 보컬 구합니다', '현재 기타, 베이스, 드럼 있습니다. 락발라드 위주로 연습해요.', 4, 5, NOW(), NOW()),
+(4, '보드게임 파티 (전략게임 위주)', '티켓투라이드, 스플렌더 등 전략 게임 좋아하시는 분들 오세요.', 4, 6, NOW(), NOW()),
+
+-- 5: 식사
+(5, '강남역 점심 메이트', '직장인 점심 혼밥 하기 싫으신 분들 같이 먹어요. N/1.', 3, 4, NOW(), NOW()),
+(5, '전국 빵지순례 원정대', '맛있는 빵집 찾아서 주말마다 투어 다닙니다. 빵순이 빵돌이 환영!', 6, 8, NOW(), NOW()),
+(5, '비건 요리 레시피 공유', '건강하고 맛있는 비건 요리 해먹고 사진 공유하는 모임입니다.', 12, 30, NOW(), NOW()),
+(5, '불금엔 치맥 파티', '이번 주 금요일 저녁 홍대 근처에서 가볍게 한잔하실 분?', 1, 6, NOW(), NOW()),
+
+-- 6: 독서
+(6, '한 달에 한 권 읽기', '부담 없이 한 달에 딱 한 권만 읽고 느낀 점 나눠요.', 7, 10, NOW(), NOW()),
+(6, '인문학 깊이 읽기', '철학, 역사 등 인문학 서적을 읽고 깊이 있는 토론을 합니다.', 4, 6, NOW(), NOW()),
+(6, '미스터리/추리 소설 매니아', '히가시노 게이고, 애거서 크리스티 등 추리 소설 좋아하시는 분!', 3, 5, NOW(), NOW()),
+
+-- 7: 여행
+(7, '제주도 게하 스탭 정보 공유', '제주도 살이, 게스트하우스 스탭 경험 나누고 정보 공유해요.', 18, 50, NOW(), NOW()),
+(7, '이번 주말 강릉 당일치기', 'KTX 타고 가서 바다 보고 커피 마시고 오실 분 구합니다.', 2, 4, NOW(), NOW()),
+(7, '유럽 배낭여행 동행 (7월)', '7월 중순 파리, 스위스 일정 겹치시는 분 밥이라도 같이 먹어요.', 1, 4, NOW(), NOW()),
+
+-- 8: 게임
+(8, '롤(LoL) 자랭 즐겜 유저', '티어 상관없습니다. 욕설 금지. 매너 게임 하실 분만.', 3, 5, NOW(), NOW()),
+(8, '배틀그라운드 스쿼드 모집', '저녁 8시~11시 고정으로 하실 분. 디스코드 필수.', 2, 4, NOW(), NOW()),
+(8, '스팀 게임 할인 정보 공유', '할인할 때 같이 사고 멀티 게임도 같이 해요.', 45, 99, NOW(), NOW()),
+
+-- 9: 기타
+(9, '반려견 산책 친구 (소형견)', '우리 강아지 사회성 길러주고 싶은 견주님들 함께 산책해요.', 4, 8, NOW(), NOW()),
+(9, '미국 주식 투자 공부방', '뉴스 공유하고 서로 종목 분석 공유합니다. 리딩방 아님.', 10, 20, NOW(), NOW()),
+(9, '동네 마실 친구 구함', '심심할 때 편의점 커피 한잔하거나 다이소 구경 가실 동네 친구.', 1, 2, NOW(), NOW()),
+(9, '미라클 모닝 챌린지', '새벽 5시 기상 인증하고 하루 목표 공유하기.', 11, 15, NOW(), NOW()),
+(9, '영화 관람 소모임', '개봉하는 영화 같이 보고 카페에서 이야기 나눠요.', 3, 4, NOW(), NOW()) [42000-232]
+2025-12-02 12:33:41.858013+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]```"; SQL statement:
+``` [42000-232]
+2025-12-02 13:40:14.041738+09:00 jdbc[38]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]TITLE"; expected "TRUNCATE"; SQL statement:
+TITLE [42001-232]
+2025-12-02 13:40:46.561859+09:00 jdbc[39]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-232]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:217)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:134)
+	at org.h2.Driver.connect(Driver.java:59)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:370)
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:207)
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:488)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:752)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:731)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 16 more
+2025-12-02 04:58:17.820841Z database: flush
+org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/bells/IdeaProjects/OpenSW_group3/Moeim/data/moeimdb.mv.db [2.3.232/7]" [50000-232]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:407)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:1546)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:371)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:291)
+	at org.h2.mvstore.MVStore$Builder.open(MVStore.java:2035)
+	at org.h2.mvstore.db.Store.<init>(Store.java:133)
+	at org.h2.engine.Database.<init>(Database.java:326)
+	at org.h2.engine.Engine.openSession(Engine.java:92)
+	at org.h2.engine.Engine.openSession(Engine.java:222)
+	at org.h2.engine.Engine.createSession(Engine.java:201)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:344)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:124)
+	at org.h2.Driver.connect(Driver.java:59)
+	at com.intellij.database.remote.jdbc.helpers.JdbcHelperImpl.connect(JdbcHelperImpl.java:786)
+	at com.intellij.database.remote.jdbc.impl.RemoteDriverImpl.connect(RemoteDriverImpl.java:47)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(UnicastServerRef.java:360)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:200)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:197)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:714)
+	at java.rmi/sun.rmi.transport.Transport.serviceCall(Transport.java:196)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(TCPTransport.java:598)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(TCPTransport.java:844)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(TCPTransport.java:721)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(TCPTransport.java:720)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/bells/IdeaProjects/OpenSW_group3/Moeim/data/moeimdb.mv.db [2.3.232/7]" [50000-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 32 more
+Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/bells/IdeaProjects/OpenSW_group3/Moeim/data/moeimdb.mv.db [2.3.232/7]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	at org.h2.mvstore.SingleFileStore.lockFileChannel(SingleFileStore.java:143)
+	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:117)
+	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:81)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:286)
+	... 26 more
+2025-12-02 14:33:59.346024+09:00 jdbc[42]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "POST_ID" not found; SQL statement:
+SELECT * FROM users WHERE post_id BETWEEN 40 AND 159 [42122-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.expression.ExpressionColumn.getColumnException(ExpressionColumn.java:244)
+	at org.h2.expression.ExpressionColumn.optimizeOther(ExpressionColumn.java:226)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:213)
+	at org.h2.expression.condition.BetweenPredicate.optimize(BetweenPredicate.java:70)
+	at org.h2.expression.Expression.optimizeCondition(Expression.java:148)
+	at org.h2.command.query.Select.prepareExpressions(Select.java:1235)
+	at org.h2.command.query.Query.prepare(Query.java:232)
+	at org.h2.command.Parser.prepareCommand(Parser.java:489)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:645)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:561)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1164)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1344)
+	at org.h2.server.web.WebApp.query(WebApp.java:1142)
+	at org.h2.server.web.WebApp.query(WebApp.java:1118)
+	at org.h2.server.web.WebApp.process(WebApp.java:244)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
+	at org.h2.server.web.JakartaWebServlet.doGet(JakartaWebServlet.java:129)
+	at org.h2.server.web.JakartaWebServlet.doPost(JakartaWebServlet.java:166)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-12-02 14:49:46.536190+09:00 jdbc[66]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-232]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:217)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:134)
+	at org.h2.Driver.connect(Driver.java:59)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:370)
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:207)
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:488)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:752)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:731)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 16 more
+2025-12-02 19:48:30.700960+09:00 jdbc[26]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-232]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:217)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:134)
+	at org.h2.Driver.connect(Driver.java:59)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:370)
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:207)
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:488)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:752)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:731)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 16 more
