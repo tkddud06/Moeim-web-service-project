@@ -26,10 +26,8 @@ public class Schedule {
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Lob
-    @Column(nullable = false)
-    @org.hibernate.annotations.ColumnDefault("''")
-    private String description;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String description = "";
 
     @Column(nullable = false)
     private LocalDateTime startDate;

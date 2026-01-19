@@ -74,8 +74,7 @@ public class User extends BaseTimeEntity {
 
     // === getter/setter ===
     @Setter
-    @Lob
-    @Column(name = "profile_image")
+    @Column(name = "profile_image", columnDefinition = "BYTEA")
     private byte[] profileImage;
 
     @Setter

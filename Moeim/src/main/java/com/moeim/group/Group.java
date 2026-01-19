@@ -37,8 +37,7 @@ public class Group extends BaseTimeEntity {
 
     //    @Column(name = "banner_picture")
 //    private String bannerPicture;
-    @Lob
-    @Column(name = "banner_image")
+    @Column(name = "banner_image", columnDefinition = "BYTEA")
     private byte[] bannerImage;
 
     @Column(name = "banner_image_type")

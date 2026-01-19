@@ -29,7 +29,6 @@ public class GroupJoinRequest extends BaseTimeEntity {
     private User user;
 
     // 신청할 때 적은 글
-    @Lob
-    @Column(nullable = false, length = 300)
+    @Column(columnDefinition = "TEXT", nullable = false, length = 300)
     private String text;
 }
