@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,9 +97,11 @@ public class GroupController {
         if (bannerFile == null || bannerFile.isEmpty()) {
 
             ClassPathResource defaultImg = new ClassPathResource("static/images/default_banner.jpg");
-            byte[] imgBytes = Files.readAllBytes(defaultImg.getFile().toPath());
-
-            group.setBannerImage(imgBytes);
+            // getInputStream()을 사용하여 JAR 내부의 데이터를 직접 읽어옵니다.
+            try (InputStream is = defaultImg.getInputStream()) {
+                byte[] imgBytes = is.readAllBytes();
+                group.setBannerImage(imgBytes);
+            }
             group.setBannerImageType("image/jpeg");  // png면 image/png
         } else {
             // 업로드된 파일 저장

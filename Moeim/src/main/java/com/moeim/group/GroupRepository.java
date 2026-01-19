@@ -21,7 +21,9 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     @Query("""
     SELECT g FROM Group g
     WHERE (:categoryId IS NULL OR g.category.id = :categoryId)
-    AND (:keyword IS NULL OR LOWER(g.title) LIKE LOWER(CONCAT('%', :keyword, '%')))
+    AND (:keyword IS NULL OR 
+        LOWER(CAST(g.title AS string)) LIKE LOWER(CAST(CONCAT('%', :keyword, '%') AS string))
+    )
     AND (:userId IS NULL OR g.id NOT IN (
         SELECT gu.group.id FROM GroupUser gu WHERE gu.user.id = :userId
     ))
